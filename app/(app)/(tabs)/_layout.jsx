@@ -44,13 +44,6 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <Icon name="shopping" size={28} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="transactions"
-        options={{
-          title: 'Transactions',
-          tabBarIcon: ({ color }) => <Icon name="file-document" size={28} color={color} />,
-        }}
-      />
     </Tabs>
   );
 }

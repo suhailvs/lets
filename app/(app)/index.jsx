@@ -19,7 +19,7 @@ export default function Index() {
   const router = useRouter();
 
   useEffect(() => {
-    fetchBalance();
+    // fetchBalance();
     getAuthUser();
     fetchUsers();
   }, []);
@@ -61,14 +61,7 @@ export default function Index() {
     <ScrollView>
       <View style={styles.header}>
         <Text variant="labelLarge" style={styles.headerText}>Hi {authuser.firstname}, welcome to {authuser.exchange_name} exchange.</Text>
-        <Text variant="headlineSmall" style={styles.headerText}>Your Balance:</Text>
-        
-        <View style={{flexDirection: "row"}}>
-          <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `${balance}`:'****'}</Text>        
-          <TouchableOpacity onPress={fetchBalance}>
-            <MaterialIcons name="refresh" size={55} style={[styles.headerText,styles.headerIcon]} />
-          </TouchableOpacity>       
-        </View>
+       
       </View>
       <View style={styles.container}>
         <Card>

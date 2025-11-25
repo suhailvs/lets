@@ -53,11 +53,6 @@ const OfferingDetailPage = ( ) => {
     }
   };
   
-  const handleBuyNow = () => {
-    // Navigate to payment screen
-    // navigation.navigate("Checkout", { offering });
-    router.push({ pathname: 'screens/sendmoney/amount', params:{'id':offering.user.id, 'username':offering.user.username, 'first_name':offering.user.first_name} })
-  };
   
 
   const handleDelete = async () => {
@@ -97,7 +92,6 @@ const OfferingDetailPage = ( ) => {
         <View>
           {/* Product Title and Price */}
           <Text style={styles.productTitle}>{offering.title}</Text>
-          <Text style={styles.productPrice}>£{offering.rate}</Text>
           {/* Formatted Date */}
           <Text style={styles.dateLabel}>Added on: {formatDate(offering.created_at)}</Text>
           {/* Product Image   */}
@@ -117,9 +111,7 @@ const OfferingDetailPage = ( ) => {
             <Text style={styles.advertiserItem}>Advertiser Details:</Text>
             
             <Text style={styles.advertiserTitle}>{offering.user.first_name}</Text>
-            <Text style={[offering.user.balance > 0 ? styles.positive : styles.negative]}>
-              Balance: £{offering.user.balance}
-            </Text>
+            
             <Text style={styles.advertiserDate}>Last login: {formatDate(offering.user.last_login)}</Text>
                
 
@@ -150,14 +142,7 @@ const OfferingDetailPage = ( ) => {
               <MaterialIcons name="delete" color={color} size={size} />
             )}
           >Delete</Button></>} 
-          <Button
-            mode="contained"
-            onPress={handleBuyNow}
-            style={styles.buyNowButton}
-            labelStyle={styles.buttonText}
-          >
-            Buy Now
-          </Button>
+          
           
           {/* These 3 text boxes are to add some margin Bottom */}
           <Text></Text><Text></Text><Text></Text>

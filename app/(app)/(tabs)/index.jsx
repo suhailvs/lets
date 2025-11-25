@@ -60,26 +60,7 @@ const UserDetails = () => {
           </View>
         ) : (
           <View>
-            {!data.is_active ? (
-              <Button
-                mode="contained"
-                onPress={handleVerifyUser}
-                loading={verifyLoading}
-                disabled={verifyLoading}
-              >
-                {verifyLoading ? 'Verifying...' : 'Verify User'}
-              </Button>
-            ):(
-              <Button
-                mode="contained-tonal"
-                icon={({ size, color }) => (
-                  <Ionicons name="send" size={size} color={color} />
-                )}
-                onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name } })}
-              >
-                Send Money
-              </Button>
-            )}
+            
           
             <Card mode="outlined" style={styles.card}>
               
@@ -99,11 +80,6 @@ const UserDetails = () => {
                   title="Email"
                   description={data.email || '-'}
                   left={(props) => <List.Icon {...props} icon="email" />}
-                />
-                <List.Item
-                  title="Balance"
-                  description={`£ ${data.balance ?? 0}`}
-                  left={(props) => <List.Icon {...props} icon="wallet" />}
                 />
                 <List.Item
                   title="Date of Birth"
