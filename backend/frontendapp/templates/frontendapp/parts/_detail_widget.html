@@ -1,0 +1,10 @@
+<!--
+    Create an offering description for local exchange trading system where I have a bike and can do things like transport 
+    one person at a rate of 2 dollars per kilometer
+-->
+<br>
+<textarea name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} style="display:none;">
+    {% if widget.value %}{{ widget.value }}{% endif %}
+</textarea>
+<button type="button" class="btn btn-sm btn-primary" id="btn_generate_ai">Generate Detail from Heading</button>
+<button type="button" class="btn btn-sm btn-primary" id="btn_show_details">Enter Detail Manually</button>

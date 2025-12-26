@@ -2,9 +2,9 @@
   "expo": {
     "name": "letsystem",
     "slug": "letsystem",
-    "version": "1.0.0",
+    "version": "1.1.6",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/lets-icon.png",
     "scheme": "letsystem",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -13,11 +13,10 @@
     },
     "android": {
       "adaptiveIcon": {
-        "backgroundColor": "#E6F4FE",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "foregroundImage": "./assets/images/lets-adaptive-icon.png",
+        "backgroundColor": "#ffffff"
       },
+      "package": "com.suhailvs.letsystem",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
@@ -43,6 +42,12 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "97a7f612-8acd-4f27-b63b-dce41bd23967"
+      }
     }
   }
 }

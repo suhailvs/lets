@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %} 
+{% block css %}
+<link rel="stylesheet" href="{% static 'select2/select2.min.css' %}">
+{% endblock %}
+
+{% block content %}
+<h3 class="text-muted">Balance: {{request.user.balance}}$</h3>
+{% comment %} <form method="post" action="."> {% csrf_token %}
+    <div class="form-check">
+        <input class="form-check-input" type="radio" value="seller" name="transaction_type" id="transaction_type1" checked>
+        <label class="form-check-label" for="transaction_type1">
+            Seller transaction(Receive money):
+        </label>
+    </div>
+    <div class="form-check">
+        <input class="form-check-input" type="radio" value="buyer" name="transaction_type" id="transaction_type2">
+        <label class="form-check-label" for="transaction_type2">
+            Buyer transaction(Send money):
+        </label>
+    </div>
+    
+    <div class="mb-3">
+        <label for="buyer" class="form-label">To:</label>
+        <select class="form-control" id="id_buyer" name="buyer">
+            <option value="">---------</option> 
+            {% for user in users %}
+            <option value="{{user.username}}">{{user.username}}({{user.first_name}})</option>
+            {% endfor %}
+        </select>
+        <p class="lead">Balance: <span id="user_balance"></span></p>
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Description:</label>
+        <input type="text" class="form-control" name="description">
+    </div>
+    <div class="mb-3">
+        <label class="form-label">Amount:</label>
+        <input type="text" class="form-control" name="amount">
+    </div>
+    <button type="submit" class="btn btn-primary">Confirm</button>
+</form>
+<hr> {% endcomment %}
+
+
+<form method="post" action="."> {% csrf_token %}
+<div class="card">
+    <div class="card-body">
+    <h5 class="card-title">Record Transaction</h5>
+    {{ transaction_form|crispy }}
+    <button type="submit" class="btn btn-primary">Confirm</button>
+    </div>
+</div>
+</form>
+
+<p>Total money in existence:${{total}}</p>
+<p class="lead">My latest 5 Transactions</p>
+<a href="#">sell all transactions</a>
+{% include 'frontendapp/parts/_transactions.html' %}
+{% endblock %}
+
+{% block js %}
+{% comment %} <script src="{% static 'select2/select2.min.js' %}"></script>
+<script>
+    $(function () {
+        $('#id_buyer').select2();
+        $('#id_buyer').val('').trigger('change');
+        $('#id_buyer').on('select2:select', function (e) {
+            $.ajax({ 
+                url: "{% url 'frontendapp:ajax_views' 'get_balance' %}", 
+                data: {'username': e.params.data.id},
+                success: function (data) {
+                    $("#user_balance").html(data);
+                }
+            });
+        });
+
+    });
+</script> {% endcomment %}
+{% endblock %}

@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+<p class="lead">Please select an exchange to list down its users</p>
+<table class="table table-bordered">
+  <tr><th>Code</th><th>Title</th><th>Country</th></tr>
+  {% for exchange in exchanges %}
+  <tr>
+    <td><a href="{% url 'frontendapp:user_list' exchange=exchange.code %}">{{exchange.code}}</a></td>
+    <td>{{exchange.name}}</td>
+    <td>{{exchange.get_country_and_subdivision}}</td>    
+  </tr>
+  {% endfor %}
+</table>
+
+{% include '_pagination.html' %}
+{% endblock %}

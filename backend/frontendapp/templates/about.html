@@ -1,0 +1,138 @@
+{% extends 'base.html' %} 
+{% load static %} 
+
+{% block content %}
+
+<h2>Welcome to the StackCoin!</h2>
+<p class="lead">
+  If you already have an account, go ahead and
+  <a href="{% url 'login' %}">log in</a>. If you are new to StackCoin, get
+  started by creating an <a href="{# url 'signup' #}">account</a>.
+</p>
+<hr />
+
+<p class="lead">What's this about?</p>
+<a href="https://www.community-exchange.org/home/qanda/the-problems-with-conventional-money/">The Problems with Conventional Money</a>
+
+<p>
+  The interest-based lending can force some borrowers into default by design is
+  a critique of the way money is created in modern economies and how interest
+  functions within the system. This critique often highlights a few key points:
+</p>
+<ul>
+  <li>
+    <p>Money Creation through Debt</p>
+    <p>
+      In most modern economies, money is created when banks issue loans.
+      However, when a bank lends money, it only creates the principal (the loan
+      amount), not the interest. For example, if a bank lends 100rs, it expects
+      to be repaid, say, 101rs, but only the 100rs was created. The additional
+      1rs (interest) does not exist in the economy until it is earned through
+      production, trade, or other means.
+    </p>
+    <p>
+      This creates a mathematical imbalance: The total amount of debt (principal
+      + interest) always exceeds the money supply (just the principal). As a
+      result, some borrowers may be unable to repay their debts because there
+      simply isn&#39;t enough money circulating to cover all debts plus
+      interest. This leads to a scenario where defaults are inevitable.
+    </p>
+    <img
+      src="{% static 'img/loan_default.png' %}"
+      alt="loan default"
+      class="img-thumbnail"
+    />
+  </li>
+  <li>
+    <p>Scarcity and Competition</p>
+    <p>
+      Because interest demands more money than was originally created, borrowers
+      are forced into competition for the limited money available in the
+      economy. Some borrowers succeed, but others fail, defaulting on their
+      loans. The system relies on some individuals, businesses, or nations
+      defaulting to maintain the balance.
+    </p>
+    <p>
+      This creates a zero-sum game in which not everyone can repay their loans,
+      even if they all work hard and are productive. In fact, if everyone tried
+      to repay their debts at once, there wouldn&#39;t be enough money in
+      circulation to do so, leading to widespread defaults.
+    </p>
+  </li>
+  <li>
+    <p>Debt-Driven Growth and Economic Pressure</p>
+    <p>
+      To avoid default, economies are under constant pressure to grow. Economic
+      growth creates new money (via production, profits, etc.) that can help
+      repay both principal and interest. However, continuous growth is not
+      always sustainable, and when economic growth slows or stalls, borrowers
+      may find themselves unable to service their debts.
+    </p>
+    <p>
+      In periods of economic downturns or recessions, this structural imbalance
+      becomes more apparent. Businesses and individuals are more likely to
+      default because they can't generate the additional income needed to cover
+      both their debts and interest payments.
+    </p>
+  </li>
+  <li>
+    <p>Systemic Risk and Economic Crises</p>
+    <p>
+      This dynamic contributes to economic instability. If too many borrowers
+      default at the same time, it can trigger financial crises, as seen during
+      events like the 2008 global financial crisis. When debt grows faster than
+      the real economy can support, the entire system can become fragile,
+      leading to widespread defaults and financial collapses.
+    </p>
+  </li>
+  <li>
+    <p>Debt Jubilee Concept</p>
+    <p>
+      Some critics argue that the only way to periodically address this
+      imbalance is through a &quot;debt jubilee&quot;, where debts are forgiven
+      en masse to reset the system. Historically, ancient civilizations like
+      Mesopotamia periodically forgave debts to prevent economic collapse and
+      social unrest. While not common in modern economies, debt relief programs
+      for individuals, businesses, or even nations (like developing countries)
+      reflect this idea.
+    </p>
+  </li>
+  <li>
+    <p>Moral Hazard and the Default Cycle</p>
+    <p>
+      From a systemic perspective, the inevitability of some defaults serves as
+      a way to clear out bad loans and reallocate resources. However, this can
+      create moral hazard, where lenders and borrowers engage in risky behavior,
+      knowing that some entities will fail, but the system will continue with
+      bailouts or write-offs. Over time, this leads to cycles of boom and bust,
+      with default as a built-in feature of the system rather than an anomaly.
+    </p>
+    <p>
+      In essence, interest-based lending in its current form can create a system
+      where not all debts can be repaid, and default becomes inevitable for some
+      borrowers. This is a systemic feature, not a personal failure, leading to
+      critiques of whether such a system is fair or sustainable in the long run.
+    </p>
+  </li>
+</ul>
+
+<hr />
+<p class="lead">Solution: LETS</p>
+<p>
+  This Django application is an example I created to illustrate a
+  <a href="https://en.wikipedia.org/wiki/Local_exchange_trading_system"
+    >Local Exchange Trading System (LETS)</a
+  >. In this application, users can sign up with zero balance. User can make
+  offerings and accept offerings.
+</p>
+
+<p>
+  Want to run this code locally?
+  <a href="https://github.com/sta-k/stackcoin/blob/main/README.md"
+    >Read detailed instructions on how to run this project</a
+  >.
+</p>
+<p class="mb-0">
+  Suhail VS <a href="https://github.com/suhailvs/">@suhailvs</a>
+</p>
+{% endblock %}

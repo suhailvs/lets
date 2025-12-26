@@ -1,0 +1,29 @@
+{% load quiz_extras %}
+{% load crispy_forms_tags %} 
+{% if request.user == current_user %}
+<div class="card mb-3">
+  <div class="card-header">Add new {% if listing_type == 'O' %}offering{%else%}want{%endif%}</div>
+  <div class="card-body">
+    <form method="post" action="." novalidate enctype="multipart/form-data">{% csrf_token %}      
+      <input type="hidden" name="listing_type" value="{{listing_type}}">
+      {{ form|crispy }}
+      <button type="submit" class="btn btn-success">Save</button>
+    </form>
+  </div>
+</div>
+<hr>
+{% endif %}
+
+<p class="lead">{% if listing_type == 'O' %}Offerings{% else %}Wants{% endif %}</p>
+<div class="list-group">
+  {% for listing in userlistings|in_category:listing_type %}
+  <a href="{% url 'frontendapp:listing_preview' listing.id %}" class="list-group-item list-group-item-action">
+    <div class="d-flex w-100 justify-content-between">
+      <h5 class="mb-1">{{listing.category}}</h5>
+      <small class="text-body-secondary">{{ listing.created_at|date }}</small>
+    </div>
+    <p class="mb-1">#{{listing.id}}: {{listing.title}}</p>
+    <small class="text-body-secondary">rate: {{listing.rate}}</small>
+  </a>
+  {% endfor %}
+</div>

@@ -1,0 +1,13 @@
+
+<ol class="list-group list-group-numbered">
+    {% for transaction in transactions %}
+    <li class="list-group-item d-flex justify-content-between align-items-start">
+        <div class="ms-2 me-auto">
+          <div class="fw-bold">{% if transaction.is_received %}Received from {{transaction.buyer.first_name}}{% else %}Paid to {{transaction.seller.first_name}}{% endif %}</div>
+          {{transaction.created_at}}<br>
+          {{transaction.description}}
+        </div>
+        <span class="badge text-bg-{% if transaction.is_received %}success{%else%}danger{%endif%} rounded-pill">{% if transaction.is_received %}+{%else%}-{%endif%}${{transaction.amount}}</span>
+    </li>
+    {% endfor %}
+</ol>

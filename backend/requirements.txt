@@ -1,0 +1,11 @@
+Django
+django-crispy-forms
+crispy-bootstrap5
+
+djangorestframework
+django-cors-headers
+drf-spectacular
+python-decouple
+pillow
+pycountry
+sorl-thumbnail

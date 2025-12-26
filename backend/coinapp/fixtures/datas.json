@@ -1,0 +1,278 @@
+[
+{
+    "model": "coinapp.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$xzeF42M3TBzkb3KAIGsEcf$4olPeBFhZPewrbCYuWt0YEwCJS5lC5ig2dgqGkQDQns=",
+        "last_login": "2025-04-08T00:40:56.244Z",
+        "is_superuser": true,
+        "username": "KKDE001",
+        "phone": "7356775981",
+        "first_name": "suhail vs",
+        "last_name": "",
+        "email": "suhailvs@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-10-30T04:31:50.285Z",
+        "exchange": 1,
+        "government_id": "",
+        "date_of_birth": "1988-12-04",
+        "balance": 0,
+        "image": "users/1000095195.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$7uk62XShpKDDjI51hku0ww$W+FCgplzDmImw71OQ5QKE4meoeFY+U6m9QPf7U9KLPA=",
+        "last_login": "2025-03-04T09:12:43.136Z",
+        "is_superuser": false,
+        "username": "KKDE002",
+        "phone": "8921513696",
+        "first_name": "Nusra",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-27T05:05:52.942Z",
+        "exchange": 1,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": 0,
+        "image": "users/1000096453.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$IxqwLJE4C5uhlLF9LBpiOj$jS5VbK7A61RD9t7SpPo2ucLwNLVR03iIATavqJ/l/Sc=",
+        "last_login": "2024-10-26T14:39:23.475Z",
+        "is_superuser": false,
+        "username": "KKDE003",
+        "phone": "8547622462",
+        "first_name": "Sulaiman",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-26T14:39:22.900Z",
+        "exchange": 1,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": 0,
+        "image": "users/1000082291.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$eQLviIgRhoZDDoHZLTAFBS$aseC+7p5O5jntVioAhpkZHoGVYdR4xp490e/0WaMwdI=",
+        "last_login": "2024-10-30T10:47:40.966Z",
+        "is_superuser": false,
+        "username": "PIXL001",
+        "phone": "8848338141",
+        "first_name": "sabareesh",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-30T04:36:30.239Z",
+        "exchange": 2,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": 70,
+        "image": "users/IMG_20240514_171002.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 5,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$lFrr7P5JxRPUYn2px95ZvL$upvo/5+5+T90AJofgnLtlqwXOOOUUSFwp3oZTNPv69Q=",
+        "last_login": "2024-11-01T07:12:04.780Z",
+        "is_superuser": false,
+        "username": "PIXL002",
+        "phone": "9495924658",
+        "first_name": "anshad",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-11-01T07:11:54.389Z",
+        "exchange": 2,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": -40,
+        "image": "users/anshad.jpeg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 6,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$bKPhFbp3qOQ7ONZq1NPs3J$i8AXf91E5BRrZZ844aMszS34JjZf/YWx0USI8oi+Tn8=",
+        "last_login": "2024-11-01T08:47:22.925Z",
+        "is_superuser": false,
+        "username": "PIXL003",
+        "phone": "8281752374",
+        "first_name": "Vishnu",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-11-01T08:46:57.959Z",
+        "exchange": 2,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": 0,
+        "image": "users/DSC04385.jpeg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 7,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$0QpdqRh8EBda6a3Xdts7Aw$f0xhl+KJs91HTcDSxR5bvhryWCUu/7cqado+YjVZNEE=",
+        "last_login": "2024-11-02T08:17:12.626Z",
+        "is_superuser": false,
+        "username": "KKDE004",
+        "phone": "9495890370",
+        "first_name": "Shakeer",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-11-02T08:16:59.131Z",
+        "exchange": 1,
+        "government_id": "",
+        "date_of_birth": "2025-03-09",
+        "balance": 0,
+        "image": "users/1000095972.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 8,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$2eA51hkNIS7qAdrqGy1w7o$N0DVZq4aaDhY80V0RF5LSb+/Hqu2DRKILkI8FCTjIWA=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "PIXL004",
+        "first_name": "suhail pixl",
+        "last_name": "",
+        "email": "suhail@pixl.ai",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-05-01T01:04:36.968Z",
+        "exchange": 2,
+        "phone": "9000000000",
+        "government_id": "",
+        "date_of_birth": "1988-12-04",
+        "balance": -30,
+        "image": "users/me.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.exchange",
+    "pk": 1,
+    "fields": {
+        "code": "KKDE",
+        "name": "Kolakkode exchange",
+        "address": "Kolakkode, Palakkad, Kerala. PIN-678686",
+        "country_city": "IN-KL",
+        "postal_code": "678686"
+    }
+},
+{
+    "model": "coinapp.exchange",
+    "pk": 2,
+    "fields": {
+        "code": "PIXL",
+        "name": "Pixdynamics exchange",
+        "address": "Carnival Infopark, Kakkanad, Kochi",
+        "country_city": "IN-KL",
+        "postal_code": "682030"
+    }
+},
+{
+    "model": "coinapp.listing",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "category": "Food_Drink",
+      "title": "rice",
+      "description": "Matta rice",
+      "rate": "50$ per kg",
+      "listing_type": "O",
+      "created_at": "2024-11-01T07:12:50.355Z",
+      "image": ""
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 1,
+    "fields": {
+        "seller": 4,
+        "buyer": 8,
+        "listing": null,
+        "description": "Badminton Court - Amigos Oct 29",
+        "amount": 70,
+        "created_at": "2024-10-30T04:38:30.192Z"
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 2,
+    "fields": {
+        "seller": 4,
+        "buyer": 8,
+        "listing": null,
+        "description": "Chumma tha",
+        "amount": 100,
+        "created_at": "2024-10-30T10:48:05.234Z"
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 3,
+    "fields": {
+        "seller": 8,
+        "buyer": 4,
+        "listing": null,
+        "description": "Return 100rs due to dummy previous payment ",
+        "amount": 100,
+        "created_at": "2024-10-31T14:54:43.195Z"
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 4,
+    "fields": {
+        "seller": 8,
+        "buyer": 5,
+        "listing": null,
+        "description": "Sandwich ",
+        "amount": 40,
+        "created_at": "2024-11-01T07:12:50.355Z"
+    }
+}
+]

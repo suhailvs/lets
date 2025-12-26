@@ -1,3 +1,3 @@
-Frontend -> React App
-Backend -> Django
-Mobile -> Expo
++ Frontend -> React App
++ Backend -> Django
++ Mobile -> Expo

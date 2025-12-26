@@ -1,0 +1,135 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% load quiz_extras %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'select2/select2.min.css' %}">
+<style>
+  .tab-pane {margin-top: 20px}
+</style>
+
+{% endblock %}
+{% block content %} 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:exchange_list' %}">Exchanges</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:user_list' exchange=request.resolver_match.kwargs.exchange %}">{{ request.resolver_match.kwargs.exchange }}</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{current_user.username}}</li>
+  </ol>
+</nav>
+
+<ul class="nav nav-tabs" id="myTab" role="tablist">
+
+  <li class="nav-item" role="presentation">
+    <button class="nav-link active" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="true">Profile</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="offerings-tab" data-bs-toggle="tab" data-bs-target="#offerings-tab-pane" type="button" role="tab" aria-controls="offerings-tab-pane" aria-selected="false">Offerings</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="wants-tab" data-bs-toggle="tab" data-bs-target="#wants-tab-pane" type="button" role="tab" aria-controls="wants-tab-pane" aria-selected="false">Wants</button>
+  </li>
+  <li class="nav-item" role="presentation">
+    <button class="nav-link" id="transactions-tab" data-bs-toggle="tab" data-bs-target="#transactions-tab-pane" type="button" role="tab" aria-controls="transactions-tab-pane" aria-selected="false">Transactions</button>
+  </li>
+</ul>
+<div class="tab-content" id="myTabContent">
+  <div class="tab-pane fade show active" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+    <div class="row">
+      <div class="col-md-4">
+          <img class="img-thumbnail" src="{{ current_user.username|gravatar_url:200 }}" width="200" height="200" alt="@{{ current_user.username}}">
+      </div>
+      <div class="col-md-8">
+        <div class="card">
+          <table class="table mb-0">
+            
+            <tbody>
+              <tr><td>Username</td><td>{{current_user.username}}</td></tr>
+              <tr><td>Name</td><td>{{current_user.first_name}}</td></tr>
+              <tr><td>Balance</td><td>{{current_user.balance}}</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="tab-pane fade" id="offerings-tab-pane" role="tabpanel" aria-labelledby="offerings-tab" tabindex="0">
+    {% include 'frontendapp/parts/_listings.html' with listing_type='O' %}
+  </div>
+  <div class="tab-pane fade" id="wants-tab-pane" role="tabpanel" aria-labelledby="wants-tab" tabindex="0">
+    {% include 'frontendapp/parts/_listings.html' with listing_type='W' %}
+  </div>
+  <div class="tab-pane fade" id="transactions-tab-pane" role="tabpanel" aria-labelledby="transactions-tab" tabindex="0">
+    <p class="lead">Transactions</p>
+    {% include 'frontendapp/parts/_transactions.html' %}
+  </div>
+</div>
+
+
+{% endblock %}
+
+
+{% block js %}
+<!--
+<script src="https://unpkg.com/showdown/dist/showdown.min.js"></script>
+var converter = new showdown.Converter();
+converter.makeHtml(data)
+-->
+<script src="{% static 'js/typed.umd.js' %}"></script>
+<script lang="text/javascript"> 
+  function hidebtns() {
+    $("#btn_generate_ai").hide();
+    $("#btn_show_details").hide();
+  } 
+  
+  $("#btn_show_details").click(function(){
+    $("#id_detail").show();
+    hidebtns();
+  });
+  $("#btn_generate_ai").click(function(){
+    let heading = $("#id_heading").val();
+    if (heading.length < 20) {
+      alert('The Heading must contain at least 20 characters.')
+      return
+    }
+    $(this).prop("disabled", true);
+    $(this).html(`<span class="spinner-border spinner-border-sm" aria-hidden="true"></span> Loading...`);
+
+    let url = "https://shihas.stackschools.com/ajax/stackcoinai/"; 
+  
+    
+    $("#id_detail").show();
+    $.get(`${url}?details=${heading}`, function(data, status){      
+      let options = {
+        strings: [data],
+        typeSpeed: 40,
+        backSpeed: 0, // Set backSpeed to 0 to disable erasing
+        showCursor: false,
+        loop: false,
+        onComplete: function () {          
+          hidebtns();
+        }
+      };
+      let typed = new Typed('#id_detail', options);
+    }).fail(function() {
+      hidebtns();
+      $("#id_detail").val('api error');
+    });
+  });
+</script>
+
+{% comment %} <script src="{% static 'select2/select2.min.js' %}"></script>
+<script>
+    $(function () {
+        $('#id_offering').select2();
+        $(".delete_listing").click(function(){
+          let listing = $(this).data('listing');
+          let url = "{% url 'frontendapp:ajax_views' 'delete_listing' %}";
+          $.get(`${url}?listing=${listing}`, function(data, status){
+            if(data=='listing_deleted'){
+
+            }
+          });
+        }); 
+    });
+</script> {% endcomment %}
+{% endblock %}

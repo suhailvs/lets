@@ -1,0 +1,57 @@
+{% extends 'base.html' %} 
+{% load static %}
+{% block content %} 
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:exchange_list' %}">Exchanges</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:user_list' exchange=object.user.exchange.code %}">{{ object.user.exchange.code }}</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:user_detail' exchange=object.user.exchange.code user=object.user.id %}">{{ object.user.username }}</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page">{{object.id}}</li>
+  </ol>
+</nav>
+<h2>{% if object.listing_type == 'O' %}Offering{%else%}Want{%endif%} Details</h2>
+<hr>
+<table class="table table-bordered">
+  <tr><td><strong>{% if object.listing_type == 'O' %}Offering{%else%}Want{%endif%} ID:</strong></td><td>#{{object.id}}</td></tr>
+  <tr><td><strong>Title:</strong></td><td>{{ object.title }}</td></tr>
+  <tr><td><strong>Category:</strong></td><td>{{object.category}}</td></tr>
+  <tr><td colspan="2">
+    <strong>Description:</strong><br>
+    {# object.detail|linebreaks #}
+    <span id="offering_detail">{{ object.description }}</span>
+  </td></tr>
+  {% if object.image %}
+  <tr><td colspan="2"><strong>Picture:</strong><br><img src="{{ object.image.url }}" class="img-thumbnail" alt=""></td></tr>
+  {% endif %}
+  <tr><td><strong>Requesting:</strong></td><td>{{object.rate}}</td></tr>
+  <tr><td><strong>Added On:</strong></td><td>{{ object.created_at|date }}</td></tr>
+</table>
+
+<h2>Advertiser</h2>
+<hr>
+<table class="table table-bordered">
+  <tr><td><strong>Advertiser:</strong></td><td>#{{object.id}}</td></tr>
+  <tr><td><strong>Username:</strong></td><td>{{ object.user.username }}</td></tr>
+  <tr><td><strong>Exchange:</strong></td><td>{{object.user.exchange.title}}</td></tr>
+  <tr><td><strong>Address:</strong></td><td>{{ object.user.exchange.address }}</td></tr>
+  <tr><td><strong>Country:</strong></td><td>{{object.user.exchange.country_city}}</td></tr>
+  <tr><td><strong>Phone:</strong></td><td>{{ object.user.phone }}</td></tr>
+  <tr><td><strong>Send Email:</strong></td><td></td></tr>
+</table>
+
+{% if request.user == object.user %}
+<a href="{% url 'frontendapp:listing_delete' object.id %}">delete</a>
+{% endif %}
+
+{% endblock %}
+
+
+{% block js %}
+<script src="{% static 'js/showdown.min.js' %}"></script>
+<script>
+  let converter = new showdown.Converter();
+  let htmlOutput = converter.makeHtml($("#offering_detail").html());
+  $("#offering_detail").html(htmlOutput);
+</script>
+{% endblock %}
