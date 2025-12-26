@@ -9,3 +9,5 @@ python-decouple==3.8
 pillow==12.0.0
 pycountry==24.6.1
 sorl-thumbnail==12.11.0
+
+requests

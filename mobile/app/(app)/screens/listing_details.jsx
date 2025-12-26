@@ -56,7 +56,7 @@ const OfferingDetailPage = ( ) => {
   const handleBuyNow = () => {
     // Navigate to payment screen
     // navigation.navigate("Checkout", { offering });
-    router.push({ pathname: 'screens/sendmoney/amount', params:{'id':offering.user.id, 'username':offering.user.username, 'first_name':offering.user.first_name} })
+    router.push({ pathname: 'screens/pushnotification'})
   };
   
 
