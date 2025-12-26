@@ -2,20 +2,45 @@ import ErrorMessage from "@/components/ErrorMessage";
 import Logo from "@/components/Logo";
 import { useSession } from "@/login_extras/ctx";
 import { useRouter } from 'expo-router';
-import { useState } from 'react';
+import { useEffect,useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
+import * as Notifications from 'expo-notifications';
+import Constants from 'expo-constants';
 
 export default function Login() {
   const { signIn } = useSession();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [expoPushToken, setExpoPushToken] = useState('');
   const [loading, setLoading] = useState(false);
   const [secureText, setSecureText] = useState(true);
   const [error, setError] = useState("");
   const theme = useTheme(); // Get Paper Theme Colors 
   const router = useRouter();
 
+  async function registerForPushNotificationsAsync() {
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    if (existingStatus !== 'granted') {
+      const { status } = await Notifications.requestPermissionsAsync();
+      finalStatus = status;
+    }
+    if (finalStatus !== 'granted') return null;
+  
+    const projectId =
+      Constants?.expoConfig?.extra?.eas?.projectId ?? Constants?.easConfig?.projectId;
+    if (!projectId) return null;
+  
+    const token = (await Notifications.getExpoPushTokenAsync({projectId,})).data;
+    return token;
+  }
+
+  useEffect(() => {
+    registerForPushNotificationsAsync()
+      .then(token => setExpoPushToken(token ?? ''))
+      .catch((error) => setExpoPushToken(''));
+  }, []);
   const handleLogin = async () => {
     if (!username || !password) {
       setError("Username and password are required");
@@ -25,7 +50,7 @@ export default function Login() {
     setLoading(true);
     
     try {
-      const userData = await signIn(username, password);  
+      const userData = await signIn(username, password, expoPushToken);  
       router.replace("/");    
     } catch (err) {
       if (err.message.includes("is_active")){

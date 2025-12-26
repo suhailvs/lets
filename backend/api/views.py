@@ -7,7 +7,7 @@ from rest_framework.permissions import IsAuthenticated, BasePermission, SAFE_MET
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
-from coinapp.models import Listing, UserVerification, Exchange
+from coinapp.models import Listing, UserVerification, Exchange, ExpoPushToken
 from coinapp.misc import CATEGORIES
 from . import serializers
 from .utils import get_transaction_queryset, save_transaction, UsernameRateThrottle
@@ -44,6 +44,8 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
+        print(request.data)
+        if request.data['expoPushToken']:ExpoPushToken.objects.update_or_create(user=user,defaults={'token': request.data['expoPushToken']})
         return Response(
             {
                 "key": token.key,
@@ -195,3 +197,18 @@ class VerifyUserView(APIView):
         return Response(
             {"detail": "Verification already done."}, status=status.HTTP_400_BAD_REQUEST
         )
+
+
+class SendPushNotificationView(APIView):
+    permission_classes = [IsAuthenticated]
+    def post(self, request):        
+        import requests,json
+        obj = ExpoPushToken.objects.filter(user_id=request.data['user']).first()
+        if obj:
+            # token = obj.token.split('[')[1][:-1]
+            token = obj.token
+            message = {"to": token,"sound": "default",'title':'title','body': 'body','data':{'data':'1'}}
+            response = requests.post("https://exp.host/--/api/v2/push/send",json=message,
+                headers={"Accept": "application/json","Content-Type": "application/json",})
+            print(response.json())
+        return Response({})

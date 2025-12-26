@@ -6,7 +6,7 @@ import { useStorageState } from './useStorageState';
 
 const AuthContext = createContext<{
   // signIn: () => void;
-  signIn: (username: string, password: string) => Promise<void>;
+  signIn: (username: string, password: string, expoPushToken:string) => Promise<void>;
   signOut: () => void;
   session?: string | null;
   isLoading: boolean;
@@ -40,10 +40,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
   }
   
   // Sign-in function
-  const signIn = async (username: string, password: string) => {
+  const signIn = async (username: string, password: string, expoPushToken:string) => {
     console.log(username);
     try {
-      const response = await api.post('/login/', { username, password });
+      const response = await api.post('/login/', { username, password, expoPushToken });
       const data = response.data;
       const token = data.key;
       setSession(token); // Store token securely

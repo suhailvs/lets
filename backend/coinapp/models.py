@@ -92,7 +92,9 @@ class Transaction(models.Model):
     def __str__(self):
         return f"{self.id}: {self.buyer} -> {self.seller}: {self.amount}"
 
-
+class ExpoPushToken(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    token = models.CharField(max_length=255, unique=True)
 # site specific
 class GeneralSettings(models.Model):
     key = models.CharField(max_length=50)
