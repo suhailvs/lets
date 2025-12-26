@@ -45,7 +45,7 @@ class CustomAuthToken(ObtainAuthToken):
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
         print(request.data)
-        if request.data['expoPushToken']:ExpoPushToken.objects.update_or_create(user=user,defaults={'token': request.data['expoPushToken']})
+        if request.data.get('expoPushToken'):ExpoPushToken.objects.update_or_create(user=user,defaults={'token': request.data['expoPushToken']})
         return Response(
             {
                 "key": token.key,

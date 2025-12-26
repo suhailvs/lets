@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "597847777578",
+    "project_id": "letsystem1",
+    "storage_bucket": "letsystem1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:597847777578:android:a30df035f5573ddd7c3e53",
+        "android_client_info": {
+          "package_name": "com.suhailvs.letsystem"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBQwX-xIXhZmEyTfvNoUqxPSbY9Z2y2boo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

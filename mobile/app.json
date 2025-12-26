@@ -17,6 +17,7 @@
         "backgroundColor": "#ffffff"
       },
       "package": "com.suhailvs.letsystem",
+      "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
     },
