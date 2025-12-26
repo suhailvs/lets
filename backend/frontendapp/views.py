@@ -21,7 +21,7 @@ from frontendapp.forms import (
     ListingForm,
     get_state_choices,
 )
-from api.utils import get_transaction_queryset
+from api.utils import get_transaction_queryset, StellarPayment
 
 User = get_user_model()
 
@@ -60,6 +60,22 @@ def save_transaction(amt, desc, seller, buyer,auth_user):
         )
         return resp(True, "", txn)
     return resp(False, "Transaction Failed")
+def stellar_txn(request):
+    if request.method=='POST':
+        amt = int(request.POST['amount'])
+        user = request.user
+        if user.balance < amt:return JsonResponse({"data": 'low balance'})
+        SQ = StellarPayment(asset_code=user.exchange.code)
+        if request.POST['action']=='mint':
+            # mint token in stellar
+            SQ.payment(user.stellar_publickey,amt)
+            user.balance = F('balance') - amt
+            user.save(update_fields=['balance'])
+            # user.refresh_from_db()
+        elif request.POST['action']=='burn':
+            pass
+
+    return JsonResponse({"data": 'success'})
 
 def ajax_views(request, purpose):
     resp = ""

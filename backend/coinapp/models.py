@@ -1,4 +1,5 @@
 import pycountry
+from stellar_sdk import Keypair
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from . import misc
@@ -8,13 +9,18 @@ class User(AbstractUser):
     phone = models.CharField(max_length=50, blank=False)
     balance = models.IntegerField(default=0)
     image = models.ImageField(upload_to='users/')
-
+    stellar_secret = models.CharField(max_length=100, blank=True)
+    
     @property
     def balance_from_txns(self):
         credited = Transaction.objects.filter(seller=self).aggregate(t=models.Sum('amount'))['t'] or 0
         debited = Transaction.objects.filter(buyer=self).aggregate(t=models.Sum('amount'))['t'] or 0
         return credited - debited
 
+    @property
+    def stellar_publickey(self):
+        if not self.stellar_secret:return ''
+        return Keypair.from_secret(self.stellar_secret).public_key
 
 class Exchange(models.Model):
     code = models.CharField(max_length=5, unique=True)

@@ -3,7 +3,7 @@ from django.contrib.auth.admin import UserAdmin
 from .models import Listing, GeneralSettings, Transaction, User, Exchange
 
 # https://stackoverflow.com/a/60084208/2351696
-extrafields = ('image','exchange','phone','balance')
+extrafields = ('image','exchange','phone','balance','stellar_secret',)
 class CustomUserAdmin(UserAdmin):
     fieldsets = UserAdmin.fieldsets + (('Other fields',{'fields':extrafields}),)
     list_display = UserAdmin.list_display +  ('phone','balance','balance_from_txns')# + extrafields 

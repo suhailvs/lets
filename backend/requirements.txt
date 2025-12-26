@@ -11,3 +11,4 @@ pycountry==24.6.1
 sorl-thumbnail==12.11.0
 
 requests
+stellar_sdk
