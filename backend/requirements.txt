@@ -1,11 +1,11 @@
-Django
-django-crispy-forms
-crispy-bootstrap5
+Django==6.0
+django-crispy-forms==2.5
+crispy-bootstrap5==2025.6
 
-djangorestframework
-django-cors-headers
-drf-spectacular
-python-decouple
-pillow
-pycountry
-sorl-thumbnail
+djangorestframework==3.16.1
+django-cors-headers==4.9.0
+drf-spectacular==0.29.0
+python-decouple==3.8
+pillow==12.0.0
+pycountry==24.6.1
+sorl-thumbnail==12.11.0
