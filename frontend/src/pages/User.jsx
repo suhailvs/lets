@@ -62,7 +62,7 @@ export default function User() {
           <div className='card-header'><h5 className="card-title">{user.first_name} ({user.username})</h5></div>
           <ul class="list-group list-group-flush">
             <li class="list-group-item"><img src={user.image} className="card-img-top" alt={user.first_name} /></li>
-            <li class="list-group-item"><p className="card-text">balance: £ {user.balance ?? 0}</p></li>
+            <li class="list-group-item"><p className="card-text">balance: ₹{user.balance ?? 0}</p></li>
           </ul>
 
           <div className="card-body">

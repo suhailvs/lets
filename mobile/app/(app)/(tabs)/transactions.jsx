@@ -42,7 +42,7 @@ export default function TransactionScreen (){
               <View style={styles.transactionItem}>
                 <Text variant="labelLarge">{item.is_received ? `Received from ${item.buyer_name}` : `Paid to ${item.seller_name}`}</Text>
                 <Text style={[styles.transactionAmount, item.is_received ? styles.positive : styles.negative]}>
-                {item.is_received ? '+' : '-'}{item.amount}£
+                ₹{item.is_received ? '+' : '-'}{item.amount}
                 </Text>
                 {item.description && (<Text variant="bodySmall">{item.description}</Text>)}                
                 <Text style={styles.transactionDate}>{formatDate(item.created_at)}</Text>                

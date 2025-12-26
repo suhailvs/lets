@@ -102,7 +102,7 @@ const UserDetails = () => {
                 />
                 <List.Item
                   title="Balance"
-                  description={`£ ${data.balance ?? 0}`}
+                  description={`₹${data.balance ?? 0}`}
                   left={(props) => <List.Icon {...props} icon="wallet" />}
                 />
                 <List.Item

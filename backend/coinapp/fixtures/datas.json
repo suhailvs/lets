@@ -196,7 +196,7 @@
     "pk": 1,
     "fields": {
         "code": "KKDE",
-        "name": "Kolakkode exchange",
+        "name": "Kolakkode",
         "address": "Kolakkode, Palakkad, Kerala. PIN-678686",
         "country_city": "IN-KL",
         "postal_code": "678686"
@@ -207,7 +207,7 @@
     "pk": 2,
     "fields": {
         "code": "PIXL",
-        "name": "Pixdynamics exchange",
+        "name": "Pixdynamics",
         "address": "Carnival Infopark, Kakkanad, Kochi",
         "country_city": "IN-KL",
         "postal_code": "682030"

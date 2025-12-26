@@ -64,7 +64,7 @@ export default function Index() {
         <Text variant="headlineSmall" style={styles.headerText}>Your Balance:</Text>
         
         <View style={{flexDirection: "row"}}>
-          <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `${balance}`:'****'}</Text>        
+          <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
           <TouchableOpacity onPress={fetchBalance}>
             <MaterialIcons name="refresh" size={55} style={[styles.headerText,styles.headerIcon]} />
           </TouchableOpacity>       

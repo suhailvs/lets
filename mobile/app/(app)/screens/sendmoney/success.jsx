@@ -59,7 +59,7 @@ const PaymentSuccessScreen = () => {
         Payment Successful
       </Animated.Text>
       <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
-        £{amount} sent to {name}
+        ₹{amount} sent to {name}
       </Animated.Text>
 
       {/* Bottom Done Button */}

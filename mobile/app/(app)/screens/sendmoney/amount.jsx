@@ -76,7 +76,7 @@ const EnterAmountScreen = () => { // { route, navigation }
       <View style={styles.formContainer}>
       {/* Amount Input */}
       <View style={styles.amountContainer}>
-        <Text style={styles.currency}>£</Text>
+        <Text style={styles.currency}>₹</Text>
         <TextInput
           style={styles.amountInput}
           placeholder="0"
@@ -97,7 +97,7 @@ const EnterAmountScreen = () => { // { route, navigation }
 
       {/* Proceed Button */}
       <TouchableOpacity style={styles.proceedButton} onPress={handleProceed}>
-        <Text style={styles.proceedButtonText}>Pay £{amount || "0"}</Text>
+        <Text style={styles.proceedButtonText}>Pay ₹{amount || "0"}</Text>
       </TouchableOpacity>
       </View>
       {/* Confirmation Modal */}
@@ -106,7 +106,7 @@ const EnterAmountScreen = () => { // { route, navigation }
           <View style={styles.modalContent}>
             <Icon name="check-circle" size={60} color="#34A853" />
             <Text style={styles.modalTitle}>Confirm Payment</Text>
-            <Text style={styles.modalText}>Pay £{amount} to {first_name} ({username})?</Text>
+            <Text style={styles.modalText}>Pay ₹{amount} to {first_name} ({username})?</Text>
             {message ? <Text style={styles.modalMessage}>"{message}"</Text> : null}
             <ErrorMessage message={error} onClose={() => setError("")} />
             
