@@ -6,7 +6,6 @@ import { Text, TextInput, Button, Snackbar, useTheme } from "react-native-paper"
 import ImagePickerComponent from "@/components/ImagePickerComponent";
 import Dropdown from "@/components/Dropdown";
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import axios from "axios";
 import api from '@/constants/api'
 
 
@@ -154,8 +153,7 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   textArea: {
-    height: 380,
-    textAlignVertical: "top",
+    height: 80
   },
   submitButton: {
     marginTop: 12,
