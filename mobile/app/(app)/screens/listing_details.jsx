@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Image, TouchableOpacity, StyleSheet, Linking} from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking} from "react-native";
 import { useRouter, useLocalSearchParams } from 'expo-router';
+import { Image } from "expo-image";
 import { Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -103,7 +104,7 @@ const OfferingDetailPage = ( ) => {
           {/* Product Image   */}
           {offering.image && (
             <View style={styles.imageContainer}>
-              <Image source={{ uri: offering.image }} style={styles.productImage} />
+              <Image source={{ uri: offering.image }} contentFit="contain" style={{ width: 300, aspectRatio: 1 }} />
             </View>
           )}
           
@@ -170,7 +171,6 @@ const OfferingDetailPage = ( ) => {
 const styles = StyleSheet.create({
   container: { flex: 1, padding: 20, backgroundColor: "#fff" },
   imageContainer: { alignItems: "center", marginBottom: 20 },
-  productImage: { width: "100%", height: 300, borderRadius: 10 },
   productTitle: { fontSize: 24, fontWeight: "bold", color: "#232F3E", marginTop: 10, borderBottomWidth: 1, borderBottomColor: "#ddd"},
   productPrice: { fontSize: 20, marginTop: 10 },
   dateLabel: {fontSize: 16,fontWeight: "bold",color: "gray",marginRight: 5,},

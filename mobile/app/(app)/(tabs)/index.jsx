@@ -1,4 +1,5 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
+import { Image } from "expo-image";
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { List, Button, Avatar, Card, HelperText } from 'react-native-paper';
@@ -116,8 +117,8 @@ const UserDetails = () => {
                   left={(props) => <List.Icon {...props} icon="clock" />}
                 />             
                 {error ? <HelperText type="error">{error}</HelperText> : null}
+                <Image source={{ uri: data.image }} contentFit="contain" style={{ width: 300, aspectRatio: 1 }} />
               </Card.Content>
-              <Card.Cover source={{ uri: data.image }} style={{ resizeMode: "contain", height: 250, backgroundColor: "#000" }} />
             </Card>
           </View>
         )}
