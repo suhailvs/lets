@@ -1,3 +1,4 @@
+import requests
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 from rest_framework import status
@@ -197,18 +198,19 @@ class VerifyUserView(APIView):
         return Response(
             {"detail": "Verification already done."}, status=status.HTTP_400_BAD_REQUEST
         )
-
+def send_push_notification(receiver_id, title, body, data=None):
+    obj = ExpoPushToken.objects.filter(user_id=receiver_id).first()
+    if obj:
+        # token = obj.token.split('[')[1][:-1]
+        token = obj.token
+        message = {"to": token,"sound": "default",'title':title,'body': body,'data':data}
+        response = requests.post("https://exp.host/--/api/v2/push/send",json=message,
+            headers={"Accept": "application/json","Content-Type": "application/json",})
+        print(response.json())
 
 class SendPushNotificationView(APIView):
     permission_classes = [IsAuthenticated]
-    def post(self, request):        
-        import requests,json
-        obj = ExpoPushToken.objects.filter(user_id=request.data['user']).first()
-        if obj:
-            # token = obj.token.split('[')[1][:-1]
-            token = obj.token
-            message = {"to": token,"sound": "default",'title':'title','body': 'body','data':{'data':'1'}}
-            response = requests.post("https://exp.host/--/api/v2/push/send",json=message,
-                headers={"Accept": "application/json","Content-Type": "application/json",})
-            print(response.json())
+    def post(self, request):
+        sulaiman = 3      
+        send_push_notification(receiver_id=sulaiman,title="New Message",body="Hi Sulaiman, You have a new chat message",data={"chat_id": 123})
         return Response({})
