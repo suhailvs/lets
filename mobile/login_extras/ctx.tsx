@@ -1,4 +1,4 @@
-import { createContext, useContext, type PropsWithChildren } from 'react';
+import { createContext, useContext,useEffect, useRef, type PropsWithChildren } from 'react';
 // import axios from 'axios';
 import api from '@/constants/api';
 import * as SecureStore from 'expo-secure-store';
@@ -17,6 +17,7 @@ const AuthContext = createContext<{
   isLoading: false,
 });
 
+const isLoggingOutRef = useRef(false);
 // This hook can be used to access the user info.
 export function useSession() {
   const value = useContext(AuthContext);
@@ -78,6 +79,18 @@ export function SessionProvider({ children }: PropsWithChildren) {
     setSession(null);
     delete api.defaults.headers.common['Authorization'];
   };
+
+  // if token has been deleted from the table, then user need to signout
+  useEffect(() => {
+    const interceptorId = api.interceptors.response.use(
+      response => response,
+      error => {
+        if (error.response?.status === 401 && !isLoggingOutRef.current) {signOut();}
+        return Promise.reject(error);
+      }
+    );
+    return () => {api.interceptors.response.eject(interceptorId);};
+  }, []);
 
   return (
     <AuthContext.Provider value={{ signIn, signOut, session, isLoading }}>
