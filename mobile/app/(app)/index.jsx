@@ -1,10 +1,11 @@
-
+// Home page with user balance, logout button and some userlisting
 import { View,  StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar, Text, Card, Button, Searchbar  } from 'react-native-paper';
 import { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from "@expo/vector-icons";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 import api from '@/constants/api'
 import { useSession } from "@/login_extras/ctx";
@@ -25,8 +26,8 @@ export default function Index() {
   }, []);
   const fetchUsers = async () => {
     try {
-        const response = await api.get('/users/');
-        setUsers(response.data);
+        const response = await api.get('/users/?page=1');
+        setUsers(response.data.results);
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
@@ -73,6 +74,9 @@ export default function Index() {
       <View style={styles.container}>
         <Card>
           <Card.Actions>
+            <Button 
+              icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
+               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}></Button>
             <Button onPress={signOut}>Logout</Button>
             <Button onPress={() => handleShowUser(authuser.user_id, 'yes')}>My Account</Button>
           </Card.Actions>

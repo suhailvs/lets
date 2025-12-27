@@ -17,7 +17,7 @@ export default function Listings({ltype}) {
   const fetchData = async () => {
     try {
         const response = await api.get(`/listings/?type=${ltype}&page=${page}&user=${global.selectedUserId}`);
-        setData(response.data);
+        setData(response.data.results);
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
