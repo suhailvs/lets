@@ -17,8 +17,6 @@ const AddListingScreen = () => {
   const [description, setDescription] = useState("");
   const [rate, setRate] = useState("");
   const [image, setSelectedImage] = useState(null);
-  const [loadingDescription, setLoadingDescription] = useState(false);
-  const [showDescription, setShowDescription] = useState(false);  
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
@@ -68,43 +66,15 @@ const AddListingScreen = () => {
       setLoading(false);
     }   
   };
-
-  const handleGenerateDetail = async () => {
-    setLoadingDescription(true);
-    let url = "https://shihas.stackschools.com/ajax/stackcoinai/"; 
-
-    let text_startswith = "";
-    if (ltype==='O') {
-      text_startswith = "Create an offering description for local exchange trading system where I can offer activity or things like";
-    } else {
-      text_startswith = "Create a wants description for local exchange trading system where I want ";
-    }
-    try {
-      // const response = await axios.get(`${url}?details=${text_startswith} ${title}`);
-      const response = {data: ''};
-      setDescription(response.data);
-      setShowDescription(true);
-    } catch (error) {
-      setError("Failed to generate description.");
-    } finally {
-    setLoadingDescription(false);
-    }
-  };
-
   return (
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text variant="titleLarge">Add a New {ltype==='O'? 'Offering':'Want'}</Text>
-      <Dropdown
-        label="Select Category"
-        items={categories}
-        // selectedValue={selectedCategory}
-        onSelect={setCategory}
-      />
-      {/* Title Input */}
-      <TextInput mode="outlined" label="Title" style={styles.input} value={title} onChangeText={setTitle} />
-
-      {showDescription ? (
+      
+      {image && (
         <>
+          <Dropdown label="Select Category" items={categories} onSelect={setCategory} />
+          {/* Title Input */}
+          <TextInput mode="outlined" label="Title" style={styles.input} value={title} onChangeText={setTitle} />
           <TextInput
             label="Description"
             value={description}
@@ -114,25 +84,15 @@ const AddListingScreen = () => {
             style={[styles.input, styles.textArea]}
           />
           <TextInput label="Rate" value={rate} onChangeText={setRate} mode="outlined" style={styles.input} />
-          <ImagePickerComponent onImageSelected={setSelectedImage} />
-          <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.submitButton}>
-            Add Listing
-          </Button>
         </>
-      ) : (
-        <Button 
-          mode="contained" 
-          loading={loadingDescription} 
-          disabled={loadingDescription} 
-          onPress={handleGenerateDetail}
-        >
-          {loadingDescription ? "Processing..." : "Enter description"}
-        </Button>
       )}
+      <ImagePickerComponent onImageSelected={setSelectedImage} />
 
       <Snackbar visible={!!error} onDismiss={() => setError("")} action={{ label: "OK" }}>
         {error}
       </Snackbar>
+      {image && 
+        <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.submitButton}> Add Listing </Button>}
       <Text></Text><Text></Text><Text></Text>
     </ScrollView>
   );

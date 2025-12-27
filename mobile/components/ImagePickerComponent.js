@@ -1,79 +1,124 @@
-import React, { useState } from "react";
-import { View, Image,Text, StyleSheet, Alert } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-// import Button from "@/components/Button";
-import { Button } from 'react-native-paper';
+import { useRef, useState } from "react";
+import { Image } from "expo-image";
+import {
+  CameraView,
+  useCameraPermissions,
+} from "expo-camera";
+import { Button, Pressable, StyleSheet, Text, View } from "react-native";
+import AntDesign from "@expo/vector-icons/AntDesign";
+import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+
 
 export default function ImagePickerScreen({ onImageSelected }) {
-  const [image, setImage] = useState(null);
-
-  // Request Permissions for Camera & Gallery
-  const requestPermissions = async () => {
-    const { status } = await ImagePicker.requestCameraPermissionsAsync();
-    if (status !== "granted") {
-      Alert.alert("Permission Required", "Camera access is needed to take pictures.");
-      return false;
-    }
-    return true;
-  };
-  const loadImage = (result) => {
-    if (!result.canceled) {
-        setImage(result.assets[0].uri);
-        onImageSelected(result.assets[0].uri);
-    }
+  // const [image, setImage] = useState(null);
+  const [permission, requestPermission] = useCameraPermissions();
+  const ref = useRef(null);
+  const [uri, setUri] = useState(null);
+  const [facing, setFacing] = useState("back");
+  
+  if (!permission) {
+    return null;
   }
 
-  // Capture Image from Camera
-  const openCamera = async () => {
-    const hasPermission = await requestPermissions();
-    if (!hasPermission) return;
-
-    let result = await ImagePicker.launchCameraAsync({
-      allowsEditing: true, // Enables cropping
-      aspect: [4, 3], // Crop aspect ratio
-      quality: 1, // High-quality image
-    });
-    loadImage(result);
-    
-  };
-
-  // Pick Image from Gallery
-  const pickImage = async () => {
-    let result = await ImagePicker.launchImageLibraryAsync({
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    loadImage(result);
-  };
-
-  return (
-    <View style={styles.container}>
-      {image && <Image source={{ uri: image }} style={styles.image} />}
-      <View style={styles.buttonContainer}>
-        <Button icon="camera" mode="elevated"  onPress={openCamera}>Open Camera</Button>
-        
-        {/* Image Picker */}
-        <Button mode="elevated" onPress={pickImage}>Pick from Gallery</Button>
+  if (!permission.granted) {
+    return (
+      <View style={styles.container}>
+        <Text style={{ textAlign: "center" }}>
+          We need your permission to use the camera
+        </Text>
+        <Button onPress={requestPermission} title="Grant permission" />
       </View>
+    );
+  }
+  
+  const takePicture = async () => {
+    const photo = await ref.current?.takePictureAsync();
+    if (photo?.uri) {
+      setUri(photo.uri);
+      onImageSelected(photo.uri);
+    }
+  };
+
+  const toggleFacing = () => {
+    setFacing((prev) => (prev === "back" ? "front" : "back"));
+  };
+
+  const renderPicture = (uri) => {    
+    return (<Image source={{ uri }} contentFit="contain" style={{ width: 300, aspectRatio: 1 }} />);
+  };
+
+  const renderCamera = () => {
+    return (
+      <View style={{ width: "100%", aspectRatio: 3 / 4 }}>
+        <View style={styles.cameraContainer}>
+          <CameraView
+            style={styles.camera}
+            ref={ref}
+            mode={"picture"}
+            facing={facing}
+            mute={false}
+            responsiveOrientationWhenOrientationLocked
+          />
+          <View style={styles.shutterContainer}>
+            <AntDesign name="picture" size={32} color="white" />
+            <Pressable onPress={takePicture}>
+              {({ pressed }) => (
+                <View style={[styles.shutterBtn,{opacity: pressed ? 0.5 : 1,},]}>
+                  <View style={[styles.shutterBtnInner,  { backgroundColor: "white" }, ]} />
+                </View>
+              )}
+            </Pressable>
+            <Pressable onPress={toggleFacing}>
+              <FontAwesome6 name="rotate-left" size={32} color="white" />
+            </Pressable>
+          </View>
+        </View>
+      </View>
+    );
+  };
+  
+  
+  return (
+    <View>
+      {uri ? renderPicture(uri) : renderCamera()}
     </View>
   );
 }
+  
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },  
-  buttonContainer: { 
-    marginTop:10,
-    flexDirection: "row", 
-    justifyContent: "space-between" 
-  },
-  image: {
+  cameraContainer: StyleSheet.absoluteFillObject,
+  camera: StyleSheet.absoluteFillObject,
+  shutterContainer: {
+    position: "absolute",
+    bottom: 44,
+    left: 0,
     width: "100%",
-    height: 200,
+    alignItems: "center",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 30,
+  },
+  shutterBtn: {
+    backgroundColor: "transparent",
+    borderWidth: 5,
+    borderColor: "white",
+    width: 85,
+    height: 85,
+    borderRadius: 45,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  shutterBtnInner: {
+    width: 70,
+    height: 70,
+    borderRadius: 50,
   },
 });
+  
+  
+  
+  
+  
+  
+  
