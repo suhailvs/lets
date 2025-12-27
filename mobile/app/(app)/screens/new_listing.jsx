@@ -141,21 +141,8 @@ const AddListingScreen = () => {
 export default AddListingScreen;
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    padding: 20,
-    backgroundColor: "#f4f4f4",
-  },
-  input: {
-    marginBottom: 12,
-  },
-  input: {
-    marginBottom: 12,
-  },
-  textArea: {
-    height: 80
-  },
-  submitButton: {
-    marginTop: 12,
-  },
+  container: {flex: 1,padding: 20,backgroundColor: "#f4f4f4"},
+  input: {marginBottom: 12},
+  textArea: { height: 80 },
+  submitButton: { marginTop: 12 },
 });
