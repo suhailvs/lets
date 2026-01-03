@@ -151,9 +151,9 @@ class ListingTest(APITestCase):
     def test_list_listings(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE001"].key)
         response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=2" )
-        self.assertEqual(response.json(), [])
+        self.assertEqual(response.json()['results'], [])
         response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=1" )
-        self.assertEqual(response.json()[0]['title'], 'rice')
+        self.assertEqual(response.json()['results'][0]['title'], 'rice')
         
 
     def test_view_listing(self):
@@ -183,12 +183,12 @@ class ListingTest(APITestCase):
 
         # user can see his inactive offerings
         response = self.client.get(f"{BASE_URL}listings/?type=O&user=1" )
-        self.assertEqual(response.json()[0]['title'], 'rice')
+        self.assertEqual(response.json()['results'][0]['title'], 'rice')
 
         # other user will not see inactive offerings
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE002"].key)
         response = self.client.get(f"{BASE_URL}listings/?type=O&user=1" )
-        self.assertEqual(response.json(), [])
+        self.assertEqual(response.json()['results'], [])
 
 
 class TransactionTest(APITestCase):
