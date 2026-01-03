@@ -23,8 +23,7 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const response = await API.get(`/users/`);
-      console.log(response.data)
-      setUsers(response.data);
+      setUsers(response.data.results);
     } catch (err) {
       if (err.response) {
         console.log(err.response.data || 'Login failed. Please try again.');
