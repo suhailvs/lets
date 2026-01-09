@@ -203,9 +203,9 @@ class TransactionTest(APITestCase):
         # login as anshad
         token = Token.objects.get_or_create(user_id=5)[0]
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        # nusra is not in request.user's exchange, so error
+        # nusra is not in request.user's exchange, but still he can see her txns
         response = self.client.get(f"{BASE_URL}transactions/?user=2")
-        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
         # suhail pixl is in request.user's exchange, so success
         response = self.client.get(f"{BASE_URL}transactions/?user=8")
         self.assertEqual(response.json()[0]['description'], 'Sandwich ')

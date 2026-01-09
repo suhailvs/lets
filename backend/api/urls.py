@@ -7,6 +7,7 @@ app_name = 'api'
 router = DefaultRouter()
 router.register('listings', views.ListingModelViewSet, basename='listing-api')
 router.register('users', views.UserReadOnlyViewSet, basename='userreadonly-api')
+router.register('exchangeusers', views.ExchangeUserReadOnlyViewset, basename='exchangeuserreadonly-api')
 
 urlpatterns = [    
     path('', include(router.urls)),

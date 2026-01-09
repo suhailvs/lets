@@ -1,30 +1,57 @@
 import { useState, useEffect } from "react";
-import { StyleSheet, FlatList, View, Image, SafeAreaView } from "react-native";
+import { StyleSheet, FlatList, View, Image } from "react-native";
 import { Text, List, Searchbar, FAB } from "react-native-paper";
 import { useRouter } from "expo-router";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import api from "@/constants/api"; 
-
+import globalStyles from "@/components/Styles"; 
 export default function Listings({ltype}) {
   const [page, setPage] = useState(1);
+  const [totallistings, setTotalListings] = useState(0);
+  const [hasNext, setHasNext] = useState(true);
   const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   const router = useRouter();
   useEffect(() => {
-    fetchData();
-  }, [page]);
+    fetchData(1);
+  }, []);
 
-  const fetchData = async () => {
+  const fetchData = async (pageNumber = page) => {
+    if (loading || refreshing || !hasNext) return;
+    setLoading(true);
     try {
-        const response = await api.get(`/listings/?type=${ltype}&page=${page}&user=${global.selectedUserId}`);
-        setData(response.data.results);
+        const res = await api.get(`/listings/?type=${ltype}&user=${global.selectedUserId}&page=${pageNumber}`);
+        if (pageNumber === 1) {
+          setData(res.data.results);
+        } else {
+          setData(prev => [...prev, ...res.data.results]);
+        }
+        setTotalListings(res.data.count);
+        if (res.data.next) {
+          setPage(pageNumber + 1);
+        } else {
+          setHasNext(false);   // last page reached
+        }
     } catch (error) {
         console.error('Error fetching data:', error);
     } finally {
         setLoading(false);
     }
   };
-
+  const onRefresh = async () => {
+    setRefreshing(true);
+    try {      
+      const res = await api.get(`/listings/?type=${ltype}&user=${global.selectedUserId}&page=1`);
+      setData(res.data.results);
+      setPage(2);                   // next page is 2
+      setHasNext(!!res.data.next);  // true if next exists
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setRefreshing(false);
+    }
+  };
   const renderItem = ({ item }) => (
     <List.Item
       title={item.category}
@@ -41,27 +68,18 @@ export default function Listings({ltype}) {
   );
 
   return (
-    <View style={styles.container}>
+    <View style={[globalStyles.container,{paddingTop:20}]}>
       {/* Search Bar */}
-      <Searchbar
-        placeholder="Search"
-        style={styles.searchBar}
-        icon="magnify"
-      />
-
-      {/* Product Listing */}
-      {loading && <View>
-          <SkeletonLoader width={100} height={20} />
-          <SkeletonLoader width={200} height={15} />
-          <SkeletonLoader width={250} height={15} />
-        </View>}
+      <Text>Total Listings: {totallistings}</Text>
       <FlatList
         data={data}
         keyExtractor={(item) => item.id.toString()}
         renderItem={renderItem}
-        contentContainerStyle={styles.listContainer}
-        onEndReached={() => setPage(page + 1)}
+        onEndReached={() => fetchData(page)}
         onEndReachedThreshold={0.5}
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+        contentContainerStyle={styles.listContainer}
         ListFooterComponent={loading && <SkeletonLoader width={100} height={20} />}
       />
 
@@ -76,14 +94,6 @@ export default function Listings({ltype}) {
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#f8f8f8",
-  },
-  searchBar: {
-    margin: 10,
-    borderRadius: 10,
-  },
   listContainer: {
     paddingHorizontal: 10,
     paddingBottom: 80,

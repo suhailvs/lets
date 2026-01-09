@@ -88,30 +88,45 @@ class CreateUserView(CreateAPIView):
     model = User
     serializer_class = serializers.UserCreateSerializer
 
+
 class UserReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserSerializer
-
     def get_queryset(self):
-        exchange = self.request.user.exchange
-        return User.objects.filter(exchange=exchange).order_by("first_name")
+        return User.objects.order_by("first_name")
 
+class ExchangeUserReadOnlyViewset(UserReadOnlyViewSet):
+    # to list users in home page
+    pagination_class = None
+    def get_queryset(self):
+        return User.objects.filter(exchange=self.request.user.exchange).order_by("first_name")
 
 class ListingModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
+        request = self.request
         user = self.request.user
-        qs = Listing.objects.filter(user__exchange=user.exchange)
+        qs = Listing.objects.all() #.filter(user__exchange=user.exchange)
         if self.action == "list":
-            qs = qs.filter(
-                listing_type=self.request.GET.get("type", "O"),
-                user=self.request.GET["user"],
-            )
-            if int(self.request.GET["user"]) != user.id:
+            listing_type = request.query_params.get("type", "O")
+            qs = qs.filter(listing_type=listing_type)
+                
+            user_id = request.query_params.get("user")
+            try:
+                user_id = int(user_id)
+            except ValueError:
+                # listings of all users
+                return qs.order_by("-created_at")
+            
+            # listings of a user
+            qs = qs.filter(user_id=user_id)
+            if user_id != user.id:
                 # don't show inactive lisiting
                 qs=qs.filter(is_active=True)
+            
         return qs.order_by("-created_at")
+        
 
     def get_serializer_class(self):
         if self.action == "list":
@@ -129,9 +144,6 @@ class Transactions(APIView):
 
     def get(self, request, format=None):        
         user = User.objects.get(id=self.request.GET["user"])
-        # check if given user is in request.user's exchange?
-        if user.exchange != request.user.exchange:            
-            return Response("Can see only your exchange txns.", status=status.HTTP_400_BAD_REQUEST)
         qs = get_transaction_queryset(user)
         serializer = serializers.TransactionSerializer(qs, many=True)
         return Response(serializer.data)
