@@ -7,6 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import api from '@/constants/api';
 import { formatDate } from '@/utils/formatDate';
+import ImagePreview from "@/components/ImagePreview";
 
 const UserDetails = () => {
   const { id,is_mine } = useLocalSearchParams();
@@ -117,7 +118,7 @@ const UserDetails = () => {
                   left={(props) => <List.Icon {...props} icon="clock" />}
                 />             
                 {error ? <HelperText type="error">{error}</HelperText> : null}
-                <Image source={{ uri: data.image }} contentFit="contain" style={{ width: 300, aspectRatio: 1 }} />
+                <ImagePreview imageUri={data.image}/>
               </Card.Content>
             </Card>
           </View>

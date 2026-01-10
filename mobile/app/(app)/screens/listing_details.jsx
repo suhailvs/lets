@@ -5,7 +5,7 @@ import { Image } from "expo-image";
 import { Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import SkeletonLoader from "@/components/SkeletonLoader";
-
+import ImagePreview from "@/components/ImagePreview";
 import api from '@/constants/api'
 import Markdown from 'react-native-markdown-display';
 import { MaterialIcons } from "@expo/vector-icons"; // Call icon
@@ -102,12 +102,7 @@ const OfferingDetailPage = ( ) => {
           {/* Formatted Date */}
           <Text style={styles.dateLabel}>Added on: {formatDate(offering.created_at)}</Text>
           {/* Product Image   */}
-          {offering.image && (
-            <View style={styles.imageContainer}>
-              <Image source={{ uri: offering.image }} contentFit="contain" style={{ width: 300, aspectRatio: 1 }} />
-            </View>
-          )}
-          
+          {offering.image && <ImagePreview imageUri={offering.image}/>}
           
           {/* Product Description */}          
           <Markdown>{offering.description}</Markdown>
