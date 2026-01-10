@@ -4,7 +4,7 @@ import { useState } from 'react';
 import Listings from "@/components/Listings";
 const AllListingComponent = () => {
   const [value, setValue] = useState('offerings');
-
+  global.selectedUserId = 'all';
   return (
     <View style={styles.container}>
       <SegmentedButtons

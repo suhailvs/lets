@@ -116,13 +116,12 @@ class ListingModelViewSet(viewsets.ModelViewSet):
             qs = qs.filter(listing_type=listing_type)
                 
             user_id = request.query_params.get("user")
-            try:
-                user_id = int(user_id)
-            except:
+            if user_id=='all':
                 # listings of all users
                 return qs.order_by("-created_at")
             
             # listings of a user
+            user_id = int(user_id)
             qs = qs.filter(user_id=user_id)
             if user_id != user.id:
                 # don't show inactive lisiting
