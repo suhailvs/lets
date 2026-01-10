@@ -2,7 +2,7 @@
   "expo": {
     "name": "letsystem",
     "slug": "letsystem",
-    "version": "1.1.6",
+    "version": "1.2.1",
     "orientation": "portrait",
     "icon": "./assets/images/lets-icon.png",
     "scheme": "letsystem",
