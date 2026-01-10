@@ -76,9 +76,10 @@ class ListingDetailSerializer(serializers.ModelSerializer):
 
 
 class ListingListSerializer(serializers.ModelSerializer):
+    exchange = serializers.ReadOnlyField(source="user.exchange.code")
     class Meta:
         model = Listing
-        fields = ("id", "category", "title", "image",'rate','thumbnail')
+        fields = ("id", "category", "title", "image",'rate','thumbnail','exchange')
     # https://github.com/dessibelle/sorl-thumbnail-serializer-field/tree/master#example-usage
     thumbnail = HyperlinkedSorlImageField(
         '128x128',

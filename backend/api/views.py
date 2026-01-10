@@ -45,7 +45,10 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
-        if request.data.get('expoPushToken'):ExpoPushToken.objects.update_or_create(user=user,defaults={'token': request.data['expoPushToken']})
+        pushtoken = request.data.get('expoPushToken')
+        if pushtoken:
+            ExpoPushToken.objects.filter(token=pushtoken).exclude(user=user).delete()
+            ExpoPushToken.objects.update_or_create(user=user,defaults={'token': pushtoken})
         return Response(
             {
                 "key": token.key,
@@ -115,7 +118,7 @@ class ListingModelViewSet(viewsets.ModelViewSet):
             user_id = request.query_params.get("user")
             try:
                 user_id = int(user_id)
-            except ValueError:
+            except:
                 # listings of all users
                 return qs.order_by("-created_at")
             
