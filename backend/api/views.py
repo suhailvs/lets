@@ -118,7 +118,7 @@ class ListingModelViewSet(viewsets.ModelViewSet):
             user_id = request.query_params.get("user")
             if user_id=='all':
                 # listings of all users
-                return qs.order_by("-created_at")
+                return qs.filter(is_active=True).order_by("-created_at")
             
             # listings of a user
             user_id = int(user_id)

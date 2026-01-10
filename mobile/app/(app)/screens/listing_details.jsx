@@ -70,13 +70,14 @@ const OfferingDetailPage = ( ) => {
       console.error('Error deleting item:', error);
     }
   };
-  const handleDeactivate = async () => {
+  const handleActivateListing = async (is_active) => {
     try {
-      const response = await api.patch(`/listings/${offering.id}/`,{is_active:false},
+      const response = await api.patch(`/listings/${offering.id}/`,{is_active},
         { headers: { 'Content-Type': 'application/json'}}
       );
       console.log('Item deactivated successfully:');
-      router.replace("/")
+      // router.replace("/")
+      fetchData();
     } catch (error) {
       console.error('Error deactivating item:', error);
     }
@@ -129,23 +130,29 @@ const OfferingDetailPage = ( ) => {
           </View>
           {/* Add to Delete and Buy Now Buttons */}
           {offering.user.id == userdata.user_id && 
-          <>{offering.is_active == false && <Button
-            mode="outlined"
-            onPress={handleDeactivate}
-            style={styles.deleteButton}
-            textColor="#D32F2F"
-            icon={({ color, size }) => (
-              <MaterialIcons name="close" color={color} size={size} />
-            )}
-          >Deactivate</Button>}<Button
-            mode="outlined"
-            onPress={handleDelete}
-            style={styles.deleteButton}
-            textColor="#D32F2F"
-            icon={({ color, size }) => (
-              <MaterialIcons name="delete" color={color} size={size} />
-            )}
-          >Delete</Button></>} 
+          <>
+            {
+              offering.is_active == true ? (<Button
+                mode="outlined"
+                onPress={() => handleActivateListing(false)}
+                style={styles.deleteButton}
+                textColor="#D32F2F"
+                icon={({ color, size }) => (
+                  <MaterialIcons name="close" color={color} size={size} />
+                )}
+                >Deactivate</Button>):
+                (<Button mode="outlined" style={{marginTop: 10}} onPress={() => handleActivateListing(true)}>Activate</Button>)
+            }
+            <Button
+              mode="outlined"
+              onPress={handleDelete}
+              style={styles.deleteButton}
+              textColor="#D32F2F"
+              icon={({ color, size }) => (
+                <MaterialIcons name="delete" color={color} size={size} />
+              )}
+            >Delete</Button>
+          </>} 
           <Button
             mode="contained"
             onPress={handleBuyNow}

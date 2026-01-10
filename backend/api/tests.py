@@ -307,6 +307,9 @@ class ListingTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE002"].key)
         response = self.client.get(f"{BASE_URL}listings/?type=O&user=1")
         self.assertEqual(response.json()["results"], [])
+        # Other users cannot see even in all listing
+        response = self.client.get(f"{BASE_URL}listings/?type=O&user=all")
+        self.assertEqual(response.json()["results"], [])
 
 # =====================================================================
 # TRANSACTIONS
