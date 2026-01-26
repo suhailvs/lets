@@ -6,7 +6,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-
+import i18n from '@/constants/i18n';
 import api from '@/constants/api'
 
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -72,7 +72,7 @@ export default function Index() {
             <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
                mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}>All Users</Button> */}
             <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
-              onPress={() => handleShowUser(authuser.user_id, 'yes')}>My Account</Button>
+              onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>
                         
           </Card.Actions>
         </Card>

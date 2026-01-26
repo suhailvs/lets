@@ -5,7 +5,7 @@ import SkeletonLoader from "@/components/SkeletonLoader";
 import api from '@/constants/api'
 import globalStyles from "@/components/Styles"; 
 import { formatDate } from '@/utils/formatDate';
-
+import i18n from '@/constants/i18n';
 export default function TransactionScreen (){
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -34,7 +34,7 @@ export default function TransactionScreen (){
         </View>
       ) : (
         <View>        
-          <Text variant="headlineMedium">Transactions</Text>
+          <Text variant="headlineMedium">{i18n.t('transactions')}</Text>
           <FlatList
             data={data}
             keyExtractor={(item) => item.id.toString()}
