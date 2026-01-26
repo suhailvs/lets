@@ -212,13 +212,13 @@
     "model": "coinapp.listing",
     "pk": 16,
     "fields": {
-        "user": 2,
+        "user": 1,
         "category": "Advice_Tuition",
-        "title": "Maths Tuition for upto 10 standard",
-        "description": "**Offering: Maths Tuition for Students (Up to 10th Standard)**  \n\nDo you or your child need support with Maths? I’m offering personalized **Maths Tuition** as part of the Local Exchange Trading System (LETS)! I specialize in helping students from primary levels up to **10th standard** (Year 10) build confidence, master concepts, and improve their problem-solving skills.  \n\n### What’s Included:\n- **One-on-One or Group Sessions:** Tailored to the student’s pace and level of understanding.  \n- **Comprehensive Coverage of Syllabus:** Algebra, Geometry, Trigonometry, Probability, Calculus (if applicable), and more.  \n- **Exam Preparation and Homework Help:** Assistance with test strategies, past papers, and assignments.  \n- **Concept-Focused Learning:** Simplifying tricky problems and explaining solutions in a clear, accessible way.  \n- **Interactive and Engaging Lessons:** Real-life applications to make learning maths fun!  \n\n### Perfect For:\n- Students who need extra practice or clarification with tough topics.  \n- Learners preparing for school exams or improving their grades.   \n- Anyone wanting to boost their confidence in Maths!  \n\n### Exchange Details:\nI’m trading this service as part of LETS, so I’m happy to accept **skills, goods, or services in return.** Some examples of what I’d be interested in are:  \n- Cooking/Baking lessons or homemade meals  \n- Gardening help  \n- Cleaning/Organizing services  \n- Art, craft, or creative workshops  \n- Any other service or skill you’re offering!  \n\nLet’s connect to discuss how we can trade and make learning Maths a positive experience. Feel free to reach out and let me know how I can help! 😊",
-        "rate": "10 per hour",
+        "title": "കണക്ക് ട്യൂഷൻ പ്ലസ് ടു ക്ലാസ് വരെ",
+        "description": "**ഒന്ന് മുതൽ പ്ലസ് ടു ക്ലാസ് വരെ കണക്ക് ട്യൂഷൻ നൽകുന്നതാണ്.**\r\n+ രാവിലെ ആറു മണി മുതൽ ഏഴു മണി വരെ. \r\n+ എന്റെ വീട്ടിൽ(സുമയ്യ മൻസിൽ) വച്ചോ അതോ നിങ്ങളുടെ വീട്ടിൽ വച്ചോ നൽകുന്നതാണ്. \r\n+ ആവശ്യമുള്ളവർ എന്നെ താഴെ കാണുന്ന നമ്പറിൽ വിളിക്കാവുന്നതാണ്.",
+        "rate": "ഒരു മണിക്കൂറിന് 10 രൂപ",
         "listing_type": "O",
-        "created_at": "2025-05-01T08:00:46.283Z",
+        "created_at": "2026-01-10T16:08:17.347Z",
         "image": "offering/2025/05/01/upload_DHGIXZg.jpg",
         "is_active": true
     }

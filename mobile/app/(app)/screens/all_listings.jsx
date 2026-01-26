@@ -2,6 +2,7 @@ import { SegmentedButtons } from 'react-native-paper';
 import { StyleSheet, View, Text } from 'react-native';
 import { useState } from 'react';
 import Listings from "@/components/Listings";
+import i18n from '@/constants/i18n';
 const AllListingComponent = () => {
   const [value, setValue] = useState('offerings');
   global.selectedUserId = 'all';
@@ -11,8 +12,8 @@ const AllListingComponent = () => {
         value={value}
         onValueChange={setValue}
         buttons={[
-          { value: 'offerings', label: 'Offerings', icon: 'cart', },
-          { value: 'wants', label: 'Wants', icon: 'shopping' },
+          { value: 'offerings', label: `${i18n.t('offerings')}`, icon: 'cart', },
+          { value: 'wants', label: `${i18n.t('wants')}`, icon: 'shopping' },
         ]}
       />
       <View style={styles.content}>

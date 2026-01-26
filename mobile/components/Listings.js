@@ -1,10 +1,12 @@
 import { useState, useEffect } from "react";
 import { StyleSheet, FlatList, View, Image } from "react-native";
-import { Text, List, Searchbar, FAB } from "react-native-paper";
+import { Text, List, FAB } from "react-native-paper";
 import { useRouter } from "expo-router";
 import SkeletonLoader from "@/components/SkeletonLoader";
 import api from "@/constants/api"; 
 import globalStyles from "@/components/Styles"; 
+import i18n from '@/constants/i18n';
+
 export default function Listings({ltype}) {
   const [page, setPage] = useState(1);
   const [totallistings, setTotalListings] = useState(0);
@@ -85,7 +87,7 @@ export default function Listings({ltype}) {
 
       {/* Floating Cart Button */}
       {global.isMe=='yes' && (
-        <FAB style={styles.fab} icon={'plus'} label={ltype==='O'? 'New Offering':'New Want'}
+        <FAB style={styles.fab} icon={'plus'} label={ltype==='O'? `${i18n.t('newoffering')}`:`${i18n.t('newwant')}`}
           onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':ltype} })}
         />)
       }

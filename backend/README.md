@@ -12,6 +12,18 @@ Run the following in your terminal:
 ```
 curl -s https://raw.githubusercontent.com/suhailvs/pylets/main/pylets.sh | bash
 ```
+or
+
+```bash
+$ cp .env.example .env
+$ pip install -r requirements.txt
+$ python manage.py migrate
+$ python manage.py loaddata datas
+$ python manage.py loaddata offerings
+$ python manage.py loaddata users
+$ python manage.py runserver
+```
+
 visit: http://localhost:8000/
 
 ## Run Tests
