@@ -56,8 +56,8 @@ const OfferingDetailPage = ( ) => {
   
   const handleBuyNow = () => {
     // Navigate to payment screen
-    // navigation.navigate("Checkout", { offering });
-    router.push({ pathname: 'screens/pushnotification'})
+    router.push({ pathname: 'screens/sendmoney/amount', params:{'id':offering.user.id, 'username':offering.user.username, 'first_name':offering.user.first_name} });
+    // router.push({ pathname: 'screens/pushnotification'})
   };
   
 
@@ -159,7 +159,7 @@ const OfferingDetailPage = ( ) => {
             style={styles.buyNowButton}
             labelStyle={styles.buttonText}
           >
-            Buy Now
+            Send Money
           </Button>
           
           {/* These 3 text boxes are to add some margin Bottom */}
