@@ -1,6 +1,6 @@
 // Home page with user balance, logout button and some userlisting
 import { View,  StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Avatar, Text, Card, Button, Searchbar  } from 'react-native-paper';
+import { Avatar, Text, Card, Button  } from 'react-native-paper';
 import { useState, useEffect } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
@@ -16,7 +16,6 @@ export default function Index() {
   const [authuser, setAuthUser] = useState({});
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
   const router = useRouter();
 
   useEffect(() => {
@@ -50,10 +49,6 @@ export default function Index() {
         console.error('Error fetching data:', error);
     }
   };
-  const filteredContacts = users.filter(contact =>
-    contact.first_name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    contact.username.includes(searchQuery)
-  );
   const { signOut } = useSession();
   const handleShowUser = (userid,is_mine='no') => {
     router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});
@@ -61,7 +56,7 @@ export default function Index() {
   return (
     <ScrollView>
       <View style={styles.header}>
-        <Text variant="labelLarge" style={styles.headerText}>Hi {authuser.firstname}, welcome to {authuser.exchange_name} exchange.</Text>
+        <Text variant="labelLarge" style={styles.headerText}>{authuser.firstname}({authuser.exchange_name})</Text>
         <Text variant="headlineSmall" style={styles.headerText}>Your Balance:</Text>
         
         <View style={{flexDirection: "row"}}>
@@ -89,7 +84,6 @@ export default function Index() {
           </Card.Actions>
         </Card>
         <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>
-        <Searchbar placeholder="Search by name/phonenumber" onChangeText={setSearchQuery} value={searchQuery}/>
         
         {loading ? (
           <View>
@@ -99,7 +93,7 @@ export default function Index() {
           </View>
         ) : (
           <View style={styles.peopleRow}>
-            {filteredContacts.map((user, i) => (
+            {users.map((user, i) => (
               <View style={styles.person} key={i}>
                 <TouchableOpacity onPress={() => handleShowUser(user.id)}>
                 <Avatar.Image size={60} source={{ uri: user.thumbnail }} />

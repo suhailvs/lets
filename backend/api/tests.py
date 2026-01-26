@@ -154,6 +154,17 @@ class UserDetailsTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
+    def test_exchange_users(self):
+        """
+        Don't show loggedin user in exchange users
+        """
+        token = Token.objects.get_or_create(user_id=1)[0] # KKDE001
+        response = self.client.get(
+            f"{BASE_URL}exchangeusers/",
+            headers={"Authorization": f"Token {token}"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotIn('KKDE001',[u['username'] for u in response.data])
 # =====================================================================
 # USER VERIFICATION
 # =====================================================================

@@ -2,12 +2,13 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { Image } from "expo-image";
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
-import { List, Button, Avatar, Card, HelperText } from 'react-native-paper';
+import { List, Button, Avatar, Card, HelperText, Text } from 'react-native-paper';
 import { Ionicons } from '@expo/vector-icons';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import api from '@/constants/api';
 import { formatDate } from '@/utils/formatDate';
 import ImagePreview from "@/components/ImagePreview";
+import i18n from '@/constants/i18n';
 
 const UserDetails = () => {
   const { id,is_mine } = useLocalSearchParams();
@@ -62,6 +63,7 @@ const UserDetails = () => {
           </View>
         ) : (
           <View>
+            <Text variant="headlineSmall">{data.first_name}</Text>
             {!data.is_active ? (
               <Button
                 mode="contained"
@@ -72,15 +74,26 @@ const UserDetails = () => {
                 {verifyLoading ? 'Verifying...' : 'Verify User'}
               </Button>
             ):(
-              <Button
-                mode="contained-tonal"
-                icon={({ size, color }) => (
-                  <Ionicons name="send" size={size} color={color} />
-                )}
-                onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name } })}
-              >
-                Send Money
-              </Button>
+              <>
+              {global.isMe=='yes' ? (
+                <>
+                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}>
+                  {i18n.t('newoffering')}</Button>
+                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
+                  style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
+                </>
+              ):(
+                <Button
+                  mode="contained-tonal"
+                  icon={({ size, color }) => (
+                    <Ionicons name="send" size={size} color={color} />
+                  )}
+                  onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name } })}
+                >
+                  Send Money
+                </Button>
+              )}
+              </>
             )}
           
             <Card mode="outlined" style={styles.card}>

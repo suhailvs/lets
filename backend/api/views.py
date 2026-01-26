@@ -102,7 +102,7 @@ class ExchangeUserReadOnlyViewset(UserReadOnlyViewSet):
     # to list users in home page
     pagination_class = None
     def get_queryset(self):
-        return User.objects.filter(exchange=self.request.user.exchange).order_by("first_name")
+        return User.objects.filter(exchange=self.request.user.exchange).exclude(id=self.request.user.id).order_by("first_name")
 
 class ListingModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
