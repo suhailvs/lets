@@ -48,7 +48,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="transactions"
         options={{
-          title: 'Transactions',
+          title: `${i18n.t('transactions')}`,
           tabBarIcon: ({ color }) => <Icon name="file-document" size={28} color={color} />,
         }}
       />

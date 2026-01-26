@@ -9,7 +9,7 @@ import { formatDate } from '@/utils/formatDate';
 import ImagePreview from "@/components/ImagePreview";
 import i18n from '@/constants/i18n';
 import { useSession } from "@/login_extras/ctx";
-
+import { MaterialIcons } from "@expo/vector-icons";
 const UserDetails = () => {
   const { id,is_mine } = useLocalSearchParams();
   const [data, setData] = useState({});
@@ -77,11 +77,11 @@ const UserDetails = () => {
               <>
               {global.isMe=='yes' ? (
                 <>
-                <Button mode="contained-tonal" icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} onPress={signOut}>
+                <Button mode="contained" icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} onPress={signOut}>
                   Logout</Button>
-                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}
+                <Button mode="contained" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}
                   style={{marginTop: 15}}>{i18n.t('newoffering')}</Button>
-                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
+                <Button mode="contained" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
                   style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
                 </>
               ):(
