@@ -160,6 +160,13 @@ class Transactions(APIView):
         response_data = save_transaction(transaction_type, amt, desc, seller, buyer)
         if response_data["success"]:
             serializer = serializers.TransactionSerializer(response_data["txn_obj"])
+            notification_user = serializer.data['buyer']
+            txn_from = serializer.data['seller_name']
+            if transaction_type == "buyer":
+                notification_user=serializer.data['seller']
+                txn_from = serializer.data['buyer_name']
+            send_push_notification(receiver_id=notification_user,title="New Transaction",
+                body=f"New trasaction from {txn_from}",data={"txn_id": serializer.data['id']})
             return Response(serializer.data)
         return Response(response_data["msg"], status=status.HTTP_400_BAD_REQUEST)
 
@@ -221,9 +228,9 @@ def send_push_notification(receiver_id, title, body, data=None):
             headers={"Accept": "application/json","Content-Type": "application/json",})
         print(response.json())
 
-class SendPushNotificationView(APIView):
-    permission_classes = [IsAuthenticated]
-    def post(self, request):
-        sulaiman = 3      
-        send_push_notification(receiver_id=sulaiman,title="New Message",body="Hi Sulaiman, You have a new chat message",data={"chat_id": 123})
-        return Response({})
+# class SendPushNotificationView(APIView):
+#     permission_classes = [IsAuthenticated]
+#     def post(self, request):
+#         sulaiman = 3      
+#         send_push_notification(receiver_id=sulaiman,title="New Message",body="Hi Sulaiman, You have a new chat message",data={"chat_id": 123})
+#         return Response({})

@@ -56,7 +56,7 @@ export default function Index() {
   return (
     <ScrollView>
       <View style={styles.header}>
-        <Text variant="headlineSmall" style={styles.headerText}>{authuser.firstname}({authuser.exchange_name})</Text>
+        <Text variant="headlineSmall" style={styles.headerText}>{authuser.firstname} ({authuser.exchange_name})</Text>
         <View style={{flexDirection: "row"}}>
           <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
           <TouchableOpacity onPress={fetchBalance}>
@@ -67,9 +67,9 @@ export default function Index() {
       <View style={styles.container}>
         <Card>
           <Card.Actions>
-            {/* <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}>All Listings</Button>
-            <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
+            <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
+               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
+            {/* <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
                mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}>All Users</Button> */}
             <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
               onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>

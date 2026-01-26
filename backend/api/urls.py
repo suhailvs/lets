@@ -16,6 +16,6 @@ urlpatterns = [
     path('login/', views.CustomAuthToken.as_view()),
     path('registration/', views.CreateUserView.as_view()),
     path('verifyuser/', views.VerifyUserView.as_view()),
-    path('sendpushnotification/', views.SendPushNotificationView.as_view()),
+    # path('sendpushnotification/', views.SendPushNotificationView.as_view()),
     
 ]
