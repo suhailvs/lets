@@ -1,5 +1,4 @@
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Image } from "expo-image";
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { List, Button, Avatar, Card, HelperText, Text } from 'react-native-paper';
@@ -9,6 +8,7 @@ import api from '@/constants/api';
 import { formatDate } from '@/utils/formatDate';
 import ImagePreview from "@/components/ImagePreview";
 import i18n from '@/constants/i18n';
+import { useSession } from "@/login_extras/ctx";
 
 const UserDetails = () => {
   const { id,is_mine } = useLocalSearchParams();
@@ -17,7 +17,7 @@ const UserDetails = () => {
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [error, setError] = useState('');
   const router = useRouter();
-
+  const { signOut } = useSession();
   useEffect(() => {
     fetchData();
   }, []);
@@ -77,8 +77,10 @@ const UserDetails = () => {
               <>
               {global.isMe=='yes' ? (
                 <>
-                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}>
-                  {i18n.t('newoffering')}</Button>
+                <Button mode="contained-tonal" icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} onPress={signOut}>
+                  Logout</Button>
+                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}
+                  style={{marginTop: 15}}>{i18n.t('newoffering')}</Button>
                 <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
                   style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
                 </>

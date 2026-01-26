@@ -8,7 +8,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 
 import api from '@/constants/api'
-import { useSession } from "@/login_extras/ctx";
+
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 export default function Index() {
@@ -49,7 +49,7 @@ export default function Index() {
         console.error('Error fetching data:', error);
     }
   };
-  const { signOut } = useSession();
+  
   const handleShowUser = (userid,is_mine='no') => {
     router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});
   };
@@ -67,13 +67,13 @@ export default function Index() {
       <View style={styles.container}>
         <Card>
           <Card.Actions>
-            <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
+            {/* <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
+               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}>All Listings</Button>
             <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}></Button>
+               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}>All Users</Button> */}
             <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
-              onPress={() => handleShowUser(authuser.user_id, 'yes')}></Button>
-            <Button icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} mode="contained" onPress={signOut}></Button>            
+              onPress={() => handleShowUser(authuser.user_id, 'yes')}>My Account</Button>
+                        
           </Card.Actions>
         </Card>
         <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>
