@@ -56,9 +56,7 @@ export default function Index() {
   return (
     <ScrollView>
       <View style={styles.header}>
-        <Text variant="labelLarge" style={styles.headerText}>{authuser.firstname}({authuser.exchange_name})</Text>
-        <Text variant="headlineSmall" style={styles.headerText}>Your Balance:</Text>
-        
+        <Text variant="headlineSmall" style={styles.headerText}>{authuser.firstname}({authuser.exchange_name})</Text>
         <View style={{flexDirection: "row"}}>
           <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
           <TouchableOpacity onPress={fetchBalance}>
@@ -69,18 +67,13 @@ export default function Index() {
       <View style={styles.container}>
         <Card>
           <Card.Actions>
-            <Button icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} mode="contained" onPress={signOut}>Logout</Button>
-            <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
-              onPress={() => handleShowUser(authuser.user_id, 'yes')}>My Account</Button>
-          </Card.Actions>
-        </Card>
-        <Text></Text>
-        <Card>
-          <Card.Actions>
-            <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}>All Users</Button>
             <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}>All Listings</Button>
+               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
+            <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
+               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}></Button>
+            <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
+              onPress={() => handleShowUser(authuser.user_id, 'yes')}></Button>
+            <Button icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} mode="contained" onPress={signOut}></Button>            
           </Card.Actions>
         </Card>
         <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>
