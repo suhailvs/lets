@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView } from 'react-native';
+import { View, StyleSheet, ScrollView,Linking } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { List, Button, Avatar, Card, HelperText, Text } from 'react-native-paper';
@@ -52,7 +52,14 @@ const UserDetails = () => {
       fetchData();
     }
   };
-
+  
+  const openWhatsApp = () => {
+    const message = 'Hello from LETS app';
+    const url = `whatsapp://send?phone=${data.phone}&text=${encodeURIComponent(message)}`;
+    Linking.openURL(url).catch(() => {
+      alert('WhatsApp is not installed');
+    });
+  };
   return (
       <ScrollView contentContainerStyle={styles.container}>
         {loading ? (
@@ -108,9 +115,10 @@ const UserDetails = () => {
               <Card.Content>
                 
                 <List.Item
-                  title="Phone"
+                  title="Whatsapp"
                   description={data.phone || '-'}
-                  left={(props) => <List.Icon {...props} icon="phone" />}
+                  left={(props) => <List.Icon {...props} icon="whatsapp" />}
+                  onPress={openWhatsApp}
                 />
                 <List.Item
                   title="Email"
@@ -122,7 +130,7 @@ const UserDetails = () => {
                   description={`₹${data.balance ?? 0}`}
                   left={(props) => <List.Icon {...props} icon="wallet" />}
                 />
-                <List.Item
+                {/* <List.Item
                   title="Date of Birth"
                   description={data.date_of_birth || '-'}
                   left={(props) => <List.Icon {...props} icon="calendar" />}
@@ -131,7 +139,7 @@ const UserDetails = () => {
                   title="Last Login"
                   description={formatDate(data.last_login) || '-'}
                   left={(props) => <List.Icon {...props} icon="clock" />}
-                />             
+                />*/}
                 {error ? <HelperText type="error">{error}</HelperText> : null}
                 <ImagePreview imageUri={data.image}/>
               </Card.Content>
