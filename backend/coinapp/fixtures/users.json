@@ -18,7 +18,7 @@
         "government_id": "",
         "date_of_birth": "1988-12-04",
         "balance": 0,
-        "image": "",
+        "image": "users/meeran.jpeg",
         "groups": [],
         "user_permissions": []
     }
@@ -90,7 +90,7 @@
         "government_id": "",
         "date_of_birth": "1988-12-04",
         "balance": 0,
-        "image": "",
+        "image": "users/inu.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -162,7 +162,7 @@
         "government_id": "",
         "date_of_birth": "1988-12-04",
         "balance": 0,
-        "image": "",
+        "image": "users/naseer.jpeg",
         "groups": [],
         "user_permissions": []
     }
@@ -210,7 +210,7 @@
         "government_id": "",
         "date_of_birth": "1988-12-04",
         "balance": 0,
-        "image": "",
+        "image": "users/sufail.jpeg",
         "groups": [],
         "user_permissions": []
     }
@@ -234,7 +234,7 @@
         "government_id": "",
         "date_of_birth": "1988-12-04",
         "balance": 0,
-        "image": "",
+        "image": "users/sumee.jpeg",
         "groups": [],
         "user_permissions": []
     }
