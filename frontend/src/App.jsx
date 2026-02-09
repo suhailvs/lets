@@ -5,6 +5,7 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import User from './pages/User';
+import Map from './pages/Map';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthContext } from './utils/AuthContext';
 
@@ -26,8 +27,9 @@ function App() {
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
         />
         
-        <Route element={<PrivateRoute />}>          
+        <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/map" element={<Map />} />
             <Route path="/user/:id" element={<User />} />
         </Route>
       </Routes>
