@@ -10,8 +10,12 @@ class CustomUserAdmin(UserAdmin):
     list_display = UserAdmin.list_display +  ('phone','date_of_birth','balance','balance_from_txns')# + extrafields 
     list_filter = ("is_active", "exchange")
 
+
+class ListingAdmin(admin.ModelAdmin):
+    list_filter = ('is_active',)
+                   
 admin.site.register(GeneralSettings)
 admin.site.register(User, CustomUserAdmin)
 admin.site.register(Exchange)
-admin.site.register(Listing)
+admin.site.register(Listing,ListingAdmin)
 admin.site.register(Transaction)
