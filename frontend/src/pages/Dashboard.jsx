@@ -7,23 +7,30 @@ export default function Dashboard() {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(false);
   const [authuser, setAuthUser] = useState({});
+  const [page, setPage] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
+  const [hasPrevious, setHasPrevious] = useState(false);
 
   useEffect(() => {
     getAuthUser();
     fetchBalance();
-    fetchUsers();
-    
   }, []);
+
+  useEffect(() => {
+    fetchUsers(page);
+  }, [page]);
 
   const getAuthUser = () => {
       const user = localStorage.getItem('user');
       setAuthUser(user ? JSON.parse(user) : null);
     };
-  const fetchUsers = async () => {
+  const fetchUsers = async (pageNumber) => {
     setLoading(true);
     try {
-      const response = await API.get(`/users/`);
-      setUsers(response.data.results);
+      const res = await API.get(`/users/?page=${pageNumber}`);
+      setUsers(res.data.results);
+      setHasNext(res.data.next);
+      setHasPrevious(res.data.previous);
     } catch (err) {
       if (err.response) {
         console.log(err.response.data || 'Login failed. Please try again.');
@@ -52,8 +59,6 @@ export default function Dashboard() {
             alt="" />
         </Link>
         <div className="media-body">
-         {/* <Link to={`/user/${user.id}`}>{user.username}</Link><br />
-          Balance: <strong>{user.balance}</strong><br /> */}
           {user.first_name}
         </div>
       </div>
@@ -64,7 +69,16 @@ export default function Dashboard() {
       <h3>{authuser.firstname}, ({authuser.exchange_name})</h3>
       <h2>Your Balance: {balance != null ? `${balance}`:'****'}</h2>
       <hr />
-      {loading==true ? (<div>loading...</div>): (<div className="row">{listItems}</div>)}      
+      {loading==true ? (<div>loading...</div>): (<div className="row">{listItems}</div>)}   
+
+      <div style={{ marginTop: 20 }}>
+        <button className="btn btn-primary" onClick={() => setPage(p => p - 1)} disabled={!hasPrevious}>
+          {'<-- Previous Page'}
+        </button>
+        <button className="btn btn-primary" onClick={() => setPage(p => p + 1)} disabled={!hasNext} style={{ marginLeft: 10 }}>
+          {'Next Page -->'}
+        </button>
+      </div>   
     </>
   );
 }

@@ -29,6 +29,7 @@ export default function Nav() {
                     <a className='navbar-brand' href='/'>{user['username']}</a>
                     <div className="navbar-nav">
                         <NavLink to="/dashboard" className="nav-item nav-link">Users</NavLink>
+                        <NavLink to="/map" className="nav-item nav-link">Map</NavLink>
                         <button onClick={handleLogout} className="btn btn-link nav-item nav-link">Logout</button>
                     </div>
                 </div>
