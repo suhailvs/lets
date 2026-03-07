@@ -7,7 +7,6 @@ app_name = 'api'
 router = DefaultRouter()
 router.register('listings', views.ListingModelViewSet, basename='listing-api')
 router.register('users', views.UserReadOnlyViewSet, basename='userreadonly-api')
-router.register('exchangeusers', views.ExchangeUserReadOnlyViewset, basename='exchangeuserreadonly-api')
 
 urlpatterns = [    
     path('', include(router.urls)),
@@ -16,6 +15,5 @@ urlpatterns = [
     path('login/', views.CustomAuthToken.as_view()),
     path('registration/', views.CreateUserView.as_view()),
     path('verifyuser/', views.VerifyUserView.as_view()),
-    # path('sendpushnotification/', views.SendPushNotificationView.as_view()),
     
 ]

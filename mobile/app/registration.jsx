@@ -15,7 +15,6 @@ export default function RegisterScreen() {
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
   const [email, setEmail] = useState('');
-  const [date_of_birth, setDateOfBirth] = useState('');
   const [exchange, setExchange] = useState('');
   const [image, setSelectedImage] = useState(null);
   const [secureText, setSecureText] = useState(true);
@@ -40,7 +39,7 @@ export default function RegisterScreen() {
     }
   };
   const handleRegistration = async () => {
-    if (!first_name || !phone || !password  || !email || !date_of_birth || !exchange || !image) {
+    if (!first_name || !phone || !password  || !email || !exchange || !image) {
       if(!image){
         setError("Please upload your profile picture.");
       } else {
@@ -56,7 +55,6 @@ export default function RegisterScreen() {
     formData.append("email", email);
     formData.append("phone", phone);
     formData.append("password", password);
-    formData.append("date_of_birth", date_of_birth);
     formData.append("exchange", exchange);
     try {      
       const response = await api.post('/registration/', formData, { headers: { "Content-Type": "multipart/form-data" } });
@@ -108,13 +106,6 @@ export default function RegisterScreen() {
             onPress={() => setSecureText(!secureText)}
             />
         }
-        style={styles.input}
-      />      
-      <TextInput
-        label="Date Of Birth(YYYY-MM-DD)"
-        value={date_of_birth}
-        onChangeText={setDateOfBirth}
-        mode="outlined"
         style={styles.input}
       />
       <Dropdown

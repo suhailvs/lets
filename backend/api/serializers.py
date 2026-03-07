@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ["id", "first_name","last_login", "username","email","is_active", "balance",
-            'phone','government_id','date_of_birth','exchange', "image",'thumbnail']
+            'phone','exchange', "image",'thumbnail']
         read_only_fields = fields
     thumbnail = HyperlinkedSorlImageField(
         '128x128',
@@ -38,8 +38,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
             'email',
             "phone",
             "password",
-            # "government_id",
-            "date_of_birth",
             "exchange",
             'username',
             "image",

@@ -12,15 +12,9 @@ User = get_user_model()
 class SignUpForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     email = forms.EmailField(required=True)
+    phone = forms.CharField(required=True)
     tandc = forms.BooleanField(label="Terms and Conditions.")
 
-    def clean_government_id(self):
-        govt_id = self.cleaned_data["government_id"]
-        if govt_id:
-            if User.objects.filter(government_id=govt_id).exists():
-                raise ValidationError({'government_id': 'This Government ID must be unique.'})
-        return govt_id
-    
     def save(self, commit=True, exchange_obj=None):
         user = super().save(commit=commit)
         if exchange_obj:
@@ -39,8 +33,6 @@ class SignUpForm(UserCreationForm):
             "phone",
             "first_name",
             "email",
-            "government_id",
-            "date_of_birth",
             "password1",
             "password2",
             "tandc",

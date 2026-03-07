@@ -1,14 +1,13 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import Listing, GeneralSettings, Transaction, User, UserVerification, Exchange
+from .models import Listing, GeneralSettings, Transaction, User, Exchange
 
 # https://stackoverflow.com/a/60084208/2351696
-extrafields = ('image','exchange','phone','government_id','date_of_birth','balance')
+extrafields = ('image','exchange','phone','balance')
 class CustomUserAdmin(UserAdmin):
-    # see -> env/lib/python3.12/site-packages/django/contrib/auth/admin.py
     fieldsets = UserAdmin.fieldsets + (('Other fields',{'fields':extrafields}),)
-    list_display = UserAdmin.list_display +  ('phone','date_of_birth','balance','balance_from_txns')# + extrafields 
-    list_filter = ("is_active", "exchange")
+    list_display = UserAdmin.list_display +  ('phone','balance','balance_from_txns')# + extrafields 
+    list_filter = ("is_active","exchange")
 
 
 class ListingAdmin(admin.ModelAdmin):
