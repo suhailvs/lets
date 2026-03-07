@@ -1,4 +1,4 @@
-import { View, StyleSheet, ScrollView,Linking } from 'react-native';
+import { View, StyleSheet, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { List, Button, Avatar, Card, HelperText, Text } from 'react-native-paper';
@@ -6,6 +6,7 @@ import { Ionicons } from '@expo/vector-icons';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import api from '@/constants/api';
 import { formatDate } from '@/utils/formatDate';
+import { openWhatsApp } from '@/utils/openWhatsApp';
 import ImagePreview from "@/components/ImagePreview";
 import i18n from '@/constants/i18n';
 import { useSession } from "@/login_extras/ctx";
@@ -53,13 +54,6 @@ const UserDetails = () => {
     }
   };
   
-  const openWhatsApp = () => {
-    const message = 'Hello from LETS app';
-    const url = `whatsapp://send?phone=${data.phone}&text=${encodeURIComponent(message)}`;
-    Linking.openURL(url).catch(() => {
-      alert('WhatsApp is not installed');
-    });
-  };
   return (
       <ScrollView contentContainerStyle={styles.container}>
         {loading ? (
@@ -92,33 +86,32 @@ const UserDetails = () => {
                   style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
                 </>
               ):(
-                <Button
-                  mode="contained-tonal"
-                  icon={({ size, color }) => (
-                    <Ionicons name="send" size={size} color={color} />
-                  )}
-                  onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name } })}
-                >
-                  Send Money
-                </Button>
+                <Card>
+                  <Card.Actions>
+                    <Button mode="contained-tonal" icon={({ size, color }) => (<Ionicons name="send" size={size} color={color} />)}
+                      onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'buyer' } })}
+                    > Send</Button>
+                    <Button mode="contained-tonal"
+                      onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'seller' } })}
+                    > Receive</Button>
+                  </Card.Actions>
+                </Card>
               )}
               </>
             )}
           
-            <Card mode="outlined" style={styles.card}>
-              
+            <Card mode="outlined" style={styles.card}>              
               <Card.Title
                 title={data.username || 'User'}
                 subtitle={`ID: ${data.id}`}
                 left={(props) => <Avatar.Image size={50} source={{ uri: data.thumbnail }} />}
               />
-              <Card.Content>
-                
+              <Card.Content>                
                 <List.Item
                   title="Whatsapp"
                   description={data.phone || '-'}
                   left={(props) => <List.Icon {...props} icon="whatsapp" />}
-                  onPress={openWhatsApp}
+                  onPress={() => openWhatsApp(data.phone,'')}
                 />
                 <List.Item
                   title="Email"

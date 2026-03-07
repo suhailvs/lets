@@ -4,6 +4,7 @@ import { useRouter, useLocalSearchParams } from 'expo-router';
 import { Image } from "expo-image";
 import { Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
+import { openWhatsApp } from '@/utils/openWhatsApp';
 import SkeletonLoader from "@/components/SkeletonLoader";
 import ImagePreview from "@/components/ImagePreview";
 import api from '@/constants/api'
@@ -54,10 +55,8 @@ const OfferingDetailPage = ( ) => {
     }
   };
   
-  const handleBuyNow = () => {
-    // Navigate to payment screen
-    router.push({ pathname: 'screens/sendmoney/amount', params:{'id':offering.user.id, 'username':offering.user.username, 'first_name':offering.user.first_name} });
-    // router.push({ pathname: 'screens/pushnotification'})
+  const handleShowUser = (userid,is_mine='no') => {
+    router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});
   };
   
 
@@ -119,7 +118,6 @@ const OfferingDetailPage = ( ) => {
             </Text>
             <Text style={styles.advertiserDate}>Last login: {formatDate(offering.user.last_login)}</Text>
                
-
             <View style={styles.phoneView}>
               <Text style={styles.phoneLabel}>Contact Customer:</Text>
               <TouchableOpacity onPress={handleCallPress}  style={styles.phoneContainer}>
@@ -128,8 +126,9 @@ const OfferingDetailPage = ( ) => {
               </TouchableOpacity>
             </View>
           </View>
+
           {/* Add to Delete and Buy Now Buttons */}
-          {offering.user.id == userdata.user_id && 
+          {offering.user.id == userdata.user_id ?
           <>
             {
               offering.is_active == true ? (<Button
@@ -152,15 +151,26 @@ const OfferingDetailPage = ( ) => {
                 <MaterialIcons name="delete" color={color} size={size} />
               )}
             >Delete</Button>
-          </>} 
-          <Button
-            mode="contained"
-            onPress={handleBuyNow}
-            style={styles.buyNowButton}
-            labelStyle={styles.buttonText}
-          >
-            Send Money
-          </Button>
+          </>:
+          <>
+            <Button
+              mode="contained"
+              onPress={() => openWhatsApp(offering.user.phone,`I am interested in your advertisement ${offering.title}.`)}
+              style={styles.buyNowButton}
+              labelStyle={styles.buttonText}
+            >
+              Send Whatsapp Message
+            </Button>
+            <Button
+              mode="contained"
+              onPress={() => handleShowUser(offering.user.id)}
+              style={styles.buyNowButton}
+              labelStyle={styles.buttonText}
+            >
+              View User
+            </Button>
+          </>
+          } 
           
           {/* These 3 text boxes are to add some margin Bottom */}
           <Text></Text><Text></Text><Text></Text>

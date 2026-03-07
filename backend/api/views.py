@@ -93,8 +93,10 @@ class UserReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = serializers.UserSerializer
     pagination_class = None
     def get_queryset(self):
-        return User.objects.filter(exchange=self.request.user.exchange
-            ).order_by("first_name")
+        qs = User.objects.filter(exchange=self.request.user.exchange).order_by("first_name")
+        if self.action == "list":
+            qs = qs.exclude(id = self.request.user.id)
+        return qs
 
 class ListingModelViewSet(viewsets.ModelViewSet):
     permission_classes = [IsAuthenticated, IsOwnerOrReadOnly]
@@ -109,7 +111,7 @@ class ListingModelViewSet(viewsets.ModelViewSet):
             user_id = request.query_params.get("user")
             if user_id=='all':
                 # listings of all users
-                return qs.filter(is_active=True).order_by("-created_at")
+                return qs.filter(is_active=True).exclude(user=user).order_by("-created_at")
             # listings of a user
             user_id = int(user_id)
             qs = qs.filter(user_id=user_id)
@@ -141,7 +143,7 @@ class Transactions(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        transaction_type = "buyer"  # request.data["transaction_type"] # buyer or seller
+        transaction_type = request.data["transaction_type"] # buyer or seller
         amt = request.data["amount"]
         desc = request.data["message"]
         # default is seller transaction(receive money)

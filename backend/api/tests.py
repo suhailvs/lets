@@ -162,7 +162,7 @@ class UserDetailsTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertTrue(
-            all(user["exchange"] == 1 for user in response.data["results"]),
+            all(user["exchange"] == 1 for user in response.data),
             "Found user(s) from another exchange in /users/ response",
         )
 # =====================================================================
@@ -389,6 +389,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_nusra.id,
                 "amount": 10,
                 "message": "caring",
+                "transaction_type":"buyer",
             },
             headers={"Authorization": f"Token {token}"},
         )
@@ -428,6 +429,7 @@ class TransactionTest(APITestCase):
                     "user": User.objects.get(username="PIXL001").id,
                     "amount": amt,
                     "message": f"sending amount of {{amt}} to sabreesh must return error",
+                    "transaction_type":"buyer",
                 },
                 headers={"Authorization": f"Token {token.key}"},
             )
@@ -454,6 +456,7 @@ class TransactionTest(APITestCase):
                 "user": User.objects.get(username="PIXL001").id,
                 "amount": '101',
                 "message": "sending amount of 101 to sabreesh must return error",
+                "transaction_type":"buyer",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -478,6 +481,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_nusra.id,
                 "amount": '101',
                 "message": "sending amount of 101 to nusra must return error",
+                "transaction_type":"buyer",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -502,6 +506,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_sulaiman.id,
                 "amount": 11,
                 "message": "send 11$ to sulaiman must return error",
+                "transaction_type":"buyer",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
