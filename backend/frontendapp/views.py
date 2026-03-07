@@ -11,7 +11,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView
 from django.http import JsonResponse
 
-from coinapp.models import Listing, GeneralSettings, Exchange
+from coinapp.models import Listing, Exchange
 from frontendapp.forms import (
     SignUpForm,
     SignUpFormWithoutExchange,
@@ -24,21 +24,10 @@ from api.utils import get_transaction_queryset, save_transaction
 
 User = get_user_model()
 
-
-def about_view(request):
-    about_count = GeneralSettings.objects.get(key="about")
-    about_count.value = int(about_count.value) + 1
-    about_count.save()
-    return render(request, "about.html")
-
-
 def ajax_views(request, purpose):
     resp = ""
     if purpose == "get_cities":
         resp = get_state_choices(request.GET.get("country"))
-    # elif purpose == "get_balance":
-    #     # i think it is not used
-    #     resp = User.objects.get(username=request.GET.get("username")).amount
     return JsonResponse({"data": resp})
 
 

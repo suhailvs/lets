@@ -130,11 +130,7 @@ const UserDetails = () => {
                   description={`₹${data.balance ?? 0}`}
                   left={(props) => <List.Icon {...props} icon="wallet" />}
                 />
-                {/* <List.Item
-                  title="Date of Birth"
-                  description={data.date_of_birth || '-'}
-                  left={(props) => <List.Icon {...props} icon="calendar" />}
-                />
+                {/* 
                 <List.Item
                   title="Last Login"
                   description={formatDate(data.last_login) || '-'}

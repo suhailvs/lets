@@ -93,8 +93,6 @@ class RegistrationTest(APITestCase):
             {
                 "password": "mypass1234",
                 "phone": "9000000000",
-                "government_id": "123456",
-                "date_of_birth": "1988-12-04",
                 "exchange": "1",
                 "image": sample_image(),
             },
@@ -146,7 +144,6 @@ class UserDetailsTest(APITestCase):
             {"username": "KKDE002", "password": "sumee1910"},
         )
         token = response.json()["key"]
-
         # Fetch user details
         response = self.client.get(
             f"{BASE_URL}users/{User.objects.get(username='KKDE002').id}/",
@@ -154,17 +151,20 @@ class UserDetailsTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
-    def test_exchange_users(self):
+    def test_users_list_only_shows_same_exchange_users(self):
         """
-        Don't show loggedin user in exchange users
+        users list endpoint should only return users from request user's exchange
         """
-        token = Token.objects.get_or_create(user_id=1)[0] # KKDE001
+        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE001 (exchange=1)
         response = self.client.get(
-            f"{BASE_URL}exchangeusers/",
+            f"{BASE_URL}users/",
             headers={"Authorization": f"Token {token}"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertNotIn('KKDE001',[u['username'] for u in response.data])
+        self.assertTrue(
+            all(user["exchange"] == 1 for user in response.data["results"]),
+            "Found user(s) from another exchange in /users/ response",
+        )
 # =====================================================================
 # USER VERIFICATION
 # =====================================================================
@@ -213,8 +213,6 @@ class VerifyUserTest(APITestCase):
                 "first_name": "sufail",
                 "password": "dummypassword",
                 "phone": "dummyphone",
-                "government_id": "",
-                "date_of_birth": "1991-12-21",
                 "exchange": "1",
                 "image": sample_image(),
             },
@@ -280,6 +278,23 @@ class ListingTest(APITestCase):
         response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=1")
         self.assertEqual(response.json()["results"][0]["title"], "rice")
 
+    def test_all_listings_only_include_same_exchange(self):
+        """
+        user=all listing feed must be limited to request user's exchange
+        """
+        Listing.objects.create(
+            user=User.objects.get(username="PIXL001"),
+            category="Food_Drink",
+            title="burger",
+            description="cross exchange listing",
+            rate="10",
+            listing_type="O",
+        )
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE001"].key)
+        response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=all")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertNotIn("burger", [item["title"] for item in response.json()["results"]])
+
     def test_view_listing(self):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE001"].key)
         response = self.client.get(self.url)
@@ -341,13 +356,22 @@ class TransactionTest(APITestCase):
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
 
         response = self.client.get(f"{BASE_URL}transactions/?user=2")
-        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         response = self.client.get(f"{BASE_URL}transactions/?user=8")
         self.assertEqual(response.json()[0]["description"], "Sandwich ")
 
         response = self.client.get(f"{BASE_URL}transactions/?user=6")
         self.assertEqual(response.json(), [])
+
+    def test_get_transactions_other_exchange_user_forbidden(self):
+        """
+        Should not allow viewing transactions of users from another exchange
+        """
+        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE001 exchange=1
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
+        response = self.client.get(f"{BASE_URL}transactions/?user=4")  # PIXL001 exchange=2
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_login_and_make_transaction(self):
         """
@@ -483,4 +507,3 @@ class TransactionTest(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
-
