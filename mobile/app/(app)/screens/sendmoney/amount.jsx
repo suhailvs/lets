@@ -12,7 +12,7 @@ const EnterAmountScreen = () => { // { route, navigation }
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
-  const { id, username, first_name } = useLocalSearchParams();
+  const { id, username, first_name,txn_type } = useLocalSearchParams();
   const router = useRouter();
   const handleProceed = () => {
     if (!amount || parseFloat(amount) <= 0) {
@@ -32,7 +32,8 @@ const EnterAmountScreen = () => { // { route, navigation }
       const response = await api.post('/transactions/',{
         user: id,
         amount: amount,
-        message: message
+        message: message,
+        transaction_type: txn_type
       });
       setModalVisible(false); 
       router.replace({ pathname: 'screens/sendmoney/success',params: {name:first_name, amount:amount } });
@@ -56,20 +57,12 @@ const EnterAmountScreen = () => { // { route, navigation }
   };
   return (
     <View style={styles.container}>
-      {/* Contact Info */}
-      {/* <View style={styles.contactContainer}>
-        <Icon name="account-circle" size={50} color="#4285F4" />
-        <View>
-          <Text style={styles.contactName}>{first_name} ({username})</Text>
-          <Text style={styles.contactDetails}>Send money on LETS</Text>
-        </View>
-      </View> */}
       <View style={styles.contactWrapper}>
         <View style={styles.contactContainer}>
           <Icon name="account-circle" size={50} color="#4285F4" />
           <View>
             <Text style={styles.contactName}>{first_name} ({username})</Text>
-            <Text style={styles.contactDetails}>Send money on LETS</Text>
+            <Text style={styles.contactDetails}>{txn_type==='seller'? "Receive":"Send"} money on LETS</Text>
           </View>
         </View>
       </View>
@@ -97,7 +90,7 @@ const EnterAmountScreen = () => { // { route, navigation }
 
       {/* Proceed Button */}
       <TouchableOpacity style={styles.proceedButton} onPress={handleProceed}>
-        <Text style={styles.proceedButtonText}>Pay ₹{amount || "0"}</Text>
+        <Text style={styles.proceedButtonText}>{txn_type==='seller'? "Receive":"Pay"} ₹{amount || "0"}</Text>
       </TouchableOpacity>
       </View>
       {/* Confirmation Modal */}
@@ -106,7 +99,7 @@ const EnterAmountScreen = () => { // { route, navigation }
           <View style={styles.modalContent}>
             <Icon name="check-circle" size={60} color="#34A853" />
             <Text style={styles.modalTitle}>Confirm Payment</Text>
-            <Text style={styles.modalText}>Pay ₹{amount} to {first_name} ({username})?</Text>
+            <Text style={styles.modalText}>{txn_type==='seller'? `Receive ₹${amount} from`:`Pay ₹${amount} to`} {first_name} ({username})?</Text>
             {message ? <Text style={styles.modalMessage}>"{message}"</Text> : null}
             <ErrorMessage message={error} onClose={() => setError("")} />
             
