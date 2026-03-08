@@ -2,6 +2,7 @@ import { View, StyleSheet, ScrollView } from 'react-native';
 import { useEffect, useState } from 'react';
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import { List, Button, Avatar, Card, HelperText, Text } from 'react-native-paper';
+import { Picker } from "@react-native-picker/picker";
 import { Ionicons } from '@expo/vector-icons';
 import SkeletonLoader from '@/components/SkeletonLoader';
 import api from '@/constants/api';
@@ -17,6 +18,7 @@ const UserDetails = () => {
   const [loading, setLoading] = useState(true);
   const [verifyLoading, setVerifyLoading] = useState(false);
   const [error, setError] = useState('');
+  const [language, setLanguage] = useState(i18n.locale);
   const router = useRouter();
   const { signOut } = useSession();
   useEffect(() => {
@@ -24,6 +26,12 @@ const UserDetails = () => {
   }, []);
   global.selectedUserId = id;
   global.isMe = is_mine;
+
+  const languages = [["en","English"],["ml","Malayalam"]];
+  const changeLanguage = (lang) => {
+    i18n.locale = lang;      // change i18n language
+    setLanguage(lang);       // trigger React re-render
+  };
   const fetchData = async () => {
     try {
       const response = await api.get(`/users/${id}/`);
@@ -84,6 +92,12 @@ const UserDetails = () => {
                   style={{marginTop: 15}}>{i18n.t('newoffering')}</Button>
                 <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
                   style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
+                <Text>Select Language:</Text>
+                <Picker selectedValue={language} onValueChange={(value) => changeLanguage(value)} >
+                  {languages.map((item) => (
+                    <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
+                  ))}
+                </Picker>
                 </>
               ):(
                 <Card>

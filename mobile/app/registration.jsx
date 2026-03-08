@@ -5,7 +5,7 @@ import { TextInput, Button, useTheme,Text} from "react-native-paper";
 import api from '@/constants/api'
 import ErrorMessage from "@/components/ErrorMessage";
 import Logo from "@/components/Logo";
-import Dropdown from "@/components/Dropdown";
+import { Picker } from "@react-native-picker/picker";
 import ImagePickerComponent from "@/components/ImagePickerComponent";
 export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
@@ -108,11 +108,13 @@ export default function RegisterScreen() {
         }
         style={styles.input}
       />
-      <Dropdown
-        label="Select Exchange"
-        items={exchanges}
-        onSelect={setExchange}
-      />
+      <Text>Select Exchange</Text>
+      <Picker onValueChange={setExchange} >
+        <Picker.Item key="" label="Select an Exchange" value="" />
+        {exchanges.map((item) => (
+          <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
+        ))}
+      </Picker>
       <Text variant="bodyLarge">Profile Picture</Text>
       <ImagePickerComponent onImageSelected={setSelectedImage} />
       <ErrorMessage message={error} onClose={() => setError("")} />
