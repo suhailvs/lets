@@ -8,7 +8,6 @@ from pathlib import Path
 from django.conf import settings
 from django.core import serializers as django_serializers
 from django.db.models import Q
-from django.utils import timezone
 
 from django.contrib.auth import get_user_model
 from django.http import HttpResponse
@@ -218,33 +217,27 @@ class ExportExchangeView(APIView):
             transactions_qs = Transaction.objects.filter(
                 Q(seller__exchange=exchange) | Q(buyer__exchange=exchange)
             ).distinct().order_by("id")
-
-            exported_at = timezone.now()
+            exchange_qs = Exchange.objects.filter(id=exchange.id)
             target_dir = Path(settings.BASE_DIR) / "mysite" / "media" / "exports"
             target_dir.mkdir(parents=True, exist_ok=True)
-
-            filename = f"exchange_{exchange.code}_{exported_at.strftime('%Y%m%d_%H%M%S')}.zip"
-            archive_path = target_dir / filename
-
-            metadata = {
-                "exchange": {
-                    "id": exchange.id,
-                    "code": exchange.code,
-                    "name": exchange.name,
-                    "address": exchange.address,
-                    "country_city": exchange.country_city,
-                    "postal_code": exchange.postal_code,
-                },
-                "counts": {
-                    "users": users_qs.count(),
-                    "listings": listings_qs.count(),
-                    "transactions": transactions_qs.count(),
-                },
-                "exported_at": exported_at.isoformat(),
-            }
+            # Reuse a stable filename so previous export is overwritten.
+            archive_path = target_dir / f"exchange_{exchange.code}.zip"
 
             with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
-                zf.writestr("metadata.json", json.dumps(metadata, indent=2))
+                from textwrap import dedent
+                text = dedent(f"""\
+                    Copy the json files to fixtures folder, then load each fixture using command python manage.py loaddata.
+                    $ ./manage.py loaddata exchange
+                    $ ./manage.py loaddata users
+                    $ ./manage.py loaddata listings
+                    $ ./manage.py loaddata transactions
+
+                    users: {users_qs.count()}.
+                    listings: {listings_qs.count()}.
+                    transactions: {transactions_qs.count()}.
+                """)
+                zf.writestr("README.txt",text)
+                zf.writestr("exchange.json", django_serializers.serialize("json", exchange_qs, indent=2))
                 zf.writestr("users.json", django_serializers.serialize("json", users_qs, indent=2))
                 zf.writestr("listings.json", django_serializers.serialize("json", listings_qs, indent=2))
                 zf.writestr(
