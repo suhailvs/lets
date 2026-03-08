@@ -7,7 +7,7 @@ import {
 import { Button, Pressable, StyleSheet, Text, View } from "react-native";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
-
+import { ImageManipulator } from "expo-image-manipulator";
 
 export default function ImagePickerScreen({ onImageSelected }) {
   // const [image, setImage] = useState(null);
@@ -34,10 +34,22 @@ export default function ImagePickerScreen({ onImageSelected }) {
   const takePicture = async () => {
     const photo = await ref.current?.takePictureAsync();
     if (photo?.uri) {
-      setUri(photo.uri);
-      onImageSelected(photo.uri);
+      const thumb = await createThumbnail(photo);
+      setUri(thumb);
+      onImageSelected(thumb);
     }
   };
+  async function createThumbnail(photo) {
+    const size = Math.min(photo.width, photo.height);
+    const originX = (photo.width - size) / 2;
+    const originY = (photo.height - size) / 2;
+    const context = ImageManipulator.manipulate(photo.uri);
+    context.crop({originX,originY,width: size,height: size});
+    context.resize({width: 512,height: 512});
+    const image = await context.renderAsync();
+    const result = await image.saveAsync({compress: 0.7,format: "jpeg"});
+    return result.uri;
+  }
 
   const toggleFacing = () => {
     setFacing((prev) => (prev === "back" ? "front" : "back"));
