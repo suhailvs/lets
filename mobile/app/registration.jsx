@@ -1,43 +1,26 @@
-import { useState,useEffect } from "react";
+import { useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { useRouter } from 'expo-router';
 import { TextInput, Button, useTheme,Text} from "react-native-paper";
 import api from '@/constants/api'
 import ErrorMessage from "@/components/ErrorMessage";
+import ExchangeCreationTab from "@/components/ExchangeCreationTab";
 import Logo from "@/components/Logo";
-import { Picker } from "@react-native-picker/picker";
 import ImagePickerComponent from "@/components/ImagePickerComponent";
+
 export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-
+  const [exchange, setExchange] = useState('');
   const [first_name, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
-  const [exchange, setExchange] = useState('');
+  const [email, setEmail] = useState('');  
   const [image, setSelectedImage] = useState(null);
   const [secureText, setSecureText] = useState(true);
   const theme = useTheme();
   const router = useRouter();
 
-  const [exchanges, setExchanges] = useState([]);
-
-
-  useEffect(() => {
-    fetchExchanges();
-  }, []);
-
-  const fetchExchanges = async () => {
-    try {
-      const response = await api.get('/ajax/?purpose=exchanges');
-      setExchanges(response.data['data']);
-    } catch (error) {
-        console.error('Error fetching data:', error);
-    } finally {
-        // setLoading(false);
-    }
-  };
   const handleRegistration = async () => {
     if (!first_name || !phone || !password  || !email || !exchange || !image) {
       if(!image){
@@ -69,6 +52,8 @@ export default function RegisterScreen() {
     <ScrollView style={styles.container}>
       <Logo/>
       <Text variant="headlineMedium" style={{ color: theme.colors.primary, textAlign: "center", marginBottom:20 }}>Sign up to LETS</Text>
+      <ExchangeCreationTab onExchangeSelected={setExchange} />
+      <Text>{exchange}</Text>
       <TextInput
         label="First Name"
         value={first_name}
@@ -108,13 +93,6 @@ export default function RegisterScreen() {
         }
         style={styles.input}
       />
-      <Text>Select Exchange</Text>
-      <Picker onValueChange={setExchange} >
-        <Picker.Item key="" label="Select an Exchange" value="" />
-        {exchanges.map((item) => (
-          <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
-        ))}
-      </Picker>
       <Text variant="bodyLarge">Profile Picture</Text>
       <ImagePickerComponent onImageSelected={setSelectedImage} />
       <ErrorMessage message={error} onClose={() => setError("")} />
