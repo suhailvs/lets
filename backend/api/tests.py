@@ -16,7 +16,7 @@ from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
 
-from coinapp.models import Listing
+from coinapp.models import Exchange, Listing
 
 User = get_user_model()
 
@@ -125,6 +125,26 @@ class RegistrationTest(APITestCase):
             )
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(response.json(), case["response"])
+
+    def test_create_user_with_new_exchange(self):
+        response = self.client.post(
+            f"{BASE_URL}registration/",
+            {
+                "first_name": "nora",
+                "password": "mypass1234",
+                "phone": "9000000011",
+                "exchange_code": "newx",
+                "exchange_name": "New Exchange",
+                "exchange_address": "Main Street",
+                "exchange_country_city": "IN-KL",
+                "exchange_postal_code": "673001",
+                "image": sample_image(),
+            },
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        created_user = User.objects.get(username=response.data["username"])
+        self.assertEqual(created_user.exchange.code, "NEWX")
+        self.assertTrue(Exchange.objects.filter(code="NEWX").exists())
 
 # =====================================================================
 # USER DETAILS

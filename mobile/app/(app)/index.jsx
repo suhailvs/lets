@@ -31,7 +31,8 @@ export default function Index() {
   const getAuthUser = useCallback(async () => {
     try {
       const jsonValue = await SecureStore.getItemAsync('user_data');
-      setAuthUser(JSON.parse(jsonValue));
+      const parsed = jsonValue ? JSON.parse(jsonValue) : {};
+      setAuthUser(parsed || {});
     } catch (_e) {
       setAuthUser({});
     }
@@ -76,7 +77,9 @@ export default function Index() {
   return (
     <ScrollView>
       <View style={styles.header}>
-        <Text variant="headlineSmall" style={styles.headerText}>{authuser.firstname} ({authuser.exchange_name})</Text>
+        <Text variant="headlineSmall" style={styles.headerText}>
+          {authuser?.firstname || ''}{authuser?.exchange_name ? ` (${authuser.exchange_name})` : ''}
+        </Text>
         <View style={{flexDirection: "row"}}>
           <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
           <TouchableOpacity onPress={fetchBalance}>
