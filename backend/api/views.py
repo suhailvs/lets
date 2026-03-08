@@ -58,6 +58,7 @@ class CustomAuthToken(ObtainAuthToken):
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
         token, created = Token.objects.get_or_create(user=user)
+        user_data = serializers.UserSerializer(user, context={"request": request}).data
         pushtoken = request.data.get('expoPushToken')
         if pushtoken:
             ExpoPushToken.objects.filter(token=pushtoken).exclude(user=user).delete()
@@ -70,6 +71,7 @@ class CustomAuthToken(ObtainAuthToken):
                 "username": user.username,
                 "exchange": user.exchange_id,
                 "exchange_name":user.exchange.name,
+                "thumbnail": user_data.get("thumbnail"),
             }
         )
 

@@ -78,7 +78,7 @@ export default function Index() {
     <ScrollView>
       <View style={styles.header}>
         <Text variant="headlineSmall" style={styles.headerText}>
-          {authuser?.firstname || ''}{authuser?.exchange_name ? ` (${authuser.exchange_name})` : ''}
+          {authuser?.firstname || ''} {authuser?.username}{authuser?.exchange_name ? ` (${authuser.exchange_name})` : ''}
         </Text>
         <View style={{flexDirection: "row"}}>
           <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
@@ -91,9 +91,10 @@ export default function Index() {
         <Card>
           <Card.Actions>
             <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="black" />)}
-               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}>Listings</Button>
-            <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="black" />)} mode="contained-tonal"
-              onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>                        
+               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}>All Listings</Button>
+            <TouchableOpacity onPress={() =>handleShowUser(authuser.user_id, 'yes')}>
+              <Avatar.Image size={40} source={{ uri: authuser.thumbnail }} />
+            </TouchableOpacity>
           </Card.Actions>
         </Card>
         <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>

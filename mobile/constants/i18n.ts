@@ -7,7 +7,6 @@ const translations = {
     wants: 'Wants',
     newoffering: 'New Offering',
     newwant: 'New Want',
-    myaccount: 'My Account',
     transactions: 'Transactions',
   },
   ml: {
@@ -15,7 +14,6 @@ const translations = {
     wants: 'വാങ്ങാനുള്ളത്',
     newoffering: 'പുതിയ വില്പന',
     newwant: 'പുതിയ വാങ്ങൽ',
-    myaccount: 'എന്റെ അക്കൗണ്ട്',
     transactions: 'ഇടപാടുകൾ',
   },
 };
