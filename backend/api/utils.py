@@ -4,6 +4,9 @@ from django.conf import settings
 from coinapp.models import Transaction
 
 from rest_framework.throttling import SimpleRateThrottle
+from rest_framework.views import exception_handler
+from rest_framework.response import Response
+from rest_framework import status
 
 class UsernameRateThrottle(SimpleRateThrottle):
     scope = 'login'
@@ -17,6 +20,14 @@ class UsernameRateThrottle(SimpleRateThrottle):
             'ident': username.lower()
         }
 
+def custom_exception_handler(exc, context):
+    response = exception_handler(exc, context)
+    if response is None:
+        return Response(
+            {"error": str(exc)},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
+    return response
 
 def get_transaction_queryset(user):
     return (

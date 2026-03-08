@@ -132,7 +132,7 @@ class ListingModelViewSet(viewsets.ModelViewSet):
         if self.action == "list":
             listing_type = request.query_params.get("type", "O")
             qs = qs.filter(listing_type=listing_type)
-            user_id = request.query_params.get("user")
+            user_id = request.query_params.get("user",'all')
             if user_id=='all':
                 # listings of all users
                 return qs.filter(is_active=True).order_by("-created_at")

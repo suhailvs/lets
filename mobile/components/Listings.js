@@ -6,6 +6,7 @@ import SkeletonLoader from "@/components/SkeletonLoader";
 import api from "@/constants/api"; 
 import globalStyles from "@/components/Styles"; 
 import i18n from '@/constants/i18n';
+import { formatDate } from '@/utils/formatDate';
 
 export default function Listings({ltype}) {
   const [page, setPage] = useState(1);
@@ -61,6 +62,7 @@ export default function Listings({ltype}) {
         <View style={{flexGrow: 1}}>
           <Text variant="bodyMedium">{item.title}</Text>
           <Text variant="bodySmall" style={styles.rating}>{item.rate}</Text>
+          <Text variant="labelSmall">{formatDate(item.created_at)}</Text>
         </View>
       )}
       left={() => <Image source={{ uri: item.thumbnail }} style={styles.productImage} />}
