@@ -1,6 +1,17 @@
 import requests
 import pycountry
+import tempfile
+import json
+import zipfile
+from pathlib import Path
+
+from django.conf import settings
+from django.core import serializers as django_serializers
+from django.db.models import Q
+from django.utils import timezone
+
 from django.contrib.auth import get_user_model
+from django.http import HttpResponse
 from rest_framework import viewsets
 from rest_framework import status
 from rest_framework.authtoken.models import Token
@@ -9,7 +20,7 @@ from rest_framework.permissions import IsAuthenticated,BasePermission, SAFE_METH
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.generics import CreateAPIView
-from coinapp.models import Listing,Exchange, ExpoPushToken
+from coinapp.models import Listing,Exchange,Transaction, ExpoPushToken
 from coinapp.misc import CATEGORIES
 from . import serializers
 from .utils import get_transaction_queryset, save_transaction, UsernameRateThrottle
@@ -194,7 +205,62 @@ class VerifyUserView(APIView):
         return Response(
             {"detail": "Verification successful."}, status=status.HTTP_201_CREATED
         )
-        
+
+
+class ExportExchangeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        exchange = request.user.exchange
+        with tempfile.TemporaryDirectory() as tmpdir:
+            users_qs = User.objects.filter(exchange=exchange).order_by("id")
+            listings_qs = Listing.objects.filter(user__exchange=exchange).order_by("id")
+            transactions_qs = Transaction.objects.filter(
+                Q(seller__exchange=exchange) | Q(buyer__exchange=exchange)
+            ).distinct().order_by("id")
+
+            exported_at = timezone.now()
+            target_dir = Path(settings.BASE_DIR) / "mysite" / "media" / "exports"
+            target_dir.mkdir(parents=True, exist_ok=True)
+
+            filename = f"exchange_{exchange.code}_{exported_at.strftime('%Y%m%d_%H%M%S')}.zip"
+            archive_path = target_dir / filename
+
+            metadata = {
+                "exchange": {
+                    "id": exchange.id,
+                    "code": exchange.code,
+                    "name": exchange.name,
+                    "address": exchange.address,
+                    "country_city": exchange.country_city,
+                    "postal_code": exchange.postal_code,
+                },
+                "counts": {
+                    "users": users_qs.count(),
+                    "listings": listings_qs.count(),
+                    "transactions": transactions_qs.count(),
+                },
+                "exported_at": exported_at.isoformat(),
+            }
+
+            with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+                zf.writestr("metadata.json", json.dumps(metadata, indent=2))
+                zf.writestr("users.json", django_serializers.serialize("json", users_qs, indent=2))
+                zf.writestr("listings.json", django_serializers.serialize("json", listings_qs, indent=2))
+                zf.writestr(
+                    "transactions.json",
+                    django_serializers.serialize("json", transactions_qs, indent=2),
+                )
+            with open(archive_path, "rb") as fh:
+                content = fh.read()
+
+        response = HttpResponse(content, content_type="application/zip")
+        response["Content-Disposition"] = (
+            f'attachment; filename="{exchange.code}_export.zip"'
+        )
+        return response
+
+
 def send_push_notification(receiver_id, title, body, data=None):
     obj = ExpoPushToken.objects.filter(user_id=receiver_id).first()
     if obj:
