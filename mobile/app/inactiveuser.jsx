@@ -24,7 +24,7 @@ const InactiveUser = () => {
           </Card>}
           <Button
             mode="contained"
-            onPress={() => router.navigate('/login')}
+            onPress={() => router.replace('/login')}
             style={styles.button}
           >
             Go to Login
