@@ -1,4 +1,5 @@
 import requests
+import pycountry
 from django.contrib.auth import get_user_model
 from rest_framework import viewsets
 from rest_framework import status
@@ -27,18 +28,22 @@ class CustomAuthToken(ObtainAuthToken):
     throttle_classes = [UsernameRateThrottle]
 
     def post(self, request, *args, **kwargs):
+        login_data = request.data.copy()
+        username = str(login_data.get("username", "")).strip().upper()
+        login_data["username"] = username
+
         inactive_user = User.objects.filter(
-            username=request.data["username"], is_active=False
+            username=username, is_active=False
         ).first()
         if inactive_user:
-            if inactive_user and inactive_user.check_password(request.data["password"]):
+            if inactive_user and inactive_user.check_password(login_data.get("password")):
                 return Response(
                     {"is_active": False, "message": "Verification is pending."},
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
         serializer = self.serializer_class(
-            data=request.data, context={"request": request}
+            data=login_data, context={"request": request}
         )
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data["user"]
@@ -72,9 +77,18 @@ class AjaxView(APIView):
             resp["data"] = CATEGORIES
         elif purpose == "exchanges":
             resp["data"] = [
-                (e.id, f"{e.name}, {e.get_country_and_subdivision()}, {e.postal_code}")
+                (e.id, f"{e.code}:{e.name}, {e.get_country_and_subdivision()}, {e.postal_code}")
                 for e in Exchange.objects.all()
             ]
+        elif purpose == "countries":
+            countries = [(c.alpha_2, c.name) for c in pycountry.countries]
+            resp["data"] = sorted(countries, key=lambda x: x[1])
+        elif purpose == "states":
+            country_code = request.GET.get("country")
+            if not country_code:
+                return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
+            states = list(pycountry.subdivisions.get(country_code=country_code))
+            resp["data"] = [(s.code, s.name) for s in states]
         elif purpose == "logout":
             if request.user.is_authenticated:
                 Token.objects.get(user=request.user).delete()
