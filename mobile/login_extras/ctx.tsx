@@ -17,7 +17,6 @@ const AuthContext = createContext<{
   isLoading: false,
 });
 
-const isLoggingOutRef = useRef(false);
 // This hook can be used to access the user info.
 export function useSession() {
   const value = useContext(AuthContext);
@@ -36,6 +35,7 @@ export function useSession() {
 
 export function SessionProvider({ children }: PropsWithChildren) {
   const [[isLoading, session], setSession] = useStorageState('session');
+  const isLoggingOutRef = useRef(false);
   if (session) {
     api.defaults.headers.common['Authorization'] = `Token ${session}`;
   }

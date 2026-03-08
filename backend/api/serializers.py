@@ -1,9 +1,10 @@
 import re
 from django.contrib.auth import get_user_model
+from django.db import transaction
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
-from coinapp.models import Listing, Transaction
+from coinapp.models import Exchange, Listing, Transaction
 from .fields import HyperlinkedSorlImageField
 
 User = get_user_model()
@@ -30,6 +31,16 @@ class UserSerializer(serializers.ModelSerializer):
     )
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
+    exchange = serializers.PrimaryKeyRelatedField(
+        queryset=Exchange.objects.all(), required=False
+    )
+    exchange_code = serializers.CharField(write_only=True, required=False)
+    exchange_name = serializers.CharField(write_only=True, required=False)
+    exchange_address = serializers.CharField(write_only=True, required=False)
+    exchange_country_city = serializers.CharField(write_only=True, required=False)
+    exchange_postal_code = serializers.CharField(
+        write_only=True, required=False, allow_blank=True
+    )
     
     class Meta:
         model = User
@@ -39,6 +50,11 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "phone",
             "password",
             "exchange",
+            "exchange_code",
+            "exchange_name",
+            "exchange_address",
+            "exchange_country_city",
+            "exchange_postal_code",
             'username',
             "image",
         ]
@@ -46,8 +62,48 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     
 
-    def validate(self, attrs):       
-        user = User(**attrs)
+    def validate(self, attrs):
+        create_exchange_fields = [
+            "exchange_code",
+            "exchange_name",
+            "exchange_address",
+            "exchange_country_city",
+        ]
+        exchange_selected = bool(attrs.get("exchange"))
+        create_exchange_requested = any(attrs.get(field) for field in create_exchange_fields)
+
+        if exchange_selected and create_exchange_requested:
+            raise serializers.ValidationError(
+                {"exchange": "Choose an existing exchange or create a new one, not both."}
+            )
+
+        if not exchange_selected:
+            missing = [field for field in create_exchange_fields if not attrs.get(field)]
+            if missing:
+                raise serializers.ValidationError(
+                    {
+                        "exchange": (
+                            "Either select an existing exchange or provide all new exchange fields."
+                        )
+                    }
+                )
+            exchange_code = attrs["exchange_code"].upper()
+            if len(exchange_code) != 4:
+                raise serializers.ValidationError(
+                    {"exchange_code": "Exchange code must be exactly 4 characters long."}
+                )
+            if Exchange.objects.filter(code=exchange_code).exists():
+                raise serializers.ValidationError(
+                    {"exchange_code": "Exchange code already exists."}
+                )
+            attrs["exchange_code"] = exchange_code
+
+        user_data = {
+            key: value
+            for key, value in attrs.items()
+            if key in {"first_name", "email", "phone", "exchange", "image"}
+        }
+        user = User(**user_data)
         password = attrs.get("password")
         try:
             validate_password(password, user)
@@ -58,10 +114,29 @@ class UserCreateSerializer(serializers.ModelSerializer):
         return attrs
 
     def create(self, validated_data):
-        validated_data['username'] = generate_username(validated_data['exchange'].code)
-        user = User.objects.create_user(**validated_data)
-        user.is_active = False
-        user.save()
+        exchange = validated_data.pop("exchange", None)
+        exchange_code = validated_data.pop("exchange_code", None)
+        exchange_name = validated_data.pop("exchange_name", None)
+        exchange_address = validated_data.pop("exchange_address", None)
+        exchange_country_city = validated_data.pop("exchange_country_city", None)
+        exchange_postal_code = validated_data.pop("exchange_postal_code", "")
+        is_active = False
+        with transaction.atomic():
+            if not exchange:
+                exchange = Exchange.objects.create(
+                    code=exchange_code,
+                    name=exchange_name,
+                    address=exchange_address,
+                    country_city=exchange_country_city,
+                    postal_code=exchange_postal_code,
+                )
+                is_active = True
+
+            validated_data["exchange"] = exchange
+            validated_data['username'] = generate_username(exchange.code)
+            user = User.objects.create_user(**validated_data)
+            user.is_active = is_active
+            user.save()
         return user
 
 

@@ -11,7 +11,7 @@ import ImagePickerComponent from "@/components/ImagePickerComponent";
 export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
-  const [exchange, setExchange] = useState('');
+  const [exchangeData, setExchangeData] = useState({ mode: 'join', exchange: '' });
   const [first_name, setFirstName] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
@@ -22,9 +22,19 @@ export default function RegisterScreen() {
   const router = useRouter();
 
   const handleRegistration = async () => {
-    if (!first_name || !phone || !password  || !email || !exchange || !image) {
+    const joinInvalid = exchangeData.mode === 'join' && !exchangeData.exchange;
+    const createInvalid =
+      exchangeData.mode === 'create' &&
+      (!exchangeData.exchange_code ||
+        !exchangeData.exchange_name ||
+        !exchangeData.exchange_address ||
+        !exchangeData.exchange_country_city);
+
+    if (!first_name || !phone || !password  || !email || joinInvalid || createInvalid || !image) {
       if(!image){
         setError("Please upload your profile picture.");
+      } else if (joinInvalid || createInvalid) {
+        setError("Please complete exchange details.");
       } else {
         setError("Please fill all fields.");
       }      
@@ -38,7 +48,15 @@ export default function RegisterScreen() {
     formData.append("email", email);
     formData.append("phone", phone);
     formData.append("password", password);
-    formData.append("exchange", exchange);
+    if (exchangeData.mode === 'join') {
+      formData.append("exchange", exchangeData.exchange);
+    } else {
+      formData.append("exchange_code", exchangeData.exchange_code.toUpperCase());
+      formData.append("exchange_name", exchangeData.exchange_name);
+      formData.append("exchange_address", exchangeData.exchange_address);
+      formData.append("exchange_country_city", exchangeData.exchange_country_city.toUpperCase());
+      formData.append("exchange_postal_code", exchangeData.exchange_postal_code || "");
+    }
     try {      
       const response = await api.post('/registration/', formData, { headers: { "Content-Type": "multipart/form-data" } });
       router.replace({ pathname: '/inactiveuser',params:{'username':response.data['username']} });
@@ -52,8 +70,7 @@ export default function RegisterScreen() {
     <ScrollView style={styles.container}>
       <Logo/>
       <Text variant="headlineMedium" style={{ color: theme.colors.primary, textAlign: "center", marginBottom:20 }}>Sign up to LETS</Text>
-      <ExchangeCreationTab onExchangeSelected={setExchange} />
-      <Text>{exchange}</Text>
+      <ExchangeCreationTab onExchangeSelected={setExchangeData} />
       <TextInput
         label="First Name"
         value={first_name}
