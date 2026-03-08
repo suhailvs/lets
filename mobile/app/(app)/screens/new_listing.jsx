@@ -4,7 +4,8 @@ import { View, ScrollView, StyleSheet } from "react-native";
 import { Text, TextInput, Button, Snackbar, useTheme } from "react-native-paper";
 
 import ImagePickerComponent from "@/components/ImagePickerComponent";
-import Dropdown from "@/components/Dropdown";
+// import Dropdown from "@/components/Dropdown";
+import { Picker } from "@react-native-picker/picker";
 import { useLocalSearchParams, useRouter } from 'expo-router';
 import api from '@/constants/api'
 
@@ -72,7 +73,14 @@ const AddListingScreen = () => {
       
       {image && (
         <>
-          <Dropdown label="Select Category" items={categories} onSelect={setCategory} />
+          <Text>Select Category</Text>
+          <Picker onValueChange={setCategory}>
+            <Picker.Item key="" label="Select a Category" value="" />
+            {categories.map((item) => (
+              <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
+            ))}
+          </Picker>
+          {/* <Dropdown label="Select Category" items={categories} onSelect={setCategory} /> */}
           {/* Title Input */}
           <TextInput mode="outlined" label="Title" style={styles.input} value={title} onChangeText={setTitle} />
           <TextInput
@@ -93,7 +101,7 @@ const AddListingScreen = () => {
       </Snackbar>
       {image && 
         <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.submitButton}> Add Listing </Button>}
-      <Text></Text><Text></Text><Text></Text>
+      <Text></Text><Text></Text><Text></Text><Text></Text>
     </ScrollView>
   );
 };

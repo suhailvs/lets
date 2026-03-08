@@ -72,7 +72,7 @@ class AjaxView(APIView):
             resp["data"] = CATEGORIES
         elif purpose == "exchanges":
             resp["data"] = [
-                (e.id, f"{e.name}\n{e.get_country_and_subdivision()},{e.postal_code}")
+                (e.id, f"{e.name}, {e.get_country_and_subdivision()}, {e.postal_code}")
                 for e in Exchange.objects.all()
             ]
         elif purpose == "logout":
@@ -111,7 +111,7 @@ class ListingModelViewSet(viewsets.ModelViewSet):
             user_id = request.query_params.get("user")
             if user_id=='all':
                 # listings of all users
-                return qs.filter(is_active=True).exclude(user=user).order_by("-created_at")
+                return qs.filter(is_active=True).order_by("-created_at")
             # listings of a user
             user_id = int(user_id)
             qs = qs.filter(user_id=user_id)
