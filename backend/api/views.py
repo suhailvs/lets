@@ -100,7 +100,11 @@ class AjaxView(APIView):
             if not country_code:
                 return Response({"status": "error"}, status=status.HTTP_400_BAD_REQUEST)
             states = list(pycountry.subdivisions.get(country_code=country_code))
-            resp["data"] = [(s.code, s.name) for s in states]
+            if states:
+                resp["data"] = [(s.code, s.name) for s in states]
+            else:
+                # countries like antartica, have no states
+                resp["data"] = [(country_code,pycountry.countries.get(alpha_2=country_code).name)]
         elif purpose == "logout":
             if request.user.is_authenticated:
                 Token.objects.get(user=request.user).delete()
