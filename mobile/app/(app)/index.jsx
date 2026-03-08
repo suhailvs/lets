@@ -1,11 +1,12 @@
 // Home page with user balance, logout button and some userlisting
 import { View,  StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
 import { Avatar, Text, Card, Button  } from 'react-native-paper';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
+import NetInfo from '@react-native-community/netinfo';
 import i18n from '@/constants/i18n';
 import api from '@/constants/api'
 
@@ -16,39 +17,59 @@ export default function Index() {
   const [authuser, setAuthUser] = useState({});
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
+  const wasOfflineRef = useRef(false);
   const router = useRouter();
 
-  useEffect(() => {
-    fetchBalance();
-    getAuthUser();
-    fetchUsers();
-  }, []);
-  const fetchUsers = async () => {
+  const fetchUsers = useCallback(async () => {
     try {
         const response = await api.get('/users/');
         setUsers(response.data);
     } catch (error) {
         console.error('Error fetching data:', error);
-    } finally {
-        setLoading(false);
     }
-  };
-  const getAuthUser = async () => {
+  }, []);
+
+  const getAuthUser = useCallback(async () => {
     try {
       const jsonValue = await SecureStore.getItemAsync('user_data');
       setAuthUser(JSON.parse(jsonValue));
-    } catch (e) {
+    } catch (_e) {
       setAuthUser({});
     }
-  };
-  const fetchBalance = async () => {    
+  }, []);
+
+  const fetchBalance = useCallback(async () => {
     try {
         const response = await api.get('/ajax/?purpose=userbalance');
         setBalance(response.data['data']);
     } catch (error) {
         console.error('Error fetching data:', error);
     }
-  };
+  }, []);
+
+  const refreshData = useCallback(async () => {
+    setLoading(true);
+    await Promise.all([fetchBalance(), fetchUsers()]);
+    setLoading(false);
+  }, [fetchBalance, fetchUsers]);
+
+  useEffect(() => {
+    getAuthUser();
+    refreshData();
+
+    const unsubscribe = NetInfo.addEventListener((state) => {
+      const isOnline = Boolean(state.isConnected && state.isInternetReachable !== false);
+      if (!isOnline) {
+        wasOfflineRef.current = true;
+        return;
+      }
+      if (wasOfflineRef.current) {
+        wasOfflineRef.current = false;
+        refreshData();
+      }
+    });
+    return () => unsubscribe();
+  }, [getAuthUser, refreshData]);
   
   const handleShowUser = (userid,is_mine='no') => {
     router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});

@@ -1,4 +1,4 @@
-## REACT LETS
+## REACT App
 
 ```
 npm create vite@latest
