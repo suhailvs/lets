@@ -9,7 +9,6 @@ import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NetInfo from '@react-native-community/netinfo';
 import i18n from '@/constants/i18n';
 import api from '@/constants/api'
-
 import SkeletonLoader from "@/components/SkeletonLoader";
 
 export default function Index() {
@@ -88,13 +87,10 @@ export default function Index() {
       <View style={styles.container}>
         <Card>
           <Card.Actions>
-            <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
-            {/* <Button icon={({ size }) => (<FontAwesome6 name="users" size={size} color="white" />)}
-               mode="contained" onPress={() => router.push({ pathname: 'screens/users'})}>All Users</Button> */}
-            <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="white" />)} mode="contained"
-              onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>
-                        
+            <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="black" />)}
+               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
+            <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="black" />)} mode="contained-tonal"
+              onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>                        
           </Card.Actions>
         </Card>
         <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>
@@ -122,8 +118,8 @@ export default function Index() {
   );
 }
 const styles = StyleSheet.create({
-  header: { backgroundColor: "#007C8A",paddingBottom: 30, paddingTop:80, paddingHorizontal: 10,position: "relative" },
-  headerText: {color: "#99C9CE"},
+  header: { backgroundColor: "#fdf7df",paddingBottom: 30, paddingTop:80, paddingHorizontal: 10,position: "relative" },// backgroundColor #007C8A
+  headerText: {color: "#2a231a"}, // color #99C9CE
   headerIcon: { padding: 5 },
   container: { flex: 1, backgroundColor:"#fff", padding:10, paddingBottom:100 },
   peopleRow: { flexDirection: 'row', flexWrap: 'wrap' },

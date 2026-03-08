@@ -67,7 +67,7 @@ const UserDetails = () => {
             <Text variant="headlineSmall">{data.first_name}</Text>
             {!data.is_active ? (
               <Button
-                mode="contained"
+                mode="contained-tonal"
                 onPress={handleVerifyUser}
                 loading={verifyLoading}
                 disabled={verifyLoading}
@@ -78,11 +78,11 @@ const UserDetails = () => {
               <>
               {global.isMe=='yes' ? (
                 <>
-                <Button mode="contained" icon={({ size }) => (<MaterialIcons name="logout" size={size} color="white" />)} onPress={signOut}>
+                <Button mode="contained-tonal" icon={({ size }) => (<MaterialIcons name="logout" size={size} color="black" />)} onPress={signOut}>
                   Logout</Button>
-                <Button mode="contained" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}
+                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'O'} })}
                   style={{marginTop: 15}}>{i18n.t('newoffering')}</Button>
-                <Button mode="contained" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
+                <Button mode="contained-tonal" icon={'plus'} onPress={() => router.push({ pathname: 'screens/new_listing', params:{'ltype':'W'} })} 
                   style={{marginTop: 15}}>{i18n.t('newwant')}</Button>
                 </>
               ):(

@@ -22,6 +22,6 @@ const translations = {
 
 const i18n = new I18n(translations);
 i18n.enableFallback = true;
-i18n.locale = 'ml'; // default only
+i18n.locale = 'en'; // default only
 
 export default i18n;
