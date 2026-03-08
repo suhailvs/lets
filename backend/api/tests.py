@@ -146,6 +146,27 @@ class RegistrationTest(APITestCase):
         self.assertEqual(created_user.exchange.code, "NEWX")
         self.assertTrue(Exchange.objects.filter(code="NEWX").exists())
 
+    def test_login_username_is_uppercased(self):
+        self.client.post(
+            f"{BASE_URL}registration/",
+            {
+                "first_name": "sufail",
+                "password": "dummypassword",
+                "phone": "dummyphone",
+                "exchange": "1",
+                "image": sample_image(),
+            },
+        )
+        response = self.client.post(
+            f"{BASE_URL}login/",
+            {"username": "kkde005", "password": "dummypassword"},
+        )
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(
+            response.json(),
+            {"is_active": False, "message": "Verification is pending."},
+        )
+
 # =====================================================================
 # USER DETAILS
 # =====================================================================

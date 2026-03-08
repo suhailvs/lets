@@ -1,26 +1,26 @@
 import { View, StyleSheet } from 'react-native';
-import { Button,Text, Title, Paragraph, Card } from 'react-native-paper';
+import { Button,Text, Card } from 'react-native-paper';
 import { useLocalSearchParams,useRouter } from 'expo-router';
 const InactiveUser = () => {  
     let confirmationsLeft='some';//5;
     const router = useRouter();
-    const { username } = useLocalSearchParams();
+    const { username,is_active } = useLocalSearchParams();
   return (
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Title style={styles.title}>🎉 Signup Successful!</Title>
-          <Paragraph style={styles.paragraph}>
+          <Text variant="titleLarge">🎉 Signup Successful!</Text>
+          <Text variant="bodyMedium">
             Welcome {username}! Your account has been created successfully.
-          </Paragraph>
-          <Card style={styles.inactiveCard}>
+          </Text>
+          {is_active==='false' && <Card style={styles.inactiveCard}>
             <Card.Content>
             <Text style={styles.inactiveTitle}>Inactive User 🚫</Text>
             <Text style={styles.inactiveText}>
                 You need {confirmationsLeft} more confirmations to activate your account.
             </Text>
             </Card.Content>
-          </Card>
+          </Card>}
           <Button
             mode="contained"
             onPress={() => router.navigate('/login')}
@@ -47,19 +47,7 @@ const styles = StyleSheet.create({
       padding: 20,
       borderRadius: 10,
       elevation: 5,
-    },
-    title: {
-      textAlign: 'center',
-      fontSize: 26,
-      marginBottom: 10,
-      fontWeight: 'bold',
-    },
-    paragraph: {
-      textAlign: 'center',
-      marginBottom: 20,
-      fontSize: 16,
-      color: '#666',
-    },
+    },    
     inactiveCard: {
       backgroundColor: '#fff3cd',
       marginVertical: 15,

@@ -55,7 +55,7 @@ export default function Login() {
     } catch (err) {
       if (err.message.includes("is_active")){
         // user and password is correct, but user is inactive
-        router.navigate({ pathname: '/inactiveuser',params:{'username':username}});
+        router.navigate({ pathname: '/inactiveuser',params:{'username':username,'is_active':'false'}});
       }
       else{
         setError(err.message); // Show error message
