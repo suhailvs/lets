@@ -185,6 +185,8 @@ REST_FRAMEWORK = {
         'login': '5/min',  # Apply to our custom throttle
     }
 }
+if not DEBUG:
+    REST_FRAMEWORK["EXCEPTION_HANDLER"] = "api.utils.custom_exception_handler"
 SITE_ID = 1 
 CORS_ORIGIN_ALLOW_ALL = True
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.dbm_kvstore.KVStore' # https://sorl-thumbnail.readthedocs.io/en/latest/reference/settings.html?highlight=kvstores#dbm

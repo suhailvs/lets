@@ -91,7 +91,7 @@ export default function Index() {
         <Card>
           <Card.Actions>
             <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="black" />)}
-               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}></Button>
+               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}>Listings</Button>
             <Button icon={({ size }) => (<FontAwesome6 name="user" size={size} color="black" />)} mode="contained-tonal"
               onPress={() => handleShowUser(authuser.user_id, 'yes')}>{i18n.t('myaccount')}</Button>                        
           </Card.Actions>
