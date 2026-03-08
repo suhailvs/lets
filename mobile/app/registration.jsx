@@ -87,7 +87,7 @@ export default function RegisterScreen() {
         style={styles.input}
       />
       <TextInput
-        label="Phone Number"
+        label="Phone Number(WhatsApp)"
         value={phone}
         onChangeText={setPhone}
         mode="outlined"

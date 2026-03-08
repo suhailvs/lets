@@ -11,8 +11,9 @@ const InactiveUser = () => {
         <Card.Content>
           <Text variant="titleLarge">🎉 Signup Successful!</Text>
           <Text variant="bodyMedium">
-            Welcome {username}! Your account has been created successfully.
+            Welcome {username}! Your account has been created successfully. Please note down your username below.
           </Text>
+          <Text variant="titleMedium">username: {username}</Text>
           {is_active==='false' && <Card style={styles.inactiveCard}>
             <Card.Content>
             <Text style={styles.inactiveTitle}>Inactive User 🚫</Text>
