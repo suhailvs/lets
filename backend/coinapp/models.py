@@ -32,6 +32,9 @@ class Exchange(models.Model):
             if subdivision:
                 country = pycountry.countries.get(alpha_2=subdivision.country_code)
                 return f'{subdivision.name},{country.name}'
+            else:
+                # countries like antartica, have no subdivision
+                return pycountry.countries.get(alpha_2=self.country_city).name
         except Exception as e:
             print(f"Error: {e}")
         return self.country_city
