@@ -119,7 +119,7 @@ export default function RegisterScreen() {
 
 
       <Text variant="bodyLarge" style={{ textAlign: "center", marginTop:20 }}>I already have an account !</Text>
-      <Button style={{marginTop: 15}} onPress={() => router.navigate('/login')} mode="outlined">Log In</Button>
+      <Button style={{marginTop: 15}} onPress={() => router.replace('/login')} mode="outlined">Log In</Button>
       <Text></Text><Text></Text><Text></Text>
     </ScrollView>
   )

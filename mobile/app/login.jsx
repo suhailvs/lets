@@ -1,7 +1,7 @@
 import ErrorMessage from "@/components/ErrorMessage";
 import Logo from "@/components/Logo";
 import { useSession } from "@/login_extras/ctx";
-import { useRouter } from 'expo-router';
+import { Redirect, useRouter } from 'expo-router';
 import { useEffect,useState } from 'react';
 import { StyleSheet, View } from "react-native";
 import { Button, Text, TextInput, useTheme } from "react-native-paper";
@@ -9,7 +9,7 @@ import * as Notifications from 'expo-notifications';
 import Constants from 'expo-constants';
 
 export default function Login() {
-  const { signIn } = useSession();
+  const { signIn, session } = useSession();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [expoPushToken, setExpoPushToken] = useState('');
@@ -66,6 +66,10 @@ export default function Login() {
     }
   };
 
+  if (session) {
+    return <Redirect href="/" />;
+  }
+
   return (
   <View style={styles.container}>
     <Logo/>
@@ -101,7 +105,7 @@ export default function Login() {
       {loading ? 'Loading...' : 'Login'}
     </Button>
     <Text variant="bodyLarge" style={{ textAlign: "center", marginTop:20 }}>Or New user?</Text>
-    <Button style={{marginTop: 15}} onPress={() => router.navigate('/registration')} mode="outlined">Sign up for LETS</Button>
+    <Button style={{marginTop: 15}} onPress={() => router.replace('/registration')} mode="outlined">Sign up for LETS</Button>
     <Text></Text><Text></Text><Text></Text>
   </View>
   );
