@@ -41,7 +41,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
     exchange_postal_code = serializers.CharField(
         write_only=True, required=False, allow_blank=True
     )
-    
+    is_active = serializers.BooleanField(read_only=True)
     class Meta:
         model = User
         fields = [
@@ -57,6 +57,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             "exchange_postal_code",
             'username',
             "image",
+            "is_active",
         ]
         read_only_fields = ['username']
 

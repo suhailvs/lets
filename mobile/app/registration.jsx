@@ -59,7 +59,11 @@ export default function RegisterScreen() {
     }
     try {      
       const response = await api.post('/registration/', formData, { headers: { "Content-Type": "multipart/form-data" } });
-      router.replace({ pathname: '/inactiveuser',params:{'username':response.data['username']} });
+      if (response.data['is_active']){
+        router.replace({ pathname: '/login' });
+      } else {
+        router.replace({ pathname: '/inactiveuser',params:{'username':response.data['username']} });
+      }
     } catch (error) {
       setError(JSON.stringify(error.response?.data) || "Something went wrong.");
     } finally {
