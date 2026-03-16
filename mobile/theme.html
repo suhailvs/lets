@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Neighbourly — Home</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&family=Nunito+Sans:wght@300;400;600&display=swap');
+
+:root {
+  --bg: #FFF8F0;
+  --coral: #FF6B5B;
+  --coral-light: #FFE8E5;
+  --teal: #3BBFAD;
+  --teal-light: #DFF5F2;
+  --yellow: #FFB830;
+  --yellow-light: #FFF3D6;
+  --purple: #9B7FE8;
+  --purple-light: #EEE8FB;
+  --green: #4CC97A;
+  --green-light: #E0F8EB;
+  --card: #FFFFFF;
+  --text-dark: #1A1A2E;
+  --text-mid: #555577;
+  --text-soft: #AAAACC;
+  --blob1: #FFE0D8;
+  --blob2: #D8F0EE;
+  --blob3: #FFF0CC;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: 'Nunito Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text-dark);
+  max-width: 390px;
+  margin: 0 auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* ── DECORATIVE BLOBS ── */
+.blob-layer {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  pointer-events: none;
+  z-index: 0;
+  overflow: hidden;
+  max-width: 390px;
+  margin: 0 auto;
+}
+
+.blob {
+  position: absolute;
+  border-radius: 50%;
+  opacity: 0.55;
+}
+
+.blob-a {
+  width: 220px; height: 220px;
+  background: var(--blob1);
+  top: -80px; right: -60px;
+  border-radius: 60% 40% 55% 45% / 50% 60% 40% 50%;
+}
+
+.blob-b {
+  width: 160px; height: 160px;
+  background: var(--blob2);
+  top: 340px; left: -50px;
+  border-radius: 45% 55% 40% 60% / 55% 45% 65% 35%;
+}
+
+.blob-c {
+  width: 120px; height: 120px;
+  background: var(--blob3);
+  bottom: 180px; right: -30px;
+  border-radius: 55% 45% 60% 40% / 40% 60% 45% 55%;
+}
+
+/* ── CONTENT ── */
+.content {
+  position: relative;
+  z-index: 1;
+}
+
+/* ── TOP NAV ── */
+.topnav {
+  padding: 18px 20px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nav-wordmark {
+  font-family: 'Nunito', sans-serif;
+  font-size: 22px;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+}
+
+.nav-wordmark span {
+  color: var(--coral);
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.icon-btn {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: var(--card);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  border: none;
+}
+
+.avatar {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--coral), var(--yellow));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Nunito', sans-serif;
+  font-size: 16px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(255,107,91,0.35);
+}
+
+/* ── GREETING ── */
+.greeting-area {
+  padding: 4px 22px 20px;
+}
+
+.greeting-wave {
+  font-family: 'Nunito', sans-serif;
+  font-size: 26px;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -0.5px;
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.greeting-sub {
+  font-size: 14px;
+  color: var(--text-mid);
+  font-weight: 400;
+}
+
+/* ── BALANCE CARD ── */
+.balance-card {
+  margin: 0 16px 20px;
+  background: linear-gradient(135deg, var(--coral) 0%, #FF9A6C 100%);
+  border-radius: 26px;
+  padding: 22px 22px 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 28px rgba(255,107,91,0.35);
+  animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+@keyframes popIn {
+  from { opacity: 0; transform: scale(0.88) translateY(10px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.balance-card::before {
+  content: '';
+  position: absolute;
+  width: 200px; height: 200px;
+  background: rgba(255,255,255,0.12);
+  border-radius: 50%;
+  top: -80px; right: -50px;
+}
+
+.balance-card::after {
+  content: '';
+  position: absolute;
+  width: 100px; height: 100px;
+  background: rgba(255,255,255,0.10);
+  border-radius: 50%;
+  bottom: -30px; left: 30px;
+}
+
+.balance-top {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.balance-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+
+.balance-amount {
+  font-family: 'Nunito', sans-serif;
+  font-size: 44px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: -2px;
+  line-height: 1;
+}
+
+.balance-unit {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-top: 4px;
+}
+
+.hub-badge {
+  background: rgba(255,255,255,0.22);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 5px 12px;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+}
+
+.balance-stats {
+  display: flex;
+  gap: 10px;
+}
+
+.bstat {
+  flex: 1;
+  background: rgba(255,255,255,0.18);
+  border-radius: 14px;
+  padding: 10px 12px;
+  backdrop-filter: blur(4px);
+}
+
+.bstat-label {
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.7);
+  margin-bottom: 3px;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+.bstat-val {
+  font-family: 'Nunito', sans-serif;
+  font-size: 18px;
+  font-weight: 800;
+  color: #fff;
+}
+
+/* ── QUICK ACTIONS ── */
+.quick-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin: 0 16px 22px;
+  animation: slideUp 0.4s ease both;
+  animation-delay: 0.07s;
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.qa-btn {
+  background: var(--card);
+  border: none;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+  box-shadow: 0 3px 14px rgba(0,0,0,0.07);
+  transition: transform 0.15s;
+}
+
+.qa-btn:hover { transform: translateY(-2px); }
+
+.qa-icon {
+  width: 38px; height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.qa-icon.send { background: var(--teal-light); }
+.qa-icon.request { background: var(--yellow-light); }
+
+.qa-text { text-align: left; }
+
+.qa-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.1;
+}
+
+.qa-sub {
+  font-size: 11px;
+  color: var(--text-soft);
+  margin-top: 1px;
+}
+
+/* ── SECTION HEADER ── */
+.section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px 12px;
+  animation: slideUp 0.4s ease both;
+  animation-delay: 0.1s;
+}
+
+.section-title {
+  font-family: 'Nunito', sans-serif;
+  font-size: 17px;
+  font-weight: 900;
+  color: var(--text-dark);
+  letter-spacing: -0.3px;
+}
+
+.section-link {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--coral);
+  text-decoration: none;
+  font-family: 'Nunito', sans-serif;
+}
+
+/* ── LISTING CARDS ── */
+.listing-card {
+  margin: 0 16px 12px;
+  background: var(--card);
+  border-radius: 22px;
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+  cursor: pointer;
+  transition: transform 0.15s, box-shadow 0.15s;
+  animation: slideUp 0.4s ease both;
+}
+
+.listing-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 22px rgba(0,0,0,0.11);
+}
+
+.listing-card:nth-child(1) { animation-delay: 0.12s; }
+.listing-card:nth-child(2) { animation-delay: 0.17s; }
+.listing-card:nth-child(3) { animation-delay: 0.22s; }
+.listing-card:nth-child(4) { animation-delay: 0.27s; }
+
+.listing-emoji {
+  width: 50px; height: 50px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.listing-meta { flex: 1; min-width: 0; }
+
+.listing-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-dark);
+  letter-spacing: -0.2px;
+}
+
+.listing-person {
+  font-size: 12px;
+  color: var(--text-soft);
+  margin-top: 2px;
+  font-weight: 400;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.listing-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+  flex-shrink: 0;
+}
+
+.credit-pill {
+  font-family: 'Nunito', sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  padding: 5px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+}
+
+.type-tag {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 20px;
+  font-family: 'Nunito', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+}
+
+/* Colour combos per listing */
+.c-teal   { background: var(--teal-light); }
+.c-yellow { background: var(--yellow-light); }
+.c-purple { background: var(--purple-light); }
+.c-green  { background: var(--green-light); }
+
+.pill-teal   { background: var(--teal-light); color: var(--teal); }
+.pill-yellow { background: var(--yellow-light); color: #C47F00; }
+.pill-purple { background: var(--purple-light); color: var(--purple); }
+.pill-green  { background: var(--green-light); color: #28A35A; }
+
+.tag-teal   { background: var(--teal); color: #fff; }
+.tag-yellow { background: var(--yellow); color: #fff; }
+.tag-purple { background: var(--purple); color: #fff; }
+.tag-green  { background: var(--green); color: #fff; }
+
+/* ── ACTIVITY STRIP ── */
+.activity-strip {
+  margin: 0 16px 24px;
+  background: var(--card);
+  border-radius: 22px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.07);
+  animation: slideUp 0.4s ease both;
+  animation-delay: 0.28s;
+}
+
+.activity-row {
+  display: flex;
+  align-items: center;
+  padding: 13px 16px;
+  gap: 12px;
+  border-bottom: 1.5px dashed #F0EEF8;
+}
+
+.activity-row:last-child { border-bottom: none; }
+
+.act-dot {
+  width: 10px; height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.act-dot.in  { background: var(--green); box-shadow: 0 0 0 3px var(--green-light); }
+.act-dot.out { background: var(--coral); box-shadow: 0 0 0 3px var(--coral-light); }
+
+.act-info { flex: 1; }
+
+.act-name {
+  font-family: 'Nunito', sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+}
+
+.act-time {
+  font-size: 11px;
+  color: var(--text-soft);
+  margin-top: 1px;
+}
+
+.act-amount {
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+}
+
+.act-amount.in  { color: var(--green); }
+.act-amount.out { color: var(--coral); }
+
+/* ── FAB ── */
+.fab {
+  position: fixed;
+  bottom: 88px;
+  right: 20px;
+  background: var(--coral);
+  color: #fff;
+  border: none;
+  border-radius: 22px;
+  padding: 14px 20px;
+  font-family: 'Nunito', sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  box-shadow: 0 6px 24px rgba(255,107,91,0.40);
+  z-index: 90;
+  transition: transform 0.15s, box-shadow 0.15s;
+  letter-spacing: -0.2px;
+}
+
+.fab:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 10px 32px rgba(255,107,91,0.45);
+}
+
+.fab-icon {
+  font-size: 20px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+/* ── BOTTOM NAV ── */
+.bottom-nav {
+  position: fixed;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 390px;
+  background: var(--card);
+  border-top: 2px solid #F5F0FF;
+  display: flex;
+  padding: 10px 0 20px;
+  z-index: 100;
+  box-shadow: 0 -4px 20px rgba(0,0,0,0.05);
+}
+
+.nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.nav-icon-wrap {
+  width: 36px; height: 36px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.nav-item.active .nav-icon-wrap {
+  background: var(--coral-light);
+}
+
+.nav-label {
+  font-family: 'Nunito', sans-serif;
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--text-soft);
+  letter-spacing: 0.2px;
+}
+
+.nav-item.active .nav-label {
+  color: var(--coral);
+}
+
+/* ── SCROLL PADDING ── */
+.scroll-area {
+  padding-bottom: 110px;
+}
+</style>
+</head>
+<body>
+
+<div class="blob-layer">
+  <div class="blob blob-a"></div>
+  <div class="blob blob-b"></div>
+  <div class="blob blob-c"></div>
+</div>
+
+<div class="content">
+  <!-- TOP NAV -->
+  <nav class="topnav">
+    <div class="nav-wordmark">neighbour<span>ly</span></div>
+    <div class="nav-right">
+      <button class="icon-btn">
+        <svg width="17" height="17" fill="none" stroke="#555577" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </button>
+      <div class="avatar">E</div>
+    </div>
+  </nav>
+
+  <div class="scroll-area">
+
+    <!-- GREETING -->
+    <div class="greeting-area">
+      <div class="greeting-wave">Hey Elara! 👋</div>
+      <div class="greeting-sub">Here's what's happening in your community today.</div>
+    </div>
+
+    <!-- BALANCE CARD -->
+    <div class="balance-card">
+      <div class="balance-top">
+        <div>
+          <div class="balance-label">Your Credits</div>
+          <div class="balance-amount">248</div>
+          <div class="balance-unit">community credits</div>
+        </div>
+        <div class="hub-badge">🏘 Eastside Hub</div>
+      </div>
+      <div class="balance-stats">
+        <div class="bstat">
+          <div class="bstat-label">Earned</div>
+          <div class="bstat-val">+105</div>
+        </div>
+        <div class="bstat">
+          <div class="bstat-label">Spent</div>
+          <div class="bstat-val">−20</div>
+        </div>
+        <div class="bstat">
+          <div class="bstat-label">Offers</div>
+          <div class="bstat-val">3</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="quick-actions">
+      <button class="qa-btn">
+        <div class="qa-icon send">
+          <svg width="18" height="18" fill="none" stroke="var(--teal)" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">Send</div>
+          <div class="qa-sub">Pay a neighbour</div>
+        </div>
+      </button>
+      <button class="qa-btn">
+        <div class="qa-icon request">
+          <svg width="18" height="18" fill="none" stroke="var(--yellow)" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><polyline points="19 12 12 19 5 12"/></svg>
+        </div>
+        <div class="qa-text">
+          <div class="qa-title">Request</div>
+          <div class="qa-sub">Ask for credits</div>
+        </div>
+      </button>
+    </div>
+
+    <!-- LISTINGS -->
+    <div class="section-header">
+      <div class="section-title">What's available 🌿</div>
+      <a href="#" class="section-link">See all</a>
+    </div>
+
+    <div style="animation: slideUp 0.4s ease both; animation-delay: 0.12s;">
+      <div class="listing-card" style="animation:none;">
+        <div class="listing-emoji c-yellow">🧀</div>
+        <div class="listing-meta">
+          <div class="listing-name">Artisan Cheese</div>
+          <div class="listing-person">Dr. Keaton Mayert · today 8:40 AM</div>
+        </div>
+        <div class="listing-right">
+          <div class="credit-pill pill-yellow">Quote</div>
+          <div class="type-tag tag-yellow">Offer</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="animation: slideUp 0.4s ease both; animation-delay: 0.17s;">
+      <div class="listing-card" style="animation:none;">
+        <div class="listing-emoji c-teal">🌿</div>
+        <div class="listing-meta">
+          <div class="listing-name">Garden Herbs</div>
+          <div class="listing-person">Maya Kirilow · 0.3 km away</div>
+        </div>
+        <div class="listing-right">
+          <div class="credit-pill pill-teal">30 cr</div>
+          <div class="type-tag tag-teal">Offer</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="animation: slideUp 0.4s ease both; animation-delay: 0.22s;">
+      <div class="listing-card" style="animation:none;">
+        <div class="listing-emoji c-purple">🔧</div>
+        <div class="listing-meta">
+          <div class="listing-name">Bike Repair</div>
+          <div class="listing-person">Sam Teller · 0.8 km away</div>
+        </div>
+        <div class="listing-right">
+          <div class="credit-pill pill-purple">45 cr</div>
+          <div class="type-tag tag-purple">Service</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="animation: slideUp 0.4s ease both; animation-delay: 0.27s;">
+      <div class="listing-card" style="animation:none;">
+        <div class="listing-emoji c-green">📚</div>
+        <div class="listing-meta">
+          <div class="listing-name">Spanish Lessons</div>
+          <div class="listing-person">Leila Brecht · 1.2 km away</div>
+        </div>
+        <div class="listing-right">
+          <div class="credit-pill pill-green">60 cr</div>
+          <div class="type-tag tag-green">Want</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIVITY -->
+    <div class="section-header" style="animation-delay:0.28s;">
+      <div class="section-title">Recent trades ✨</div>
+      <a href="#" class="section-link">History</a>
+    </div>
+
+    <div class="activity-strip">
+      <div class="activity-row">
+        <div class="act-dot in"></div>
+        <div class="act-info">
+          <div class="act-name">Bike Repair · Sam T.</div>
+          <div class="act-time">Today, 7:14 AM</div>
+        </div>
+        <div class="act-amount in">+45</div>
+      </div>
+      <div class="activity-row">
+        <div class="act-dot out"></div>
+        <div class="act-info">
+          <div class="act-name">Garden Veggies · Maya K.</div>
+          <div class="act-time">Yesterday, 3:02 PM</div>
+        </div>
+        <div class="act-amount out">−20</div>
+      </div>
+      <div class="activity-row">
+        <div class="act-dot in"></div>
+        <div class="act-info">
+          <div class="act-name">Spanish Tutoring · Leila B.</div>
+          <div class="act-time">Monday, 11:30 AM</div>
+        </div>
+        <div class="act-amount in">+60</div>
+      </div>
+    </div>
+
+  </div><!-- scroll-area -->
+</div><!-- content -->
+
+<!-- FAB -->
+<button class="fab">
+  <span class="fab-icon">+</span> New Listing
+</button>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="nav-item active">
+    <div class="nav-icon-wrap">
+      <svg width="20" height="20" fill="none" stroke="var(--coral)" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24">
+        <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/>
+      </svg>
+    </div>
+    <div class="nav-label">Home</div>
+  </div>
+  <div class="nav-item">
+    <div class="nav-icon-wrap">
+      <svg width="20" height="20" fill="none" stroke="var(--text-soft)" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24">
+        <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/><path d="M7 15h2M12 15h5"/>
+      </svg>
+    </div>
+    <div class="nav-label">Transfers</div>
+  </div>
+  <div class="nav-item">
+    <div class="nav-icon-wrap">
+      <svg width="20" height="20" fill="none" stroke="var(--text-soft)" stroke-width="2.2" stroke-linecap="round" viewBox="0 0 24 24">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/>
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+      </svg>
+    </div>
+    <div class="nav-label">Community</div>
+  </div>
+</nav>
+
+</body>
+</html>

@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react';
-import { View, Text, ScrollView, TouchableOpacity, StyleSheet, Linking} from "react-native";
+import { View, Text, ScrollView, StyleSheet, Linking, Pressable} from "react-native";
 import { useRouter, useLocalSearchParams } from 'expo-router';
-import { Image } from "expo-image";
-import { Button } from 'react-native-paper';
 import * as SecureStore from 'expo-secure-store';
 import { openWhatsApp } from '@/utils/openWhatsApp';
 import SkeletonLoader from "@/components/SkeletonLoader";
@@ -10,6 +8,7 @@ import ImagePreview from "@/components/ImagePreview";
 import api from '@/constants/api'
 import Markdown from 'react-native-markdown-display';
 import { MaterialIcons } from "@expo/vector-icons"; // Call icon
+import { Palette } from '@/constants/Colors';
 
 const OfferingDetailPage = ( ) => {
   const [offering, setOffering] = useState([]);
@@ -87,93 +86,111 @@ const OfferingDetailPage = ( ) => {
   };
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.container}>
+      <View pointerEvents="none" style={styles.blobLayer}>
+        <View style={[styles.blob, styles.blobA]} />
+        <View style={[styles.blob, styles.blobB]} />
+        <View style={[styles.blob, styles.blobC]} />
+      </View>
       {loading ? (
-        <View>
+        <View style={styles.loadingWrap}>
           <SkeletonLoader width={100} height={20} />
           <SkeletonLoader width={200} height={15} />
           <SkeletonLoader width={250} height={15} />
         </View>
       ) : (
-        <View>
-          {/* Product Title and Price */}
-          <Text style={styles.productTitle}>{offering.title}</Text>
-          <Text style={styles.productPrice}>₹{offering.rate}</Text>
-          {/* Formatted Date */}
-          <Text style={styles.dateLabel}>Added on: {formatDate(offering.created_at)}</Text>
-          {/* Product Image   */}
-          {offering.image && <ImagePreview imageUri={offering.image}/>}
-          
-          {/* Product Description */}          
-          <Markdown>{offering.description}</Markdown>
-
-
-          {/* Advertiser Details */}
-          <View>
-            <Text style={styles.advertiserItem}>Advertiser Details:</Text>
-            
-            <Text style={styles.advertiserTitle}>{offering.user.first_name}</Text>
-            <Text style={[offering.user.balance > 0 ? styles.positive : styles.negative]}>
-              Balance: ₹{offering.user.balance}
-            </Text>
-            <Text style={styles.advertiserDate}>Last login: {formatDate(offering.user.last_login)}</Text>
-               
-            <View style={styles.phoneView}>
-              <Text style={styles.phoneLabel}>Contact Customer:</Text>
-              <TouchableOpacity onPress={handleCallPress}  style={styles.phoneContainer}>
-                <MaterialIcons name="phone" size={20} color="#fff" />
-                <Text style={styles.phoneText}>{offering.user.phone}</Text>
-              </TouchableOpacity>
+        <View style={styles.content}>
+          <View style={styles.heroCard}>
+            <View style={styles.heroTop}>
+              <View style={styles.heroMeta}>
+                <Text style={styles.heroTitle}>{offering.title}</Text>
+                <Text style={styles.heroDate}>Added on {formatDate(offering.created_at)}</Text>
+              </View>
+              <View style={styles.pricePill}>
+                <Text style={styles.priceLabel}>Price</Text>
+                <Text style={styles.priceValue}>₹{offering.rate}</Text>
+              </View>
             </View>
+            {offering.image ? (
+              <View style={styles.imageCard}>
+                <ImagePreview imageUri={offering.image}/>
+              </View>
+            ) : null}
+          </View>
+          
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Description</Text>
+            <Text style={styles.sectionLink}>{category || 'Listing'}</Text>
+          </View>
+          <View style={styles.detailCard}>
+            <Markdown style={markdownStyles}>{offering.description || 'No description provided.'}</Markdown>
           </View>
 
-          {/* Add to Delete and Buy Now Buttons */}
-          {offering.user.id == userdata.user_id ?
-          <>
-            {
-              offering.is_active == true ? (<Button
-                mode="outlined"
-                onPress={() => handleActivateListing(false)}
-                style={styles.deleteButton}
-                textColor="#D32F2F"
-                icon={({ color, size }) => (
-                  <MaterialIcons name="close" color={color} size={size} />
-                )}
-                >Deactivate</Button>):
-                (<Button mode="outlined" style={{marginTop: 10}} onPress={() => handleActivateListing(true)}>Activate</Button>)
-            }
-            <Button
-              mode="outlined"
-              onPress={handleDelete}
-              style={styles.deleteButton}
-              textColor="#D32F2F"
-              icon={({ color, size }) => (
-                <MaterialIcons name="delete" color={color} size={size} />
+          <View style={styles.sectionHeader}>
+            <Text style={styles.sectionTitle}>Advertiser</Text>
+            <Text style={styles.sectionLink}>Details</Text>
+          </View>
+          <View style={styles.advertiserCard}>
+            <View style={styles.advertiserHeader}>
+              <View style={styles.advertiserAvatar}>
+                <Text style={styles.advertiserAvatarText}>{offering.user.first_name?.[0] || 'U'}</Text>
+              </View>
+              <View style={styles.advertiserMeta}>
+                <Text style={styles.advertiserTitle}>{offering.user.first_name}</Text>
+                <Text style={styles.advertiserDate}>Last login {formatDate(offering.user.last_login)}</Text>
+              </View>
+              <View style={[
+                styles.balancePill,
+                offering.user.balance > 0 ? styles.balancePositive : styles.balanceNegative
+              ]}>
+                <Text style={styles.balanceText}>₹{offering.user.balance}</Text>
+              </View>
+            </View>
+
+            <Pressable onPress={handleCallPress} style={styles.phoneRow}>
+              <View style={styles.phoneIcon}>
+                <MaterialIcons name="phone" size={18} color={Palette.teal} />
+              </View>
+              <View style={styles.phoneMeta}>
+                <Text style={styles.phoneLabel}>Call</Text>
+                <Text style={styles.phoneText}>{offering.user.phone}</Text>
+              </View>
+            </Pressable>
+          </View>
+
+          {offering.user.id == userdata.user_id ? (
+            <View style={styles.actionGroup}>
+              {offering.is_active == true ? (
+                <Pressable style={styles.actionOutline} onPress={() => handleActivateListing(false)}>
+                  <MaterialIcons name="close" size={18} color={Palette.coral} />
+                  <Text style={styles.actionOutlineText}>Deactivate</Text>
+                </Pressable>
+              ) : (
+                <Pressable style={styles.actionPrimary} onPress={() => handleActivateListing(true)}>
+                  <MaterialIcons name="check-circle" size={18} color={Palette.white} />
+                  <Text style={styles.actionPrimaryText}>Activate</Text>
+                </Pressable>
               )}
-            >Delete</Button>
-          </>:
-          <>
-            <Button
-              mode="contained"
-              onPress={() => openWhatsApp(offering.user.phone,`I am interested in your advertisement ${offering.title}.`)}
-              style={styles.buyNowButton}
-              labelStyle={styles.buttonText}
-            >
-              Send Whatsapp Message
-            </Button>
-            <Button
-              mode="contained"
-              onPress={() => handleShowUser(offering.user.id)}
-              style={styles.buyNowButton}
-              labelStyle={styles.buttonText}
-            >
-              View User
-            </Button>
-          </>
-          } 
-          
-          {/* These 3 text boxes are to add some margin Bottom */}
-          <Text></Text><Text></Text><Text></Text>
+              <Pressable style={styles.actionOutline} onPress={handleDelete}>
+                <MaterialIcons name="delete" size={18} color={Palette.coral} />
+                <Text style={styles.actionOutlineText}>Delete</Text>
+              </Pressable>
+            </View>
+          ) : (
+            <View style={styles.actionGroup}>
+              <Pressable
+                style={styles.actionPrimary}
+                onPress={() => openWhatsApp(offering.user.phone,`I am interested in your advertisement ${offering.title}.`)}
+              >
+                <MaterialIcons name="chat" size={18} color={Palette.white} />
+                <Text style={styles.actionPrimaryText}>Send Whatsapp Message</Text>
+              </Pressable>
+              <Pressable style={styles.actionSecondary} onPress={() => handleShowUser(offering.user.id)}>
+                <MaterialIcons name="person" size={18} color={Palette.coral} />
+                <Text style={styles.actionSecondaryText}>View User</Text>
+              </Pressable>
+            </View>
+          )}
         </View>
       )}
     </ScrollView>
@@ -181,63 +198,295 @@ const OfferingDetailPage = ( ) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#fff" },
-  imageContainer: { alignItems: "center", marginBottom: 20 },
-  productTitle: { fontSize: 24, fontWeight: "bold", color: "#232F3E", marginTop: 10, borderBottomWidth: 1, borderBottomColor: "#ddd"},
-  productPrice: { fontSize: 20, marginTop: 10 },
-  dateLabel: {fontSize: 16,fontWeight: "bold",color: "gray",marginRight: 5,},
-  deleteButton: {
-    borderColor: '#D32F2F', // red outline
-    borderRadius: 8,
-    marginTop: 10,
+  screen: {
+    flex: 1,
+    backgroundColor: Palette.bg,
   },
-  buyNowButton: {
-    marginVertical: 10,
-    borderRadius: 8,
-    paddingVertical: 6,
+  container: {
+    padding: 16,
+    paddingBottom: 120,
   },
-  buttonText: {
+  blobLayer: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+  },
+  blob: {
+    position: 'absolute',
+    borderRadius: 999,
+    opacity: 0.55,
+  },
+  blobA: {
+    width: 220,
+    height: 220,
+    backgroundColor: Palette.blob1,
+    top: -80,
+    right: -60,
+  },
+  blobB: {
+    width: 160,
+    height: 160,
+    backgroundColor: Palette.blob2,
+    top: 340,
+    left: -50,
+  },
+  blobC: {
+    width: 120,
+    height: 120,
+    backgroundColor: Palette.blob3,
+    bottom: 180,
+    right: -30,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+  },
+  loadingWrap: {
+    paddingTop: 24,
+  },
+  heroCard: {
+    backgroundColor: Palette.card,
+    borderRadius: 26,
+    padding: 16,
+    shadowColor: Palette.black,
+    shadowOpacity: 0.08,
+    shadowRadius: 18,
+    shadowOffset: { width: 0, height: 6 },
+    elevation: 3,
+    marginBottom: 18,
+  },
+  heroTop: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  heroMeta: {
+    flex: 1,
+  },
+  heroTitle: {
+    fontSize: 20,
+    fontWeight: '900',
+    color: Palette.textDark,
+  },
+  heroDate: {
+    fontSize: 12,
+    color: Palette.textMid,
+    marginTop: 6,
+  },
+  pricePill: {
+    backgroundColor: Palette.coral,
+    borderRadius: 18,
+    paddingVertical: 8,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    shadowColor: Palette.coral,
+    shadowOpacity: 0.3,
+    shadowRadius: 10,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  priceLabel: {
+    fontSize: 10,
+    textTransform: 'uppercase',
+    letterSpacing: 0.4,
+    color: Palette.whiteAlpha75,
+    fontWeight: '700',
+  },
+  priceValue: {
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: '900',
+    color: Palette.white,
   },
-
-  phoneView: {
-    marginTop:10,
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "#000", // Amazon Pay Black
-    padding: 10,
-    borderRadius: 8,
-    shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowOffset: { width: 0, height: 2 },
-    shadowRadius: 4,
-    elevation: 5, // For Android shadow
-    color: "#fff",
+  imageCard: {
+    marginTop: 14,
+    borderRadius: 20,
+    overflow: 'hidden',
+  },
+  sectionHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginBottom: 10,
+    marginTop: 6,
+  },
+  sectionTitle: {
+    fontSize: 16,
+    fontWeight: '900',
+    color: Palette.textDark,
+  },
+  sectionLink: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Palette.coral,
+  },
+  detailCard: {
+    backgroundColor: Palette.card,
+    borderRadius: 20,
+    padding: 16,
+    shadowColor: Palette.black,
+    shadowOpacity: 0.06,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+    marginBottom: 18,
+  },
+  advertiserCard: {
+    backgroundColor: Palette.card,
+    borderRadius: 22,
+    padding: 16,
+    shadowColor: Palette.black,
+    shadowOpacity: 0.08,
+    shadowRadius: 14,
+    shadowOffset: { width: 0, height: 4 },
+    elevation: 2,
+    marginBottom: 18,
+  },
+  advertiserHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 12,
+  },
+  advertiserAvatar: {
+    width: 48,
+    height: 48,
+    borderRadius: 16,
+    backgroundColor: Palette.tealLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  advertiserAvatarText: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: Palette.teal,
+  },
+  advertiserMeta: {
+    flex: 1,
+  },
+  advertiserTitle: {
+    fontSize: 15,
+    fontWeight: '800',
+    color: Palette.textDark,
+  },
+  advertiserDate: {
+    fontSize: 11,
+    color: Palette.textSoft,
+    marginTop: 4,
+  },
+  balancePill: {
+    borderRadius: 18,
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+  },
+  balancePositive: {
+    backgroundColor: Palette.greenLight,
+  },
+  balanceNegative: {
+    backgroundColor: Palette.coralLight,
+  },
+  balanceText: {
+    fontSize: 12,
+    fontWeight: '800',
+    color: Palette.textDark,
+  },
+  phoneRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderTopColor: '#F0EEF8',
+  },
+  phoneIcon: {
+    width: 36,
+    height: 36,
+    borderRadius: 12,
+    backgroundColor: Palette.tealLight,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  phoneMeta: {
+    flex: 1,
   },
   phoneLabel: {
-    fontSize: 16,
-    fontWeight: "bold",
-    color: "#fff",
-    marginRight: 10,
-  },
-  phoneContainer: {
-    flexDirection: "row",
-    alignItems: "center",
+    fontSize: 11,
+    textTransform: 'uppercase',
+    letterSpacing: 0.3,
+    color: Palette.textSoft,
+    fontWeight: '700',
   },
   phoneText: {
-    fontSize: 16,
-    color: "#fff",
-    marginLeft: 5,
-    textDecorationLine: "underline",
+    fontSize: 14,
+    color: Palette.textDark,
+    fontWeight: '700',
+    marginTop: 2,
   },
+  actionGroup: {
+    gap: 10,
+  },
+  actionPrimary: {
+    backgroundColor: Palette.coral,
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    justifyContent: 'center',
+    shadowColor: Palette.coral,
+    shadowOpacity: 0.35,
+    shadowRadius: 12,
+    shadowOffset: { width: 0, height: 4 },
+  },
+  actionPrimaryText: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.white,
+  },
+  actionSecondary: {
+    backgroundColor: Palette.card,
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Palette.coralLight,
+  },
+  actionSecondaryText: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.coral,
+  },
+  actionOutline: {
+    backgroundColor: Palette.card,
+    borderRadius: 18,
+    paddingVertical: 14,
+    paddingHorizontal: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    justifyContent: 'center',
+    borderWidth: 1,
+    borderColor: Palette.coralLight,
+  },
+  actionOutlineText: {
+    fontSize: 14,
+    fontWeight: '800',
+    color: Palette.coral,
+  },
+});
 
-  advertiserItem: { fontSize: 20, borderBottomWidth: 1, borderBottomColor: "#ddd" },
-  advertiserTitle: { fontSize: 16, fontWeight: "500" },
-  
-  advertiserDate: { fontSize: 12, color: "gray", marginTop: 2 },
-  positive: { color: "green" },
-  negative: { color: "red" },
+const markdownStyles = StyleSheet.create({
+  body: {
+    color: Palette.textDark,
+    fontSize: 13,
+    lineHeight: 20,
+  },
+  link: {
+    color: Palette.coral,
+  },
 });
 
 export default OfferingDetailPage;
