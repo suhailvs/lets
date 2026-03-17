@@ -1,15 +1,15 @@
 // Home page with user balance, logout button and some userlisting
-import { View,  StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
-import { Avatar, Text, Card, Button  } from 'react-native-paper';
+import { View, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { Avatar, Text, Button } from 'react-native-paper';
 import { useState, useEffect, useCallback, useRef } from 'react';
 import * as SecureStore from 'expo-secure-store';
 import { useRouter } from 'expo-router';
 import { MaterialIcons } from "@expo/vector-icons";
 import FontAwesome6 from "@expo/vector-icons/FontAwesome6";
 import NetInfo from '@react-native-community/netinfo';
-import i18n from '@/constants/i18n';
 import api from '@/constants/api'
 import SkeletonLoader from "@/components/SkeletonLoader";
+import { Palette } from '@/constants/Colors';
 
 export default function Index() {
   const [balance, setBalance] = useState(null);
@@ -75,33 +75,71 @@ export default function Index() {
     router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});
   };
   return (
-    <ScrollView>
-      <View style={styles.header}>
-        <Text variant="headlineSmall" style={styles.headerText}>
-          {authuser?.firstname || ''} {authuser?.username}{authuser?.exchange_name ? ` (${authuser.exchange_name})` : ''}
-        </Text>
-        <View style={{flexDirection: "row"}}>
-          <Text variant="displayLarge" style={styles.headerText}>{balance != null ? `₹${balance}`:'****'}</Text>        
-          <TouchableOpacity onPress={fetchBalance}>
-            <MaterialIcons name="refresh" size={55} style={[styles.headerText,styles.headerIcon]} />
-          </TouchableOpacity>       
-        </View>
+    <ScrollView style={styles.screen} contentContainerStyle={styles.contentContainer}>
+      <View pointerEvents="none" style={styles.blobLayer}>
+        <View style={[styles.blob, styles.blobA]} />
+        <View style={[styles.blob, styles.blobB]} />
+        <View style={[styles.blob, styles.blobC]} />
       </View>
-      <View style={styles.container}>
-        <Card>
-          <Card.Actions>
-            <Button icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color="black" />)}
-               mode="contained-tonal" onPress={() => router.push({ pathname: 'screens/all_listings'})}>All Listings</Button>
-            <TouchableOpacity onPress={() =>handleShowUser(authuser.user_id, 'yes')}>
-              <Avatar.Image size={40} source={{ uri: authuser.thumbnail }} />
+
+      <View style={styles.content}>
+        <View style={styles.topnav}>
+          <Text style={styles.wordmark}>Neighbourly</Text>
+          <View style={styles.navRight}>
+            <TouchableOpacity onPress={fetchBalance} style={styles.iconBtn}>
+              <MaterialIcons name="refresh" size={20} color={Palette.textDark} />
             </TouchableOpacity>
-          </Card.Actions>
-        </Card>
-        <Text variant="headlineSmall" style={{marginTop:20}}>People</Text>
-        
+            <TouchableOpacity onPress={() => handleShowUser(authuser.user_id, 'yes')}>
+              {authuser?.thumbnail ? (
+                <Avatar.Image size={38} source={{ uri: authuser.thumbnail }} />
+              ) : (
+                <View style={styles.avatarFallback}>
+                  <Text style={styles.avatarFallbackText}>{authuser?.firstname?.[0] || 'U'}</Text>
+                </View>
+              )}
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <View style={styles.greetingArea}>
+          <Text style={styles.greetingWave}>
+            Hello, {authuser?.firstname || authuser?.username || 'there'}
+          </Text>
+        </View>
+
+        <View style={styles.balanceCard}>
+          <View style={styles.balanceCircleLarge} />
+          <View style={styles.balanceCircleSmall} />
+          <View style={styles.balanceTop}>
+            <View>
+              <Text style={styles.balanceLabel}>Balance</Text>
+              <Text style={styles.balanceAmount}>{balance != null ? `₹${balance}` : '****'}</Text>
+            </View>
+            <Text style={styles.hubBadge}>{authuser?.exchange_name}</Text>
+          </View>
+          <View style={styles.balanceActions}>
+            <Button
+              icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color={Palette.textDark} />)}
+              mode="contained"
+              buttonColor={Palette.bg}
+              textColor={Palette.textDark}
+              onPress={() => router.push({ pathname: 'screens/all_listings' })}
+              style={styles.primaryCta}
+              labelStyle={styles.primaryCtaLabel}
+            >
+              All Listings
+            </Button>
+          </View>
+        </View>
+
+        <View style={styles.peopleHeader}>
+          <Text style={styles.peopleTitle}>People</Text>
+          <Text style={styles.peopleSub}>Tap a profile to open details</Text>
+        </View>
+
         {loading ? (
-          <View>
-            <SkeletonLoader width={100} height={20} />
+          <View style={styles.skeletonBlock}>
+            <SkeletonLoader width={120} height={20} />
             <SkeletonLoader width={200} height={15} />
             <SkeletonLoader width={250} height={15} />
           </View>
@@ -109,25 +147,200 @@ export default function Index() {
           <View style={styles.peopleRow}>
             {users.map((user, i) => (
               <View style={styles.person} key={i}>
-                <TouchableOpacity onPress={() => handleShowUser(user.id)}>
-                <Avatar.Image size={60} source={{ uri: user.thumbnail }} />
-                <Text variant="bodyMedium" style={[styles.personText, !user.is_active && styles.in_active]}>{user.first_name}</Text>
+                <TouchableOpacity onPress={() => handleShowUser(user.id)} style={styles.personTap}>
+                  <Avatar.Image size={60} source={{ uri: user.thumbnail }} />
+                  <Text style={[styles.personText, !user.is_active && styles.inActive]}>{user.first_name}</Text>
                 </TouchableOpacity>
               </View>
             ))}
           </View>
-          )}
+        )}
       </View>
     </ScrollView>
   );
 }
 const styles = StyleSheet.create({
-  header: { backgroundColor: "#fdf7df",paddingBottom: 30, paddingTop:80, paddingHorizontal: 10,position: "relative" },// backgroundColor #007C8A
-  headerText: {color: "#2a231a"}, // color #99C9CE
-  headerIcon: { padding: 5 },
-  container: { flex: 1, backgroundColor:"#fff", padding:10, paddingBottom:100 },
-  peopleRow: { flexDirection: 'row', flexWrap: 'wrap' },
-  person: { width: 70, alignItems: 'center', margin: 10 },
-  personText: {textAlign: 'center'},
-  in_active:{ color: "red" },
+  screen: { backgroundColor: Palette.bg },
+  contentContainer: { paddingBottom: 120 },
+  blobLayer: {
+    ...StyleSheet.absoluteFillObject,
+    overflow: 'hidden',
+  },
+  blob: {
+    position: 'absolute',
+    borderRadius: 999,
+    opacity: 0.55,
+  },
+  blobA: {
+    width: 220,
+    height: 220,
+    backgroundColor: Palette.blob1,
+    top: -80,
+    right: -60,
+  },
+  blobB: {
+    width: 160,
+    height: 160,
+    backgroundColor: Palette.blob2,
+    top: 340,
+    left: -50,
+  },
+  blobC: {
+    width: 120,
+    height: 120,
+    backgroundColor: Palette.blob3,
+    bottom: 180,
+    right: -30,
+  },
+  content: {
+    position: 'relative',
+    zIndex: 1,
+  },
+  topnav: {
+    paddingTop: 54,
+    paddingHorizontal: 20,
+    paddingBottom: 14,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  wordmark: {
+    fontSize: 22,
+    fontWeight: '900',
+    color: Palette.textDark,
+    letterSpacing: -0.5,
+  },
+  navRight: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  iconBtn: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: Palette.card,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+    shadowColor: Palette.black,
+    shadowOpacity: 0.12,
+    shadowRadius: 8,
+    shadowOffset: { width: 0, height: 2 },
+    elevation: 3,
+  },
+  avatarFallback: {
+    width: 38,
+    height: 38,
+    borderRadius: 19,
+    backgroundColor: Palette.coral,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  avatarFallbackText: {
+    color: Palette.white,
+    fontWeight: '800',
+  },
+  greetingArea: {
+    paddingHorizontal: 22,
+    paddingBottom: 20,
+  },
+  greetingWave: {
+    fontSize: 26,
+    fontWeight: '900',
+    color: Palette.textDark,
+    letterSpacing: -0.5,
+  },
+  balanceCard: {
+    marginHorizontal: 16,
+    marginBottom: 20,
+    backgroundColor: Palette.coral,
+    borderRadius: 26,
+    padding: 22,
+    overflow: 'hidden',
+    shadowColor: Palette.coral,
+    shadowOpacity: 0.35,
+    shadowRadius: 16,
+    shadowOffset: { width: 0, height: 8 },
+    elevation: 6,
+  },
+  balanceCircleLarge: {
+    position: 'absolute',
+    width: 200,
+    height: 200,
+    borderRadius: 100,
+    backgroundColor: Palette.whiteAlpha12,
+    top: -80,
+    right: -50,
+  },
+  balanceCircleSmall: {
+    position: 'absolute',
+    width: 110,
+    height: 110,
+    borderRadius: 55,
+    backgroundColor: Palette.whiteAlpha10,
+    bottom: -30,
+    left: 30,
+  },
+  balanceTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 14,
+  },
+  balanceLabel: {
+    fontSize: 12,
+    fontWeight: '700',
+    color: Palette.whiteAlpha75,
+    letterSpacing: 0.5,
+    textTransform: 'uppercase',
+  },
+  balanceAmount: {
+    fontSize: 40,
+    fontWeight: '900',
+    color: Palette.white,
+    letterSpacing: -1.5,
+    marginTop: 6,
+  },
+  hubBadge: {
+    backgroundColor: Palette.whiteAlpha22,
+    color: Palette.white,
+    fontSize: 11,
+    fontWeight: '700',
+    paddingVertical: 6,
+    paddingHorizontal: 12,
+    borderRadius: 20,
+  },
+  balanceActions: {
+    marginTop: 6,
+    alignItems: 'flex-start',
+  },
+  primaryCta: {
+    borderRadius: 18,
+  },
+  primaryCtaLabel: {
+    fontWeight: '700',
+  },
+  peopleHeader: {
+    paddingHorizontal: 20,
+    paddingTop: 8,
+  },
+  peopleTitle: {
+    fontSize: 18,
+    fontWeight: '800',
+    color: Palette.textDark,
+  },
+  peopleSub: {
+    fontSize: 13,
+    color: Palette.textMid,
+    marginTop: 4,
+  },
+  skeletonBlock: {
+    paddingHorizontal: 20,
+    paddingTop: 10,
+  },
+  peopleRow: { flexDirection: 'row', flexWrap: 'wrap', paddingHorizontal: 10 },
+  person: { width: 84, alignItems: 'center', marginVertical: 14 },
+  personTap: { alignItems: 'center' },
+  personText: { textAlign: 'center', marginTop: 6, color: Palette.textDark },
+  inActive: { color: Palette.danger },
 });
