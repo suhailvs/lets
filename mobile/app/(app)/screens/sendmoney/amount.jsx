@@ -6,6 +6,7 @@ import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import api from '@/constants/api'
 
 import ErrorMessage from "@/components/ErrorMessage";
+import { Colors, Palette } from "@/constants/Colors";
 const EnterAmountScreen = () => { // { route, navigation }
   const [amount, setAmount] = useState("");
   const [message, setMessage] = useState("");
@@ -59,7 +60,7 @@ const EnterAmountScreen = () => { // { route, navigation }
     <View style={styles.container}>
       <View style={styles.contactWrapper}>
         <View style={styles.contactContainer}>
-          <Icon name="account-circle" size={50} color="#4285F4" />
+          <Icon name="account-circle" size={50} color={Palette.teal} />
           <View>
             <Text style={styles.contactName}>{first_name} ({username})</Text>
             <Text style={styles.contactDetails}>{txn_type==='seller'? "Receive":"Send"} money on LETS</Text>
@@ -97,7 +98,7 @@ const EnterAmountScreen = () => { // { route, navigation }
       <Modal transparent={true} animationType="fade" visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Icon name="check-circle" size={60} color="#34A853" />
+            <Icon name="check-circle" size={60} color={Palette.green} />
             <Text style={styles.modalTitle}>Confirm Payment</Text>
             <Text style={styles.modalText}>{txn_type==='seller'? `Receive ₹${amount} from`:`Pay ₹${amount} to`} {first_name} ({username})?</Text>
             {message ? <Text style={styles.modalMessage}>"{message}"</Text> : null}
@@ -121,7 +122,7 @@ const EnterAmountScreen = () => { // { route, navigation }
 const styles = StyleSheet.create({
   container: { 
     flex: 1, 
-    backgroundColor: "#fff", 
+    backgroundColor: Colors.light.background, 
     alignItems: "center", 
     // justifyContent: "center", 
     paddingHorizontal: 20 
@@ -130,24 +131,24 @@ const styles = StyleSheet.create({
     width: '100%',
     // position: 'absolute',
     
-    backgroundColor: '#fff',
+    backgroundColor: Colors.light.background,
     zIndex: 10,
     borderBottomWidth: 1,
-    borderColor: '#e0e0e0',
+    borderColor: Colors.light.border,
   },
   
   
   contactContainer: { 
     flexDirection: "row", 
     alignItems: "center", 
-    backgroundColor: "#F1F3F4", 
+    backgroundColor: Palette.tealLight, 
     padding: 15, 
     borderRadius: 10, 
     width: "100%"
     // marginBottom: 30 
   },
-  contactName: { fontSize: 18, fontWeight: "bold", color: "#000", marginLeft: 10 },
-  contactDetails: { fontSize: 14, color: "#5F6368", marginLeft: 10 },
+  contactName: { fontSize: 18, fontWeight: "bold", color: Palette.textDark, marginLeft: 10 },
+  contactDetails: { fontSize: 14, color: Palette.textMid, marginLeft: 10 },
   
 
   formContainer: {
@@ -160,20 +161,20 @@ const styles = StyleSheet.create({
     alignItems: "center", 
     marginBottom: 20 
   },
-  currency: { fontSize: 50, fontWeight: "bold", color: "#000" },
+  currency: { fontSize: 50, fontWeight: "bold", color: Palette.textDark },
   amountInput: { 
     fontSize: 50, 
     fontWeight: "bold", 
-    color: "#000", 
+    color: Palette.textDark, 
     borderBottomWidth: 2, 
-    borderColor: "#4285F4", 
+    borderColor: Palette.coral, 
     width: 200, 
     textAlign: "left",
     paddingLeft: 10,
   },
 
   messageInput: { 
-    backgroundColor: "#F1F3F4", 
+    backgroundColor: Palette.coralLight, 
     padding: 12, 
     borderRadius: 8, 
     fontSize: 16, 
@@ -182,26 +183,26 @@ const styles = StyleSheet.create({
   },
 
   proceedButton: { 
-    backgroundColor: "#4285F4", 
+    backgroundColor: Palette.coral, 
     padding: 15, 
     borderRadius: 30, 
     alignItems: "center", 
     width: "80%", 
     marginTop: 10 
   },
-  proceedButtonText: { color: "#fff", fontSize: 18, fontWeight: "bold" },
+  proceedButtonText: { color: Palette.white, fontSize: 18, fontWeight: "bold" },
 
   // Modal Styles
   modalContainer: { flex: 1, justifyContent: "center",alignItems: "center", backgroundColor: "rgba(0,0,0,0.5)" },
-  modalContent: { backgroundColor: "#fff", padding: 20, borderRadius: 15, alignItems: "center", width: "85%" },
-  modalTitle: { fontSize: 22, fontWeight: "bold", marginTop: 10, color: "#000" },
-  modalText: { fontSize: 18, marginTop: 10, color: "#5F6368" },
-  modalMessage: { fontSize: 16, fontStyle: "italic", marginTop: 5, color: "#5F6368" },
+  modalContent: { backgroundColor: Colors.light.card, padding: 20, borderRadius: 15, alignItems: "center", width: "85%" },
+  modalTitle: { fontSize: 22, fontWeight: "bold", marginTop: 10, color: Palette.textDark },
+  modalText: { fontSize: 18, marginTop: 10, color: Palette.textMid },
+  modalMessage: { fontSize: 16, fontStyle: "italic", marginTop: 5, color: Palette.textMid },
   modalButtons: { flexDirection: "row", marginTop: 20, width: "100%" },  
-  cancelButton: { flex: 1, padding: 12, backgroundColor: "#DADCE0", marginRight: 5 },
-  confirmButton: { flex: 1, padding: 12, backgroundColor: "#34A853", marginLeft: 5 },
-  cancelText: {color: "#000", fontWeight: "bold",},
-  confirmText: {color: "#fff", fontWeight: "bold",},
+  cancelButton: { flex: 1, padding: 12, backgroundColor: Palette.yellowLight, marginRight: 5 },
+  confirmButton: { flex: 1, padding: 12, backgroundColor: Palette.green, marginLeft: 5 },
+  cancelText: {color: Palette.textDark, fontWeight: "bold",},
+  confirmText: {color: Palette.white, fontWeight: "bold",},
 });
 
 export default EnterAmountScreen;
