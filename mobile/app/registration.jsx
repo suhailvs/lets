@@ -1,13 +1,13 @@
 import { useState } from "react";
 import { StyleSheet, ScrollView } from "react-native";
 import { useRouter } from 'expo-router';
-import { TextInput, Button, useTheme,Text} from "react-native-paper";
+import { TextInput, Button,Text} from "react-native-paper";
 import api from '@/constants/api'
 import ErrorMessage from "@/components/ErrorMessage";
 import ExchangeCreationTab from "@/components/ExchangeCreationTab";
 import Logo from "@/components/Logo";
 import ImagePickerComponent from "@/components/ImagePickerComponent";
-
+import { Colors, Palette } from "@/constants/Colors";
 export default function RegisterScreen() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -18,7 +18,6 @@ export default function RegisterScreen() {
   const [email, setEmail] = useState('');  
   const [image, setSelectedImage] = useState(null);
   const [secureText, setSecureText] = useState(true);
-  const theme = useTheme();
   const router = useRouter();
 
   const handleRegistration = async () => {
@@ -68,8 +67,10 @@ export default function RegisterScreen() {
   };
   return (
     <ScrollView style={styles.container}>
-      <Logo/>
-      <Text variant="headlineMedium" style={{ color: theme.colors.primary, textAlign: "center", marginBottom:20 }}>Sign up to LETS</Text>
+      <Logo page="registration"/>
+      <Text variant="titleLarge" style={{ color: Palette.coral, marginBottom:10 }}>
+        Create Your Account
+      </Text>
       <ExchangeCreationTab onExchangeSelected={setExchangeData} />
       <TextInput
         label="First Name"
@@ -116,10 +117,6 @@ export default function RegisterScreen() {
       <Button style={{marginTop: 15}} mode="contained" onPress={handleRegistration} loading={loading} disabled={loading}>
         {loading ? 'Loading...' : 'Sign Up'}
       </Button>
-
-
-      <Text variant="bodyLarge" style={{ textAlign: "center", marginTop:20 }}>I already have an account !</Text>
-      <Button style={{marginTop: 15}} onPress={() => router.replace('/login')} mode="outlined">Log In</Button>
       <Text></Text><Text></Text><Text></Text>
     </ScrollView>
   )
@@ -129,6 +126,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 20,
+    backgroundColor: Colors.light.background,
   },
   input: {
     marginBottom: 15,
