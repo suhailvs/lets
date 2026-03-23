@@ -25,7 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = fields
     thumbnail = HyperlinkedSorlImageField(
         '128x128',
-        options={"crop": "center"},
+        # options={"crop": "center"},
         source='image',
         read_only=True
     )
@@ -156,7 +156,7 @@ class ListingListSerializer(serializers.ModelSerializer):
     # https://github.com/dessibelle/sorl-thumbnail-serializer-field/tree/master#example-usage
     thumbnail = HyperlinkedSorlImageField(
         '128x128',
-        options={"crop": "center"},
+        # options={"crop": "center"},
         source='image',
         read_only=True
     )
