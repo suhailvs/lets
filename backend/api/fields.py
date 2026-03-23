@@ -1,6 +1,21 @@
 from rest_framework import serializers
 from sorl.thumbnail import get_thumbnail # pip install sorl-thumbnail
+class HyperlinkedSorlImageField(serializers.ImageField):
+    def __init__(self, geometry="300x300", *args, **kwargs):
+        self.geometry = geometry
+        super().__init__(*args, **kwargs)
 
+    def to_representation(self, value):
+        if not value: return None
+        try:
+            thumb = get_thumbnail(value, self.geometry, crop="center", quality=90)
+        except Exception:
+            return None
+        request = self.context.get("request")
+        if request: return request.build_absolute_uri(thumb.url)
+        return thumb.url
+    
+'''
 class HyperlinkedSorlImageField(serializers.ImageField):
 
     """
@@ -89,3 +104,4 @@ class HyperlinkedSorlImageField(serializers.ImageField):
             except AttributeError:  # NOQA
                 return super(HyperlinkedSorlImageField, self).to_native(image.url)  # NOQA
     to_native = to_representation
+'''

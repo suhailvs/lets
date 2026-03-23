@@ -62,6 +62,8 @@ const UserDetails = () => {
     }
   };
   
+  const balanceValue = Number(data.balance ?? 0);
+
   return (
       <ScrollView contentContainerStyle={styles.container}>
         {loading ? (
@@ -135,8 +137,14 @@ const UserDetails = () => {
                 />
                 <List.Item
                   title="Balance"
-                  description={`${data.balance ?? 0} KC`}
+                  description={`${balanceValue} KC`}
                   left={(props) => <List.Icon {...props} icon="wallet" />}
+                  style={styles.balanceItem}
+                  titleStyle={styles.balanceTitle}
+                  descriptionStyle={[
+                    styles.balanceValue,
+                    balanceValue < 0 ? styles.balanceNegative : styles.balancePositive,
+                  ]}
                 />
                 {/* 
                 <List.Item
@@ -166,5 +174,24 @@ const styles = StyleSheet.create({
     marginTop: 15,
     borderRadius: 10,
     backgroundColor: '#fff',
+  },
+  balanceItem: {
+    marginTop: 4,
+    marginBottom: 8,
+    borderRadius: 8,
+    backgroundColor: '#e8f4ff',
+  },
+  balanceTitle: {
+    fontWeight: '700',
+  },
+  balanceValue: {
+    fontSize: 18,
+    fontWeight: '700',
+  },
+  balancePositive: {
+    color: '#0b5a2b',
+  },
+  balanceNegative: {
+    color: '#b00020',
   },
 });
