@@ -52,7 +52,7 @@ const PaymentSuccessScreen = () => {
     <View style={styles.container}>
       {/* Animated Success Icon */}
       <Animated.View style={[styles.iconContainer, { opacity: fadeAnim, transform: [{ scale: scaleAnim }] }]}>
-        <MaterialIcons name="check-circle" size={100} color={Palette.green} />  
+        <MaterialIcons name="check-circle" size={100} color={Palette.success} />  
       </Animated.View>
 
       {/* Success Message */}
@@ -60,7 +60,7 @@ const PaymentSuccessScreen = () => {
         Payment Successful
       </Animated.Text>
       <Animated.Text style={[styles.subtitle, { opacity: fadeAnim }]}>
-        ₹{amount} sent to {name}
+        {amount} KC sent to {name}
       </Animated.Text>
 
       {/* Bottom Done Button */}
@@ -98,11 +98,11 @@ const styles = StyleSheet.create({
   button: {
     position: "absolute",
     bottom: 40,
-    backgroundColor: Palette.coral,
+    backgroundColor: Palette.primary,
     borderRadius: 24,
     paddingVertical: 12,
     paddingHorizontal: 50,
-    shadowColor: Palette.coral,
+    shadowColor: Palette.primary,
     shadowOpacity: 0.1,
     shadowRadius: 4,
     shadowOffset: { width: 0, height: 2 },

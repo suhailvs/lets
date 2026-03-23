@@ -73,7 +73,7 @@ export default function Login() {
   return (
   <View style={styles.container}>
     <Logo page="login"/>
-    <Text variant="titleLarge" style={{ color: Palette.coral, marginBottom:10 }}>
+    <Text variant="titleLarge" style={{ color: Palette.primary, marginBottom:10 }}>
         Login to your account
     </Text>
     <TextInput

@@ -106,6 +106,7 @@ const UserDetails = () => {
                       onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'buyer' } })}
                     > Send</Button>
                     <Button mode="contained-tonal"
+                      icon={({ size, color }) => (<Ionicons name="download" size={size} color={color} />)}
                       onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'seller' } })}
                     > Receive</Button>
                   </Card.Actions>
@@ -134,7 +135,7 @@ const UserDetails = () => {
                 />
                 <List.Item
                   title="Balance"
-                  description={`₹${data.balance ?? 0}`}
+                  description={`${data.balance ?? 0} KC`}
                   left={(props) => <List.Icon {...props} icon="wallet" />}
                 />
                 {/* 

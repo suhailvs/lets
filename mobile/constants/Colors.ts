@@ -4,30 +4,38 @@
  */
 
 export const Palette = {
-  bg: '#FFF8F0',
-  coral: '#FF6B5B',
-  coralLight: '#FFE8E5',
-  teal: '#3BBFAD',
-  tealLight: '#DFF5F2',
-  yellow: '#FFB830',
-  yellowLight: '#FFF3D6',
-  purple: '#9B7FE8',
-  purpleLight: '#EEE8FB',
-  green: '#4CC97A',
-  greenLight: '#E0F8EB',
+
+  bg: '#F8F9FA',
   card: '#FFFFFF',
+  border: '#E0E3E7',
+
+  primary: '#4285F4',        // Google Pay blue
+  primaryLight: '#E8F0FE',
+
+  secondary: '#34A853',      // Google green
+  secondaryLight: '#E6F4EA',
+
+  accent: '#FBBC04',         // Google yellow
+  accentLight: '#FEF7E0',
+
+  textDark: '#202124',
+  textMid: '#5F6368',
+  textSoft: '#9AA0A6',
+
+  success: '#34A853',
+  danger: '#EA4335',
+  warning: '#FBBC04',
+
   white: '#FFFFFF',
   black: '#000000',
-  textDark: '#1A1A2E',
-  textMid: '#555577',
-  textSoft: '#AAAACC',
-  blob1: '#FFE0D8',
-  blob2: '#D8F0EE',
-  blob3: '#FFF0CC',
-  border: '#E8E2DB',
-  danger: '#D64545',
-  warningBg: '#FFF3D6',
-  warningText: '#8A5A00',
+  
+  
+  successLight: '#E6F4EA',
+  blob1: '#E8F0FE',
+  blob2: '#E6F4EA',
+  blob3: '#FEF7E0',
+  warningBg: '#FEF7E0',
+  warningText: '#9A6B00',
   whiteAlpha10: 'rgba(255,255,255,0.1)',
   whiteAlpha12: 'rgba(255,255,255,0.12)',
   whiteAlpha22: 'rgba(255,255,255,0.22)',
@@ -39,31 +47,31 @@ export const Colors = {
   light: {
     text: Palette.textDark,
     background: Palette.bg,
-    tint: Palette.coral,
+    tint: Palette.primary,
     icon: Palette.textMid,
     tabIconDefault: Palette.textSoft,
-    tabIconSelected: Palette.coral,
+    tabIconSelected: Palette.primary,
     card: Palette.card,
     border: Palette.border,
-    accent: Palette.coral,
-    accentAlt: Palette.teal,
-    success: Palette.green,
-    warning: Palette.yellow,
+    accent: Palette.primary,
+    accentAlt: Palette.secondary,
+    success: Palette.success,
+    warning: Palette.accent,
     danger: Palette.danger,
   },
   dark: {
     text: Palette.textDark,
     background: Palette.bg,
-    tint: Palette.coral,
+    tint: Palette.primary,
     icon: Palette.textMid,
     tabIconDefault: Palette.textSoft,
-    tabIconSelected: Palette.coral,
+    tabIconSelected: Palette.primary,
     card: Palette.card,
     border: Palette.border,
-    accent: Palette.coral,
-    accentAlt: Palette.teal,
-    success: Palette.green,
-    warning: Palette.yellow,
+    accent: Palette.primary,
+    accentAlt: Palette.secondary,
+    success: Palette.success,
+    warning: Palette.accent,
     danger: Palette.danger,
   },
 };

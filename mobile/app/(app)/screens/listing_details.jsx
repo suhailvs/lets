@@ -98,7 +98,7 @@ const OfferingDetailPage = ( ) => {
         <View>
           {/* Product Title and Price */}
           <Text style={styles.productTitle}>{offering.title}</Text>
-          <Text style={styles.productPrice}>₹{offering.rate}</Text>
+          <Text style={styles.productPrice}>{offering.rate} KC</Text>
           {/* Formatted Date */}
           <Text style={styles.dateLabel}>Added on: {formatDate(offering.created_at)}</Text>
           {/* Product Image   */}
@@ -114,7 +114,7 @@ const OfferingDetailPage = ( ) => {
             
             <Text style={styles.advertiserTitle}>{offering.user.first_name}</Text>
             <Text style={[offering.user.balance > 0 ? styles.positive : styles.negative]}>
-              Balance: ₹{offering.user.balance}
+              Balance: {offering.user.balance} KC
             </Text>
             <Text style={styles.advertiserDate}>Last login: {formatDate(offering.user.last_login)}</Text>
                

@@ -79,7 +79,7 @@ export default function TransactionScreen (){
                   <Text style={styles.actTime}>{formatDate(item.created_at)}</Text>
                 </View>
                 <Text style={[styles.actAmount, isReceived ? styles.amountIn : styles.amountOut]}>
-                  ₹{isReceived ? '+' : '-'}{item.amount}
+                  {isReceived ? '+' : '-'}{item.amount} KC
                 </Text>
               </View>
             );
@@ -196,15 +196,15 @@ const styles = StyleSheet.create({
     marginRight: 12,
   },
   actDotIn: {
-    backgroundColor: Palette.green,
-    shadowColor: Palette.green,
+    backgroundColor: Palette.success,
+    shadowColor: Palette.success,
     shadowOpacity: 0.5,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 0 },
   },
   actDotOut: {
-    backgroundColor: Palette.coral,
-    shadowColor: Palette.coral,
+    backgroundColor: Palette.primary,
+    shadowColor: Palette.primary,
     shadowOpacity: 0.5,
     shadowRadius: 6,
     shadowOffset: { width: 0, height: 0 },
@@ -232,10 +232,10 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   amountIn: {
-    color: Palette.green,
+    color: Palette.success,
   },
   amountOut: {
-    color: Palette.coral,
+    color: Palette.primary,
   },
   emptyState: {
     backgroundColor: Palette.card,

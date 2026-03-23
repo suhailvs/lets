@@ -60,7 +60,7 @@ const EnterAmountScreen = () => { // { route, navigation }
     <View style={styles.container}>
       <View style={styles.contactWrapper}>
         <View style={styles.contactContainer}>
-          <Icon name="account-circle" size={50} color={Palette.teal} />
+          <Icon name="account-circle" size={50} color={Palette.secondary} />
           <View>
             <Text style={styles.contactName}>{first_name} ({username})</Text>
             <Text style={styles.contactDetails}>{txn_type==='seller'? "Receive":"Send"} money on LETS</Text>
@@ -70,7 +70,7 @@ const EnterAmountScreen = () => { // { route, navigation }
       <View style={styles.formContainer}>
       {/* Amount Input */}
       <View style={styles.amountContainer}>
-        <Text style={styles.currency}>₹</Text>
+        <Text style={styles.currency}>KC</Text>
         <TextInput
           style={styles.amountInput}
           placeholder="0"
@@ -91,16 +91,16 @@ const EnterAmountScreen = () => { // { route, navigation }
 
       {/* Proceed Button */}
       <TouchableOpacity style={styles.proceedButton} onPress={handleProceed}>
-        <Text style={styles.proceedButtonText}>{txn_type==='seller'? "Receive":"Pay"} ₹{amount || "0"}</Text>
+        <Text style={styles.proceedButtonText}>{txn_type==='seller'? "Receive":"Pay"} {amount || "0"} KC</Text>
       </TouchableOpacity>
       </View>
       {/* Confirmation Modal */}
       <Modal transparent={true} animationType="fade" visible={modalVisible}>
         <View style={styles.modalContainer}>
           <View style={styles.modalContent}>
-            <Icon name="check-circle" size={60} color={Palette.green} />
+            <Icon name="check-circle" size={60} color={Palette.success} />
             <Text style={styles.modalTitle}>Confirm Payment</Text>
-            <Text style={styles.modalText}>{txn_type==='seller'? `Receive ₹${amount} from`:`Pay ₹${amount} to`} {first_name} ({username})?</Text>
+            <Text style={styles.modalText}>{txn_type==='seller'? `Receive ${amount} KC from`:`Pay ${amount} KC to`} {first_name} ({username})?</Text>
             {message ? <Text style={styles.modalMessage}>"{message}"</Text> : null}
             <ErrorMessage message={error} onClose={() => setError("")} />
             
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
   contactContainer: { 
     flexDirection: "row", 
     alignItems: "center", 
-    backgroundColor: Palette.tealLight, 
+    backgroundColor: Palette.secondaryLight, 
     padding: 15, 
     borderRadius: 10, 
     width: "100%"
@@ -167,14 +167,14 @@ const styles = StyleSheet.create({
     fontWeight: "bold", 
     color: Palette.textDark, 
     borderBottomWidth: 2, 
-    borderColor: Palette.coral, 
+    borderColor: Palette.primary, 
     width: 200, 
     textAlign: "left",
     paddingLeft: 10,
   },
 
   messageInput: { 
-    backgroundColor: Palette.coralLight, 
+    backgroundColor: Palette.primaryLight, 
     padding: 12, 
     borderRadius: 8, 
     fontSize: 16, 
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
   },
 
   proceedButton: { 
-    backgroundColor: Palette.coral, 
+    backgroundColor: Palette.primary, 
     padding: 15, 
     borderRadius: 30, 
     alignItems: "center", 
@@ -199,8 +199,8 @@ const styles = StyleSheet.create({
   modalText: { fontSize: 18, marginTop: 10, color: Palette.textMid },
   modalMessage: { fontSize: 16, fontStyle: "italic", marginTop: 5, color: Palette.textMid },
   modalButtons: { flexDirection: "row", marginTop: 20, width: "100%" },  
-  cancelButton: { flex: 1, padding: 12, backgroundColor: Palette.yellowLight, marginRight: 5 },
-  confirmButton: { flex: 1, padding: 12, backgroundColor: Palette.green, marginLeft: 5 },
+  cancelButton: { flex: 1, padding: 12, backgroundColor: Palette.accentLight, marginRight: 5 },
+  confirmButton: { flex: 1, padding: 12, backgroundColor: Palette.success, marginLeft: 5 },
   cancelText: {color: Palette.textDark, fontWeight: "bold",},
   confirmText: {color: Palette.white, fontWeight: "bold",},
 });

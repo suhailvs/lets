@@ -84,7 +84,7 @@ export default function Index() {
 
       <View style={styles.content}>
         <View style={styles.topnav}>
-          <Text style={styles.wordmark}>Neighbourly</Text>
+          <Text style={styles.wordmark}>Koottam</Text>
           <View style={styles.navRight}>
             <TouchableOpacity onPress={fetchBalance} style={styles.iconBtn}>
               <MaterialIcons name="refresh" size={20} color={Palette.textDark} />
@@ -113,7 +113,7 @@ export default function Index() {
           <View style={styles.balanceTop}>
             <View>
               <Text style={styles.balanceLabel}>Balance</Text>
-              <Text style={styles.balanceAmount}>{balance != null ? `₹${balance}` : '****'}</Text>
+              <Text style={styles.balanceAmount}>{balance != null ? `${balance} KC` : '****'}</Text>
             </View>
             <Text style={styles.hubBadge}>{authuser?.exchange_name}</Text>
           </View>
@@ -232,7 +232,7 @@ const styles = StyleSheet.create({
     width: 38,
     height: 38,
     borderRadius: 19,
-    backgroundColor: Palette.coral,
+    backgroundColor: Palette.primary,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -253,11 +253,11 @@ const styles = StyleSheet.create({
   balanceCard: {
     marginHorizontal: 16,
     marginBottom: 20,
-    backgroundColor: Palette.coral,
+    backgroundColor: Palette.primary,
     borderRadius: 26,
     padding: 22,
     overflow: 'hidden',
-    shadowColor: Palette.coral,
+    shadowColor: Palette.primary,
     shadowOpacity: 0.35,
     shadowRadius: 16,
     shadowOffset: { width: 0, height: 8 },

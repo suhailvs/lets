@@ -10,7 +10,7 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: Palette.coral,
+        tabBarActiveTintColor: Palette.primary,
         tabBarInactiveTintColor: Colors.light.tabIconDefault,
         tabBarLabelStyle: styles.tabLabel,
         tabBarStyle: styles.tabBar,
@@ -70,10 +70,10 @@ const styles = StyleSheet.create({
     // borderTopWidth: 0,
     // marginHorizontal: 16,
     // marginBottom: 16,
-    height: 68,
+    height: 80,
     // borderRadius: 26,
     // paddingBottom: 26,
-    paddingTop: 8,
+    paddingTop: 10,
     // position: 'absolute',
     // shadowColor: Palette.black,
     // shadowOpacity: 0.08,
@@ -98,6 +98,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   iconWrapActive: {
-    backgroundColor: Palette.coralLight,
+    backgroundColor: Palette.primaryLight,
   },
 });

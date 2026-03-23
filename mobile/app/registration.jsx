@@ -68,7 +68,7 @@ export default function RegisterScreen() {
   return (
     <ScrollView style={styles.container}>
       <Logo page="registration"/>
-      <Text variant="titleLarge" style={{ color: Palette.coral, marginBottom:10 }}>
+      <Text variant="titleLarge" style={{ color: Palette.primary, marginBottom:10 }}>
         Create Your Account
       </Text>
       <ExchangeCreationTab onExchangeSelected={setExchangeData} />
