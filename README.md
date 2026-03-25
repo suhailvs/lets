@@ -115,5 +115,5 @@ NF==3 {add[date]+=$1; del[date]+=$2}
 END {
   for (d in commits)
     printf "%s | commits:%d | +%d | -%d\n", d, commits[d], add[d], del[d]
-}' | sort
+}' | sort > ~/Desktop/git_daily_stats.txt
 ```
