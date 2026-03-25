@@ -121,7 +121,7 @@ class RegistrationTest(APITestCase):
         for case in test_cases:
             response = self.client.post(
                 f"{BASE_URL}login/",
-                {"username": "KKDE05", "password": case["password"]},
+                {"username": "KKDE00", "password": case["password"]},
             )
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(response.json(), case["response"])
@@ -159,7 +159,7 @@ class RegistrationTest(APITestCase):
         )
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "kkde005", "password": "dummypassword"},
+            {"username": "kkde00", "password": "dummypassword"},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -226,7 +226,7 @@ class VerifyUserTest(APITestCase):
         """
         Helper to verify newly created user (sufail)
         """
-        user_sufail = User.objects.get(username="KKDE05")
+        user_sufail = User.objects.get(username="KKDE00")
 
         response = self.client.post(
             f"{BASE_URL}verifyuser/",
@@ -260,12 +260,12 @@ class VerifyUserTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        user_sufail = User.objects.get(username="KKDE05")
+        user_sufail = User.objects.get(username="KKDE00")
 
         # Login should fail (not verified)
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE05", "password": "dummypassword"},
+            {"username": "KKDE00", "password": "dummypassword"},
         )
         self.assertFalse(response.json()["is_active"])
 
@@ -282,7 +282,7 @@ class VerifyUserTest(APITestCase):
         # Login succeeds after verification
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE05", "password": "dummypassword"},
+            {"username": "KKDE00", "password": "dummypassword"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 

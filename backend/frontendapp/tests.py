@@ -31,7 +31,7 @@ class CreateExchangeTest(TestCase):
         response = self.client.post(self.url,data,follow=True)
         # check user logged in
         self.assertInHTML(
-            f'<a href="{reverse("frontendapp:user_detail", args=("KKED","1"))}"><strong>KKED001</strong> </a>', 
+            f'<a href="{reverse("frontendapp:user_detail", args=("KKED","1"))}"><strong>KKED00</strong> </a>', 
             response.content.decode()
         )
 
