@@ -92,7 +92,7 @@ const UserDetails = () => {
                   <Text style={styles.headerName}>{data.first_name || data.username || 'User'}</Text>
                   <View style={styles.headerPillRow}>
                     <View style={styles.headerPill}>
-                      <Text style={styles.headerPillText}>ID {data.id}</Text>
+                      <Text style={styles.headerPillText}>ID {data.id} | {data.username}</Text>
                     </View>
                     {data?.is_active ? (
                       <View style={[styles.statusPill, styles.statusActive]}>
@@ -142,7 +142,7 @@ const UserDetails = () => {
                   <Card.Actions>
                     <Button mode="contained-tonal" icon={({ size, color }) => (<Ionicons name="send" size={size} color={color} />)}
                       onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'buyer' } })}
-                    > Send</Button>
+                    > Pay</Button>
                     <Button mode="contained-tonal"
                       icon={({ size, color }) => (<Ionicons name="download" size={size} color={color} />)}
                       onPress={() => router.navigate({ pathname: 'screens/sendmoney/amount', params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'seller' } })}
@@ -154,18 +154,7 @@ const UserDetails = () => {
             )}
           
             <Card mode="outlined" style={styles.card}>
-              <Card.Content>                
-                <List.Item
-                  title="Whatsapp"
-                  description={data.phone || '-'}
-                  left={(props) => <List.Icon {...props} icon="whatsapp" />}
-                  onPress={() => openWhatsApp(data.phone,'')}
-                />
-                <List.Item
-                  title="Email"
-                  description={data.email || '-'}
-                  left={(props) => <List.Icon {...props} icon="email" />}
-                />
+              <Card.Content>
                 <List.Item
                   title="Balance"
                   description={`${balanceValue} KC`}
@@ -177,12 +166,17 @@ const UserDetails = () => {
                     balanceValue < 0 ? styles.balanceNegative : styles.balancePositive,
                   ]}
                 />
-                {/* 
                 <List.Item
-                  title="Last Login"
-                  description={formatDate(data.last_login) || '-'}
-                  left={(props) => <List.Icon {...props} icon="clock" />}
-                />*/}
+                  title="Whatsapp"
+                  description={data.phone || '-'}
+                  left={(props) => <List.Icon {...props} icon="whatsapp" />}
+                  onPress={() => openWhatsApp(data.phone,'')}
+                />
+                <List.Item
+                  title="Email"
+                  description={data.email || '-'}
+                  left={(props) => <List.Icon {...props} icon="email" />}
+                />
                 {error ? <HelperText type="error">{error}</HelperText> : null}
                 <ImagePreview imageUri={data.image}/>
               </Card.Content>
@@ -343,7 +337,7 @@ const styles = StyleSheet.create({
     fontWeight: '700',
   },
   balanceValue: {
-    fontSize: 18,
+    fontSize: 20,
     fontWeight: '700',
   },
   balancePositive: {
