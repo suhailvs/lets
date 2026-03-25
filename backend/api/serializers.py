@@ -37,7 +37,7 @@ def generate_username(exchange):
         match = re.search(r'(\d+)$', username)
         if match: used_numbers.add(int(match.group(1)))
 
-    for i in range(0, 100):
+    for i in range(settings.EXCHANGE_USER_LIMIT):
         if i not in used_numbers:
             return f"{exchange.code}{i:02}"
     
@@ -106,7 +106,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
         if exchange_selected:
             count = User.objects.filter(exchange_id=exchange_selected).count()
 
-            if count >= 100:
+            if count >= settings.EXCHANGE_USER_LIMIT:
                 raise serializers.ValidationError("This exchange already has 100 users")
         else:
             missing = [field for field in create_exchange_fields if not attrs.get(field)]
@@ -255,7 +255,7 @@ class TransactionCreateSerializer(serializers.Serializer):
             created_at__date=today
         ).count()
 
-        if seller_count >= 10:
+        if seller_count >= settings.DAILY_TRANSACTION_LIMIT:
             raise serializers.ValidationError("Seller reached daily limit")
 
         buyer_count = Transaction.objects.filter(
@@ -263,7 +263,7 @@ class TransactionCreateSerializer(serializers.Serializer):
             created_at__date=today
         ).count()
 
-        if buyer_count >= 10:
+        if buyer_count >= settings.DAILY_TRANSACTION_LIMIT:
             raise serializers.ValidationError("Buyer reached daily limit")
 
         return data

@@ -173,12 +173,9 @@ class Transactions(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        # transaction_type = request.data["transaction_type"] # buyer or seller
-        
         create_serializer = serializers.TransactionCreateSerializer(data=request.data,context={"request": request})
         if create_serializer.is_valid():
-            txn_obj = create_serializer.save()
-            
+            txn_obj = create_serializer.save()            
             serializer = serializers.TransactionSerializer(txn_obj)
             notification_user = serializer.data['buyer']
             txn_from = serializer.data['seller_name']
@@ -210,10 +207,8 @@ class VerifyUserView(APIView):
             {"detail": "Verification successful."}, status=status.HTTP_201_CREATED
         )
 
-
 class ExportExchangeView(APIView):
     permission_classes = [IsAuthenticated]
-
     def get(self, request):
         exchange = request.user.exchange
         with tempfile.TemporaryDirectory() as tmpdir:

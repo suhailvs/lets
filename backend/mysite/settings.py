@@ -165,6 +165,9 @@ LOGOUT_REDIRECT_URL = "frontendapp:home"
 
 MAXIMUM_BALANCE = 1000
 MINIMUM_BALANCE = -1000
+# if changed will break tests. if added more than 100 will break exchange code generation
+EXCHANGE_USER_LIMIT = 100 
+DAILY_TRANSACTION_LIMIT = 10
 # GITHUB_TOKEN = config("GITHUB_TOKEN")
 
 REST_FRAMEWORK = {

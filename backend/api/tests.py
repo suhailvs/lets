@@ -11,7 +11,7 @@ Covers:
 
 from django.contrib.auth import get_user_model
 from django.conf import settings
-
+from django.contrib.auth.hashers import make_password
 from rest_framework import status
 from rest_framework.test import APITestCase
 from rest_framework.authtoken.models import Token
@@ -78,8 +78,26 @@ class AjaxViewsTest(APITestCase):
 # =====================================================================
 
 class RegistrationTest(APITestCase):
-    fixtures = ["datas.json"]
+    def setUp(self):
+        self.exchange_id = Exchange.objects.create(
+            code="TEST",
+            name="Test Exchange",
+            address="Test Address",
+            country_city="IN-KL",
+            postal_code ="678686"
+        ).id
 
+    def create_user(self, i):
+        data = {
+            "first_name": f"User{i}",
+            "email": f"user{i}@test.com",
+            "phone": f"9000000{i}",
+            "password": f"mypassword{i}",
+            "exchange": self.exchange_id,
+            "image": sample_image(),
+        }
+        return self.client.post(f"{BASE_URL}registration/", data)
+    
     def test_create_user_and_login(self):
         """
         - Create user
@@ -88,15 +106,7 @@ class RegistrationTest(APITestCase):
         """
 
         # Create a new user
-        response = self.client.post(
-            f"{BASE_URL}registration/",
-            {
-                "password": "mypass1234",
-                "phone": "9000000000",
-                "exchange": "1",
-                "image": sample_image(),
-            },
-        )
+        response = self.create_user(i=1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
         # Login test cases
@@ -110,7 +120,7 @@ class RegistrationTest(APITestCase):
             },
             # Correct password but user not verified
             {
-                "password": "mypass1234",
+                "password": "mypassword1",
                 "response": {
                     "is_active": False,
                     "message": "Verification is pending.",
@@ -121,7 +131,7 @@ class RegistrationTest(APITestCase):
         for case in test_cases:
             response = self.client.post(
                 f"{BASE_URL}login/",
-                {"username": "KKDE00", "password": case["password"]},
+                {"username": "TEST00", "password": case["password"]},
             )
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(response.json(), case["response"])
@@ -147,25 +157,47 @@ class RegistrationTest(APITestCase):
         self.assertTrue(Exchange.objects.filter(code="NEWX").exists())
 
     def test_login_username_is_uppercased(self):
-        self.client.post(
-            f"{BASE_URL}registration/",
-            {
-                "first_name": "sufail",
-                "password": "dummypassword",
-                "phone": "dummyphone",
-                "exchange": "1",
-                "image": sample_image(),
-            },
-        )
+        response = self.create_user(i=2)        
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "kkde00", "password": "dummypassword"},
+            {"username": "test00", "password": "mypassword2"},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
             response.json(),
             {"is_active": False, "message": "Verification is pending."},
         )
+    
+    def test_101st_user_fails(self):
+        """101st user should fail"""
+        users = []
+        password = make_password("StrongPassword123!")
+        for i in range(99):
+            users.append(
+                User(
+                    username=f"TEST{i:02}",
+                    first_name=f"User{i}",
+                    email=f"user{i}@test.com",
+                    phone=f"900000{i}",
+                    exchange_id=self.exchange_id,
+                    password=password
+                )
+            )
+
+        User.objects.bulk_create(users)
+        response = self.create_user(i=100)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+
+        response = self.create_user(i=101)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("This exchange already has 100 users", str(response.data))
+
+        # test_deleted_username_reused
+        User.objects.get(username="TEST03").delete()
+        response = self.create_user(i=999)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        new_user = User.objects.get(email="user999@test.com")
+        self.assertEqual(new_user.username, "TEST03")
 
 # =====================================================================
 # USER DETAILS

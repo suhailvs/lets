@@ -104,3 +104,16 @@ Example:
 Total potential users: 1,000,000
 
 Because each exchange operates independently, the system avoids global bottlenecks.
+
+
+## Count number of commits/day
+```
+git log main --pretty=format:'%ad' --date=short --numstat \
+| awk '
+NF==1 {date=$1; commits[date]++}
+NF==3 {add[date]+=$1; del[date]+=$2}
+END {
+  for (d in commits)
+    printf "%s | commits:%d | +%d | -%d\n", d, commits[d], add[d], del[d]
+}' | sort
+```
