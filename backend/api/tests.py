@@ -553,3 +553,29 @@ class TransactionTest(APITestCase):
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+
+    def test_block_11th_transaction(self):
+        token = Token.objects.get_or_create(user=self.user_nusra)[0]
+        create_txn = lambda: self.client.post(
+            f"{BASE_URL}transactions/",
+            {
+                "user": self.user_sulaiman.id,
+                "amount": 5,
+                "message": "nusra receive 5 rs from sulaiman",
+                "transaction_type":"seller",
+            },
+            headers={"Authorization": f"Token {token}"},
+            format="json",
+        )
+
+        # allow_first_10_transactions
+        for i in range(10):
+            response = create_txn()
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+        response = create_txn()
+        # block_11th_transaction(daily txn limit)
+        self.assertEqual(response.status_code, 400)
+        self.assertIn("Daily transaction limit", str(response.data))
+
