@@ -19,10 +19,10 @@ class SignUpForm(UserCreationForm):
         user = super().save(commit=commit)
         if exchange_obj:
             # new exchange
-            user.username = generate_username(exchange_obj.code)
+            user.username = generate_username(exchange_obj)
             user.exchange = exchange_obj
         else:
-            user.username = generate_username(user.exchange.code) 
+            user.username = generate_username(user.exchange) 
         user.save()
         return user
 

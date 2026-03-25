@@ -28,13 +28,19 @@ class HyperlinkedSorlImageField(serializers.ImageField):
         if request: return request.build_absolute_uri(thumb.url)
         return thumb.url
 
-def generate_username(exchange_code):
-    latest_user = User.objects.filter(username__startswith=exchange_code).order_by('-username').first()
-    number = 1
-    if latest_user:        
-        match = re.search(r'(\d+)$', latest_user.username) # Extract the numeric part
-        if match: number = int(match.group(1)) + 1
-    return f'{exchange_code}{number:03}' # 3-digit number with leading zeros
+def generate_username(exchange):
+    existing_usernames = User.objects.filter(
+        exchange=exchange
+    ).values_list("username", flat=True)
+    used_numbers = set()
+    for username in existing_usernames:
+        match = re.search(r'(\d+)$', username)
+        if match: used_numbers.add(int(match.group(1)))
+
+    for i in range(0, 100):
+        if i not in used_numbers:
+            return f"{exchange.code}{i:02}"
+    
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -97,7 +103,12 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 {"exchange": "Choose an existing exchange or create a new one, not both."}
             )
 
-        if not exchange_selected:
+        if exchange_selected:
+            count = User.objects.filter(exchange_id=exchange_selected).count()
+
+            if count >= 100:
+                raise serializers.ValidationError("This exchange already has 100 users")
+        else:
             missing = [field for field in create_exchange_fields if not attrs.get(field)]
             if missing:
                 raise serializers.ValidationError(
@@ -153,7 +164,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
                 is_active = True
 
             validated_data["exchange"] = exchange
-            validated_data['username'] = generate_username(exchange.code)
+            validated_data['username'] = generate_username(exchange)
             user = User.objects.create_user(**validated_data)
             user.is_active = is_active
             user.save()
