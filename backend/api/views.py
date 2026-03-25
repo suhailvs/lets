@@ -22,7 +22,7 @@ from rest_framework.generics import CreateAPIView
 from coinapp.models import Listing,Exchange,Transaction, ExpoPushToken
 from coinapp.misc import CATEGORIES
 from . import serializers
-from .utils import get_transaction_queryset, save_transaction, UsernameRateThrottle
+from .utils import get_transaction_queryset, UsernameRateThrottle
 
 User = get_user_model()
 
@@ -173,25 +173,24 @@ class Transactions(APIView):
         return Response(serializer.data)
 
     def post(self, request):
-        transaction_type = request.data["transaction_type"] # buyer or seller
-        amt = request.data["amount"]
-        desc = request.data["message"]
-        # default is seller transaction(receive money)
-        seller = request.user
-        buyer = User.objects.get(id=request.data["user"])
-        response_data = save_transaction(transaction_type, amt, desc, seller, buyer)
-        if response_data["success"]:
-            serializer = serializers.TransactionSerializer(response_data["txn_obj"])
+        # transaction_type = request.data["transaction_type"] # buyer or seller
+        
+        create_serializer = serializers.TransactionCreateSerializer(data=request.data,context={"request": request})
+        if create_serializer.is_valid():
+            txn_obj = create_serializer.save()
+            
+            serializer = serializers.TransactionSerializer(txn_obj)
             notification_user = serializer.data['buyer']
             txn_from = serializer.data['seller_name']
-            if transaction_type == "buyer":
-                notification_user=serializer.data['seller']
+            if txn_obj.initiator == txn_obj.buyer:
+                notification_user = serializer.data['seller']
                 txn_from = serializer.data['buyer_name']
             send_push_notification(receiver_id=notification_user,title="New Transaction",
                 body=f"New trasaction from {txn_from}",data={"txn_id": serializer.data['id']})
             return Response(serializer.data)
-        return Response(response_data["msg"], status=status.HTTP_400_BAD_REQUEST)
-
+            
+        return Response(create_serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
 class VerifyUserView(APIView):
     permission_classes = [IsAuthenticated]
     def post(self, request):  

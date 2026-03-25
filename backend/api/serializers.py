@@ -1,13 +1,32 @@
 import re
+from sorl.thumbnail import get_thumbnail # pip install sorl-thumbnail
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from django.core import exceptions as django_exceptions
+from django.utils import timezone
+from django.db.models import Q,F
+from django.conf import settings
 from coinapp.models import Exchange, Listing, Transaction
-from .fields import HyperlinkedSorlImageField
 
 User = get_user_model()
+
+# https://github.com/dessibelle/sorl-thumbnail-serializer-field/blob/master/sorl_thumbnail_serializer/fields.py
+class HyperlinkedSorlImageField(serializers.ImageField):
+    def __init__(self, geometry="300x300", *args, **kwargs):
+        self.geometry = geometry
+        super().__init__(*args, **kwargs)
+
+    def to_representation(self, value):
+        if not value: return None
+        try:
+            thumb = get_thumbnail(value, self.geometry, crop="center", quality=90)
+        except Exception:
+            return None
+        request = self.context.get("request")
+        if request: return request.build_absolute_uri(thumb.url)
+        return thumb.url
 
 def generate_username(exchange_code):
     latest_user = User.objects.filter(username__startswith=exchange_code).order_by('-username').first()
@@ -184,3 +203,77 @@ class TransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Transaction
         fields = "__all__"
+
+class TransactionCreateSerializer(serializers.Serializer):
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    transaction_type = serializers.ChoiceField(choices=(('seller','seller'),('buyer','buyer')))
+    message = serializers.CharField(max_length=255,required=False,allow_blank=True)
+    amount = serializers.IntegerField()
+
+    def validate(self, data):
+        today = timezone.now().date()
+        # default is seller transaction(receive money)
+        seller = self.context["request"].user
+        buyer = data["user"]
+        amt = data["amount"]
+        if seller == buyer:
+            raise serializers.ValidationError("You cannot transfer funds to your own account.")
+        if seller.exchange_id != buyer.exchange_id:
+            raise serializers.ValidationError("Oops! You can only send money to members of your own exchange.")
+        
+        try:
+            amt = int(amt)
+        except ValueError:
+            # if . in amt
+            raise serializers.ValidationError("Txn Amount must be Integer.")
+        if amt < 1:
+            raise serializers.ValidationError("Txn Amount must be greater than 0.")
+        
+        if data["transaction_type"] == "buyer":
+            # send money
+            seller, buyer = buyer, seller
+
+        # _check_max_min_balance
+        if seller.balance + amt > settings.MAXIMUM_BALANCE:
+            raise serializers.ValidationError("Seller has reached the maximum allowed amount")
+        if buyer.balance - amt < settings.MINIMUM_BALANCE:
+            raise serializers.ValidationError("Insufficient balance to complete the transaction.")
+    
+        seller_count = Transaction.objects.filter(
+            Q(seller=seller) | Q(buyer=seller),
+            created_at__date=today
+        ).count()
+
+        if seller_count >= 10:
+            raise serializers.ValidationError("Seller reached daily limit")
+
+        buyer_count = Transaction.objects.filter(
+            Q(seller=buyer) | Q(buyer=buyer),
+            created_at__date=today
+        ).count()
+
+        if buyer_count >= 10:
+            raise serializers.ValidationError("Buyer reached daily limit")
+
+        return data
+    
+    def create(self, validated_data):
+        # default is seller transaction(receive money)
+        seller = self.context["request"].user
+        buyer = validated_data["user"]
+        if validated_data["transaction_type"] == "buyer":
+            # send money
+            seller, buyer = buyer, seller
+        with transaction.atomic():
+            seller.balance = F("balance") + validated_data['amount']
+            buyer.balance = F("balance") - validated_data['amount']
+            seller.save(update_fields=["balance"])
+            buyer.save(update_fields=["balance"])
+            txn = Transaction.objects.create(
+                seller=seller,
+                buyer=buyer,
+                initiator=self.context["request"].user,
+                description=validated_data['message'],
+                amount=validated_data['amount'],
+            )
+        return txn

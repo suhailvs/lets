@@ -577,5 +577,5 @@ class TransactionTest(APITestCase):
         response = create_txn()
         # block_11th_transaction(daily txn limit)
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Daily transaction limit", str(response.data))
+        self.assertIn("Seller reached daily limit", str(response.data))
 

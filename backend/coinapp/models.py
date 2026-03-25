@@ -57,16 +57,10 @@ class Listing(models.Model):
 
 
 class Transaction(models.Model):
-    seller = models.ForeignKey(
-        "User", on_delete=models.CASCADE, related_name="txn_seller"
-    )
-    buyer = models.ForeignKey(
-        "User", on_delete=models.CASCADE, related_name="txn_buyer"
-    )
-    listing = models.ForeignKey(
-        Listing, on_delete=models.SET_NULL, null=True, related_name="transactions"
-    )
-    description = models.CharField(max_length=255)
+    seller = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_seller")
+    buyer = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_buyer")
+    initiator = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_initiator")
+    description = models.CharField(max_length=255, blank=True)
     amount = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
