@@ -1,0 +1,138 @@
+[
+{
+    "model": "coinapp.user",
+    "pk": 1,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$xzeF42M3TBzkb3KAIGsEcf$4olPeBFhZPewrbCYuWt0YEwCJS5lC5ig2dgqGkQDQns=",
+        "last_login": "2025-04-08T00:40:56.244Z",
+        "is_superuser": true,
+        "username": "KKDE00",
+        "phone": "+917356775981",
+        "first_name": "suhail",
+        "last_name": "",
+        "email": "suhailvs@gmail.com",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-10-30T04:31:50.285Z",
+        "exchange": 1,
+        "balance": 0,
+        "image": "users/1000095195.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 2,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$7uk62XShpKDDjI51hku0ww$W+FCgplzDmImw71OQ5QKE4meoeFY+U6m9QPf7U9KLPA=",
+        "last_login": "2025-03-04T09:12:43.136Z",
+        "is_superuser": false,
+        "username": "KKDE01",
+        "phone": "+918921513696",
+        "first_name": "nusra",
+        "last_name": "",
+        "email": "",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2024-10-27T05:05:52.942Z",
+        "exchange": 1,
+        "balance": 0,
+        "image": "users/1000096453.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 3,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$eQLviIgRhoZDDoHZLTAFBS$aseC+7p5O5jntVioAhpkZHoGVYdR4xp490e/0WaMwdI=",
+        "last_login": "2024-10-30T10:47:40.966Z",
+        "is_superuser": false,
+        "username": "PIXL00",
+        "phone": "+918848338141",
+        "first_name": "sabareesh",
+        "last_name": "",
+        "email": "",
+        "is_staff": true,
+        "is_active": true,
+        "date_joined": "2024-10-30T04:36:30.239Z",
+        "exchange": 2,
+        "balance": 70,
+        "image": "users/IMG_20240514_171002.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 4,
+    "fields": {
+        "password": "pbkdf2_sha256$870000$2eA51hkNIS7qAdrqGy1w7o$N0DVZq4aaDhY80V0RF5LSb+/Hqu2DRKILkI8FCTjIWA=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "PIXL01",
+        "first_name": "suhail pixl",
+        "last_name": "",
+        "email": "suhail@pixl.ai",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2025-05-01T01:04:36.968Z",
+        "exchange": 2,
+        "phone": "+919000000000",
+        "balance": -30,
+        "image": "users/me.jpg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.exchange",
+    "pk": 1,
+    "fields": {
+        "code": "KKDE",
+        "name": "Kolakkode",
+        "address": "Kolakkode, Palakkad, Kerala. PIN-678686",
+        "country_city": "IN-KL",
+        "postal_code": "678686"
+    }
+},
+{
+    "model": "coinapp.exchange",
+    "pk": 2,
+    "fields": {
+        "code": "PIXL",
+        "name": "Pixdynamics",
+        "address": "Carnival Infopark, Kakkanad, Kochi",
+        "country_city": "IN-KL",
+        "postal_code": "682030"
+    }
+},
+{
+    "model": "coinapp.listing",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "category": "Food_Drink",
+      "title": "rice",
+      "description": "Matta rice",
+      "rate": "50$ per kg",
+      "listing_type": "O",
+      "created_at": "2024-11-01T07:12:50.355Z",
+      "image": ""
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 1,
+    "fields": {
+        "seller": 3,
+        "buyer": 4,
+        "initiator":3,
+        "description": "Badminton Court - Amigos Oct 29",
+        "amount": 70,
+        "created_at": "2024-10-30T04:38:30.192Z"
+    }
+}
+]

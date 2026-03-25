@@ -37,24 +37,22 @@ class CreateExchangeTest(TestCase):
 
 
 class TransactionTest(TestCase):
-    fixtures = [
-        "datas.json",
-    ]
+    fixtures = ["test.json",]
 
     def setUp(self):
         self.client = Client()
         self.url = reverse("frontendapp:home")
-        self.nusra = User.objects.get(username="KKDE02")
-        self.sulaiman = User.objects.get(username="KKDE03")
+        self.nusra = User.objects.get(username="KKDE01")
+        self.suhail = User.objects.get(username="KKDE00")
 
     def test_login_and_make_seller_transaction(self):
         response = self.client.get(self.url, follow=True)
         self.assertInHTML("<h2>Log in</h2>", response.content.decode())
 
-        # login as sulaiman and make a seller transaction of 10$ -> nusra
+        # login as suhail and make a seller transaction of 10$ -> nusra
         self.client.post(
             reverse("login"),
-            {"username": self.sulaiman.username, "password": "sumee1910"},
+            {"username": self.suhail.username, "password": "sumee1910"},
             follow=True,
         )
         response = self.client.post(
@@ -68,7 +66,7 @@ class TransactionTest(TestCase):
         )
 
         response = self.client.get(self.url)
-        # check sulaiman has 10$ balance
+        # check suhail has 10$ balance
         self.assertInHTML(
             '<h3 class="text-muted">Balance: 10$</h3>', response.content.decode()
         )
@@ -86,7 +84,7 @@ class TransactionTest(TestCase):
     def test_buyer_transaction(self):
         self.client.post(
             reverse("login"),
-            {"username": self.sulaiman.username, "password": "sumee1910"},
+            {"username": self.suhail.username, "password": "sumee1910"},
             follow=True,
         )
         # test buyer transaction
@@ -101,7 +99,7 @@ class TransactionTest(TestCase):
         )
 
         response = self.client.get(self.url)
-        # check sulaiman has -13$ balance
+        # check suhail has -13$ balance
         self.assertInHTML(
             '<h3 class="text-muted">Balance: -13$</h3>', response.content.decode()
         )
@@ -113,7 +111,7 @@ class TransactionTest(TestCase):
 
 class ListingTest(TestCase):
     fixtures = [
-        "datas.json",
+        "test.json",
     ]
 
     def setUp(self):
@@ -139,7 +137,7 @@ class ListingTest(TestCase):
     def test_offering_create(self):
         self.client.post(
             reverse("login"),
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE00", "password": "sumee1910"},
             follow=True,
         )
         response = self.client.get(self.url)
@@ -181,7 +179,7 @@ class ListingTest(TestCase):
     def test_want_create(self):
         self.client.post(
             reverse("login"),
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE00", "password": "sumee1910"},
             follow=True,
         )
         response = self.client.get(self.url)
@@ -217,7 +215,7 @@ class ListingTest(TestCase):
         # nusra must not able to delete rice listing
         self.client.post(
             reverse("login"),
-            {"username": "KKDE02", "password": "sumee1910"},
+            {"username": "KKDE01", "password": "sumee1910"},
             follow=True,
         )
         response = self.client.post(
@@ -230,7 +228,7 @@ class ListingTest(TestCase):
         # suhail can delete rice listing
         self.client.post(
             reverse("login"),
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE00", "password": "sumee1910"},
             follow=True,
         )
         response = self.client.post(
