@@ -3,8 +3,7 @@
 # https://github.com/bobbyiliev/introduction-to-bash-scripting
 rm mysite/media/db.sqlite3
 python manage.py migrate
-python manage.py loaddata datas
-python manage.py loaddata offerings
-python manage.py loaddata users
+python manage.py loaddata pixl
+python manage.py loaddata kkde
 
 # to run $ `bash run.sh`
