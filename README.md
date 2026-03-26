@@ -1,9 +1,12 @@
 # Local Exchange Trading System(LETS)
 
-folders:
-+ [frontend](frontend/README.md) -> React App
-+ [backend](backend/README.md) -> Python, Django
-+ [mobile](mobile/README.md) -> ReactNative Expo App
+## Folders:
+
+Folder Name | Description | Production Link
+--- | --- | --- 
+[frontend](frontend/README.md) | React App | https://lets.stackschools.com/
+[backend](backend/README.md) | Python, Django | https://suhailvs.pythonanywhere.com/
+[mobile](mobile/README.md) | ReactNative Expo App | https://play.google.com/store/apps/details?id=com.suhailvs.letsystem
 
 
 ## Whitepaper / Project Overview
