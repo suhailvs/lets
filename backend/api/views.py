@@ -18,7 +18,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated,BasePermission, SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import CreateAPIView
+from rest_framework.generics import CreateAPIView,GenericAPIView
 from coinapp.models import Listing,Exchange,Transaction, ExpoPushToken
 from coinapp.misc import CATEGORIES
 from . import serializers
@@ -117,7 +117,15 @@ class CreateUserView(CreateAPIView):
     model = User
     serializer_class = serializers.UserCreateSerializer
 
-
+class ChangePasswordView(GenericAPIView):
+    permission_classes = [IsAuthenticated]
+    serializer_class = serializers.ChangePasswordSerializer
+    def post(self, request):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response({"message": "Password changed successfully"})
+    
 class UserReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]
     serializer_class = serializers.UserSerializer

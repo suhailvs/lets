@@ -15,6 +15,6 @@ urlpatterns = [
     path('login/', views.CustomAuthToken.as_view()),
     path('registration/', views.CreateUserView.as_view()),
     path('verifyuser/', views.VerifyUserView.as_view()),
+    path('change-password/', views.ChangePasswordView.as_view()),
     path('export-exchange/', views.ExportExchangeView.as_view()),
-    
 ]

@@ -10,9 +10,8 @@
 $ cp .env.example .env
 $ pip install -r requirements.txt
 $ python manage.py migrate
-$ python manage.py loaddata datas
-$ python manage.py loaddata offerings
-$ python manage.py loaddata users
+$ python manage.py loaddata pixl
+$ python manage.py loaddata kkde
 $ python manage.py runserver
 ```
 

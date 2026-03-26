@@ -41,7 +41,18 @@ def generate_username(exchange):
         if i not in used_numbers:
             return f"{exchange.code}{i:02}"
     
-
+class ChangePasswordSerializer(serializers.Serializer):
+    password = serializers.CharField(write_only=True)
+    def validate_password(self, value):
+        validate_password(value,self.context["request"].user)
+        return value
+    def save(self, **kwargs):
+        user = self.context["request"].user
+        password = self.validated_data["password"]
+        user.set_password(password)
+        user.save()
+        return user
+    
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
