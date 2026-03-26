@@ -28,9 +28,9 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const res = await API.get(`/users/?page=${pageNumber}`);
-      setUsers(res.data.results);
-      setHasNext(res.data.next);
-      setHasPrevious(res.data.previous);
+      setUsers(res.data);
+      setHasNext(null);
+      setHasPrevious(null);
     } catch (err) {
       if (err.response) {
         console.log(err.response.data || 'Login failed. Please try again.');

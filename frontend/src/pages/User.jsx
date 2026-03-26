@@ -34,6 +34,7 @@ export default function User() {
         const response = await API.post('/transactions/',{
           user: userid,
           amount: amount,
+          transaction_type:"buyer",
           message: message
         });
         navigate("/dashboard/");

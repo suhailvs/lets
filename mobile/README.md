@@ -3,7 +3,10 @@
 run `npx create-expo-app@latest`
 
 ### start developing
-run `npx expo start`
+```bash
+$ npm i
+$ npx expo start
+```
 
 ### android build
 https://docs.expo.dev/build/setup/
