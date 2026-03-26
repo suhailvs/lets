@@ -16,7 +16,7 @@
         "date_joined": "2024-10-30T04:36:30.239Z",
         "exchange": 2,
         "balance": 70,
-        "image": "users/IMG_20240514_171002.jpg",
+        "image": "users/sabareesh.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -60,7 +60,7 @@
         "date_joined": "2024-11-01T08:46:57.959Z",
         "exchange": 2,
         "balance": 0,
-        "image": "users/DSC04385.jpeg",
+        "image": "users/vishnu.jpeg",
         "groups": [],
         "user_permissions": []
     }
@@ -82,7 +82,7 @@
         "exchange": 2,
         "phone": "+919000000000",
         "balance": -30,
-        "image": "users/me.jpg",
+        "image": "users/suhail_pixl.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -144,6 +144,21 @@
         "description": "Sandwich ",
         "amount": 40,
         "created_at": "2024-11-01T07:12:50.355Z"
+    }
+},
+{
+    "model": "coinapp.listing",
+    "pk": 1,
+    "fields": {
+      "user": 1,
+      "category": "Food_Drink",
+      "title": "rice",
+      "description": "Matta rice",
+      "rate": "50$ per kg",
+      "listing_type": "O",
+      "created_at": "2024-11-01T07:12:50.355Z",
+      "image": "",
+      "is_active": true
     }
 }
 ]

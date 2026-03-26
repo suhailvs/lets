@@ -16,7 +16,7 @@
         "date_joined": "2024-10-30T04:31:50.285Z",
         "exchange": 1,
         "balance": 0,
-        "image": "users/1000095195.jpg",
+        "image": "users/suhail.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -38,7 +38,7 @@
         "date_joined": "2024-10-27T05:05:52.942Z",
         "exchange": 1,
         "balance": 0,
-        "image": "users/1000096453.jpg",
+        "image": "users/nusra.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -60,7 +60,7 @@
         "date_joined": "2024-10-30T04:36:30.239Z",
         "exchange": 2,
         "balance": 70,
-        "image": "users/IMG_20240514_171002.jpg",
+        "image": "users/sabareesh.jpg",
         "groups": [],
         "user_permissions": []
     }
@@ -82,7 +82,7 @@
         "exchange": 2,
         "phone": "+919000000000",
         "balance": -30,
-        "image": "users/me.jpg",
+        "image": "users/suhail_pixl.jpg",
         "groups": [],
         "user_permissions": []
     }
