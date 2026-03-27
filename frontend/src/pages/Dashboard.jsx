@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
 import API from '../utils/api';
 
 export default function Dashboard() {
@@ -28,9 +28,10 @@ export default function Dashboard() {
     setLoading(true);
     try {
       const res = await API.get(`/users/?page=${pageNumber}`);
-      setUsers(res.data);
-      setHasNext(null);
-      setHasPrevious(null);
+      const results = res.data?.results ?? res.data ?? [];
+      setUsers(results);
+      setHasNext(Boolean(res.data?.next));
+      setHasPrevious(Boolean(res.data?.previous));
     } catch (err) {
       if (err.response) {
         console.log(err.response.data || 'Login failed. Please try again.');
@@ -66,8 +67,22 @@ export default function Dashboard() {
   );
   return (
     <>
-      <h3>{authuser.firstname}, ({authuser.exchange_name})</h3>
-      <h2>Your Balance: {balance != null ? `${balance}`:'****'}</h2>
+      <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+        <div>
+          <h3>{authuser?.firstname || authuser?.first_name}, ({authuser?.exchange_name})</h3>
+          <h5>Your Balance: {balance != null ? `${balance}`:'****'} KC</h5>
+        </div>
+        <div className="d-flex gap-2">
+          {authuser?.user_id && (
+            <Link to={`/user/${authuser.user_id}`} className="btn btn-outline-primary">
+              My Profile
+            </Link>
+          )}
+          <Link to="/listings" className="btn btn-primary">
+            All Listings
+          </Link>
+        </div>
+      </div>
       <hr />
       {loading==true ? (<div>loading...</div>): (<div className="row">{listItems}</div>)}   
 

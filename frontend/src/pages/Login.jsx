@@ -27,7 +27,13 @@ export default function Login() {
       navigate('/dashboard');
     } catch (err) {
       if (err.response) {
-        setError(JSON.stringify(err.response.data) || 'Login failed. Please try again.');
+        const errorData = err.response.data;
+        const errorText = typeof errorData === 'string' ? errorData : JSON.stringify(errorData);
+        if (errorText && errorText.includes('is_active')) {
+          navigate(`/inactive?username=${encodeURIComponent(username)}&is_active=false`);
+          return;
+        }
+        setError(errorText || 'Login failed. Please try again.');
       } else if (err.request) {
         setError('No response from server. Check your network.');
       } else {
@@ -57,6 +63,11 @@ export default function Login() {
           </div>
           <p>{error}</p>
           <button type="submit" className="btn btn-success" disabled={loading}>{loading ? 'Logging in...' : 'Login'}</button>
+          <div className="mt-3">
+            <button type="button" className="btn btn-link" onClick={() => navigate('/register')}>
+              Sign up here
+            </button>
+          </div>
         </form>
       </div>
     </div>

@@ -3,9 +3,13 @@ import { useContext } from 'react';
 import Nav from './pages/Nav';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import InactiveUser from './pages/InactiveUser';
 import Dashboard from './pages/Dashboard';
 import User from './pages/User';
 import Map from './pages/Map';
+import AllListings from './pages/AllListings';
+import ListingDetails from './pages/ListingDetails';
+import NewListing from './pages/NewListing';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthContext } from './utils/AuthContext';
 
@@ -26,11 +30,15 @@ function App() {
           path="/register" 
           element={isAuthenticated ? <Navigate to="/dashboard" /> : <Register />} 
         />
+        <Route path="/inactive" element={<InactiveUser />} />
         
         <Route element={<PrivateRoute />}>
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/map" element={<Map />} />
             <Route path="/user/:id" element={<User />} />
+            <Route path="/listings" element={<AllListings />} />
+            <Route path="/listing/:id" element={<ListingDetails />} />
+            <Route path="/new-listing" element={<NewListing />} />
         </Route>
       </Routes>
     </div>
