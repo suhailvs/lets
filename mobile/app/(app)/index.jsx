@@ -10,6 +10,7 @@ import NetInfo from '@react-native-community/netinfo';
 import api from '@/constants/api'
 import SkeletonLoader from "@/components/SkeletonLoader";
 import { Palette } from '@/constants/Colors';
+import { useSession } from "@/login_extras/ctx";
 
 export default function Index() {
   const [balance, setBalance] = useState(null);
@@ -18,6 +19,7 @@ export default function Index() {
   const [loading, setLoading] = useState(true);
   const wasOfflineRef = useRef(false);
   const router = useRouter();
+  const { signOut } = useSession();
 
   const fetchUsers = useCallback(async () => {
     try {
@@ -71,8 +73,11 @@ export default function Index() {
     return () => unsubscribe();
   }, [getAuthUser, refreshData]);
   
-  const handleShowUser = (userid,is_mine='no') => {
-    router.navigate({ pathname: '/(tabs)', params: { id: userid, is_mine}});
+  const handleShowUser = (user,is_mine='no') => {
+    router.navigate({ pathname: '/screens/user', params: { id: user.id,username:user.username,name:user.first_name, 
+      thumbnail:user.thumbnail,balance:user.balance, is_mine}});
+    // id, username, name,image,balance, is_mine
+    // user.id,user.username,user.first_name
   };
   return (
     <ScrollView style={styles.screen} contentContainerStyle={styles.contentContainer}>
@@ -89,15 +94,17 @@ export default function Index() {
             <TouchableOpacity onPress={fetchBalance} style={styles.iconBtn}>
               <MaterialIcons name="refresh" size={20} color={Palette.textDark} />
             </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleShowUser(authuser.user_id, 'yes')}>
-              {authuser?.thumbnail ? (
-                <Avatar.Image size={38} source={{ uri: authuser.thumbnail }} />
-              ) : (
-                <View style={styles.avatarFallback}>
-                  <Text style={styles.avatarFallbackText}>{authuser?.firstname?.[0] || 'U'}</Text>
-                </View>
-              )}
+            <TouchableOpacity onPress={signOut} style={styles.iconBtn}>
+              <MaterialIcons name="logout" size={20} color={Palette.textDark} />
             </TouchableOpacity>
+            
+            {authuser?.thumbnail ? (
+              <Avatar.Image size={38} source={{ uri: authuser.thumbnail }} />
+            ) : (
+              <View style={styles.avatarFallback}>
+                <Text style={styles.avatarFallbackText}>{authuser?.firstname?.[0] || 'U'}</Text>
+              </View>
+            )}
           </View>
         </View>
 
@@ -119,7 +126,7 @@ export default function Index() {
             </View>
             <Text style={styles.hubBadge}>{authuser?.exchange_name}</Text>
           </View>
-          <View style={styles.balanceActions}>
+          {/* <View style={styles.balanceActions}>
             <Button
               icon={({ size }) => <FontAwesome6 name="list-alt" size={size} color={Palette.textDark} />}
               mode="contained"
@@ -143,8 +150,8 @@ export default function Index() {
             >
               Map
             </Button>
-          </View>
-        </View>
+          </View>*/}
+        </View> 
 
         <View style={styles.peopleHeader}>
           <Text style={styles.peopleTitle}>People</Text>
@@ -161,7 +168,7 @@ export default function Index() {
           <View style={styles.peopleRow}>
             {users.map((user, i) => (
               <View style={styles.person} key={i}>
-                <TouchableOpacity onPress={() => handleShowUser(user.id)} style={styles.personTap}>
+                <TouchableOpacity onPress={() => handleShowUser(user)} style={styles.personTap}>
                   <Avatar.Image size={60} source={{ uri: user.thumbnail }} />
                   <Text style={[styles.personText, !user.is_active && styles.inActive]}>{user.first_name}</Text>
                 </TouchableOpacity>
