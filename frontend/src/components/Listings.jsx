@@ -90,7 +90,7 @@ export default function Listings({ listingType, userId, showAddButton = false })
                     )}
                     <div className="flex-grow-1">
                       <h6 className="mb-1 text-dark">{item.title}</h6>
-                      <div className="text-muted small">Rate: {item.rate} KC</div>
+                      <div className="text-muted small">Rate: ℏ{item.rate}</div>
                       <div className="text-muted small">{formatDate(item.created_at)}</div>
                     </div>
                   </div>

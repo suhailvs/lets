@@ -91,7 +91,7 @@ export default function NewListing() {
                 <textarea className="form-control" rows="4" value={description} onChange={(e) => setDescription(e.target.value)} />
               </div>
               <div className="mb-3">
-                <label className="form-label">Rate (KC)</label>
+                <label className="form-label">Rate (ℏ)</label>
                 <input className="form-control" value={rate} onChange={(e) => setRate(e.target.value)} />
               </div>
               {error && <div className="alert alert-danger">{error}</div>}

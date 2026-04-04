@@ -79,7 +79,7 @@ export default function TransactionScreen (){
                   <Text style={styles.actTime}>{formatDate(item.created_at)}</Text>
                 </View>
                 <Text style={[styles.actAmount, isReceived ? styles.amountIn : styles.amountOut]}>
-                  {isReceived ? '+' : '-'}{item.amount} KC
+                  ℏ{isReceived ? '+' : '-'}{item.amount}
                 </Text>
               </View>
             );

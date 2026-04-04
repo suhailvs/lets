@@ -73,7 +73,7 @@ export default function User() {
     }
 
     const actionLabel = txnType === 'seller' ? 'receive' : 'pay';
-    if (!window.confirm(`Confirm to ${actionLabel} ${amount} KC ${txnType === 'seller' ? 'from' : 'to'} ${user.first_name}?`)) {
+    if (!window.confirm(`Confirm to ${actionLabel} ℏ${amount} ${txnType === 'seller' ? 'from' : 'to'} ${user.first_name}?`)) {
       return;
     }
 
@@ -151,7 +151,7 @@ export default function User() {
               <div className="card-body">
                 <h5 className="card-title">User Details</h5>
                 <p className={`mb-1 ${user.balance >= 0 ? 'text-success' : 'text-danger'}`}>
-                  Balance: {user.balance ?? 0} KC
+                  Balance: ℏ{user.balance ?? 0}
                 </p>
                 <p className="mb-1">Email: {user.email || '-'}</p>
                 <p className="mb-1">WhatsApp: {user.phone || '-'}</p>
@@ -214,7 +214,7 @@ export default function User() {
                     </button>
                   </div>
                   <div className="mb-3">
-                    <label className="form-label">Amount (KC)</label>
+                    <label className="form-label">Amount (ℏ)</label>
                     <input className="form-control" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
                   </div>
                   <div className="mb-3">

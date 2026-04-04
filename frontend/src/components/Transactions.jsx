@@ -45,7 +45,7 @@ export default function Transactions({ userId }) {
               <div className="text-muted small">{formatDate(item.created_at)}</div>
             </div>
             <span className={`badge ${isReceived ? 'text-bg-success' : 'text-bg-primary'}`}>
-              {isReceived ? '+' : '-'}{item.amount} KC
+              ℏ{isReceived ? '+' : '-'}{item.amount}
             </span>
           </div>
         );

@@ -70,7 +70,7 @@ export default function Dashboard() {
       <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
         <div>
           <h3>{authuser?.firstname || authuser?.first_name}, ({authuser?.exchange_name})</h3>
-          <h5>Your Balance: {balance != null ? `${balance}`:'****'} KC</h5>
+          <h5>Your Balance: ℏ{balance != null ? `${balance}`:'****'}</h5>
         </div>
         <div className="d-flex gap-2">
           {authuser?.user_id && (

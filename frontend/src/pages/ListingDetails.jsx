@@ -62,7 +62,7 @@ export default function ListingDetails() {
           <div className="card-body">
             <h3 className="card-title">{listing.title}</h3>
             <p className="text-muted">Added on {formatDate(listing.created_at, { year: 'numeric', month: 'long', day: '2-digit' })}</p>
-            <div className="badge text-bg-secondary mb-3">Rate: {listing.rate} KC</div>
+            <div className="badge text-bg-secondary mb-3">Rate: ℏ{listing.rate}</div>
             {listing.image && (
               <img src={listing.image} alt={listing.title} className="img-fluid rounded mb-3" />
             )}
@@ -81,7 +81,7 @@ export default function ListingDetails() {
             <h5 className="card-title">Advertiser</h5>
             <p className="mb-1 fw-semibold">{listing.user?.first_name}</p>
             <p className={`mb-1 ${listing.user?.balance >= 0 ? 'text-success' : 'text-danger'}`}>
-              Balance: {listing.user?.balance ?? 0} KC
+              Balance: ℏ{listing.user?.balance ?? 0}
             </p>
             <p className="text-muted small">Last login: {formatDate(listing.user?.last_login, { year: 'numeric', month: 'short', day: 'numeric' })}</p>
             <div className="d-grid gap-2 mt-3">

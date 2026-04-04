@@ -113,7 +113,7 @@ export default function Index() {
           <View style={styles.balanceTop}>
             <View>
               <Text style={styles.balanceLabel}>Balance</Text>
-              <Text style={styles.balanceAmount}>{balance != null ? `${balance} KC` : '****'}</Text>
+              <Text style={styles.balanceAmount}>{balance != null ? `ℏ${balance}` : '****'}</Text>
             </View>
             <Text style={styles.hubBadge}>{authuser?.exchange_name}</Text>
           </View>
