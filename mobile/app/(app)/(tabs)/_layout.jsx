@@ -1,12 +1,14 @@
 
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { View, StyleSheet } from 'react-native';
-import { Tabs } from 'expo-router';
+import { Tabs,Stack } from 'expo-router';
 import i18n from '@/constants/i18n';
 import { Colors, Palette } from '@/constants/Colors';
 
 export default function TabLayout() {
   return (
+    <>
+    <Stack.Screen options={{ title: "User" }}/>    
     <Tabs
       screenOptions={{
         headerShown: false,
@@ -61,6 +63,7 @@ export default function TabLayout() {
         }}
       />
     </Tabs>
+    </>
   );
 }
 
