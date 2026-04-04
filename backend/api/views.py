@@ -173,10 +173,11 @@ class Transactions(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        user = User.objects.filter(id=self.request.GET["user"],exchange=request.user.exchange).first()
+        user = User.objects.filter(id=request.GET["user"],exchange=request.user.exchange).first()
         if not user:
             return Response({"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
-        qs = get_transaction_queryset(user)
+        other_user = request.user if request.GET.get('show','all') == 'mine' else None
+        qs = get_transaction_queryset(user, other_user)
         serializer = serializers.TransactionSerializer(qs, many=True)
         return Response(serializer.data)
 

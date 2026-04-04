@@ -27,10 +27,13 @@ def custom_exception_handler(exc, context):
         )
     return response
 
-def get_transaction_queryset(user):
+def get_transaction_queryset(user,auth_user=None):
+    if auth_user:
+        qs = Transaction.objects.filter(Q(seller=user,buyer=auth_user) | Q(seller=auth_user,buyer=user))
+    else:
+        qs = Transaction.objects.filter(Q(seller=user) | Q(buyer=user)) #  show == 'all'
     return (
-        Transaction.objects.filter(Q(seller=user) | Q(buyer=user))
-        .select_related("seller", "buyer")
+        qs.select_related("seller", "buyer")
         .annotate(
             is_received=Case(
                 When(Q(seller=user), then=True),
