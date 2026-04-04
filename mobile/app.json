@@ -1,11 +1,11 @@
 {
   "expo": {
-    "name": "letsystem",
-    "slug": "letsystem",
-    "version": "1.2.3",
+    "name": "localshop",
+    "slug": "localshop",
+    "version": "1.2.0",
     "orientation": "portrait",
     "icon": "./assets/images/lets-icon.png",
-    "scheme": "letsystem",
+    "scheme": "localshop",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
@@ -16,7 +16,7 @@
         "foregroundImage": "./assets/images/lets-adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.suhailvs.letsystem",
+      "package": "com.suhailvs.localshop",
       "googleServicesFile": "./google-services.json",
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false
@@ -27,7 +27,6 @@
     },
     "plugins": [
       "expo-router",
-      "expo-notifications",
       [
         "expo-splash-screen",
         {
@@ -48,8 +47,9 @@
     "extra": {
       "router": {},
       "eas": {
-        "projectId": "97a7f612-8acd-4f27-b63b-dce41bd23967"
+        "projectId": "3d6a0178-d187-43e1-aed4-6cd36a31f351"
       }
-    }
+    },
+    "owner": "suhailvs"
   }
 }
