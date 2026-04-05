@@ -73,11 +73,18 @@ export default function RegisterScreen() {
     const createInvalid = exchangeData.mode === 'create' &&
       (!exchangeData.exchange_code || !exchangeData.exchange_name ||
        !exchangeData.exchange_address || !exchangeData.exchange_country_city);
+    
+    const cleanPhone = phone.replace(/\s/g, "");
+    console.log(cleanPhone)
+    const isValidPhone = /^\+[1-9]\d{1,14}$/.test(cleanPhone);
 
     if (!first_name || !phone || !password || !email || joinInvalid || createInvalid || !image) {
-      if (!image)                      setError("Please upload your profile picture.");
+      if (!image)                      setError("Please upload your profile picture.");      
       else if (joinInvalid || createInvalid) setError("Please complete exchange details.");
       else                             setError("Please fill all fields.");
+      return;
+    } else if (!isValidPhone) {
+      setError("Enter a valid phone number with country code (e.g. +91 9876543210)");
       return;
     }
 
@@ -88,7 +95,7 @@ export default function RegisterScreen() {
     formData.append("image",      { uri: image, name: "user.jpg", type: "image/jpeg" });
     formData.append("first_name", first_name);
     formData.append("email",      email);
-    formData.append("phone",      phone);
+    formData.append("phone",      cleanPhone);
     formData.append("password",   password);
 
     if (exchangeData.mode === 'join') {
@@ -162,11 +169,10 @@ export default function RegisterScreen() {
         <FieldRow icon="whatsapp" label="Phone (WhatsApp)">
           <TextInput
             style={styles.input}
-            placeholder="+91 00000 00000"
+            placeholder="+91 0000000000"
             placeholderTextColor="#b0bec5"
             value={phone}
             onChangeText={setPhone}
-            keyboardType="numeric"
           />
         </FieldRow>
 

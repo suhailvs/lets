@@ -73,9 +73,10 @@ export default function Login() {
   return (
   <View style={styles.container}>
     <Logo page="login"/>
-    <Text variant="titleLarge" style={{ color: Palette.primary, marginBottom:10 }}>
-        Login to your account
-    </Text>
+    <View style={styles.greetingArea}>
+      <Text style={styles.greetingLabel}>WELCOME BACK</Text>
+      <Text style={styles.greetingTitle}>Sign in to your account</Text>
+    </View>
     <TextInput
       label="Username"
       value={username}
@@ -116,5 +117,25 @@ const styles = StyleSheet.create({
   },
   input: {
     marginBottom: 15,
+  },
+  // ── Greeting ───────────────────────────────────────────────
+  greetingArea: {
+    marginBottom: 20,
+  },
+
+  greetingLabel: {
+    fontSize: 10,
+    fontWeight: '700',
+    letterSpacing: 2,
+    color: Palette.textMid,
+    textTransform: 'uppercase',
+    marginBottom: 4,
+  },
+
+  greetingTitle: {
+    fontSize: 26,
+    fontWeight: '900',
+    color: Palette.textDark,
+    letterSpacing: -0.5,
   },
 });

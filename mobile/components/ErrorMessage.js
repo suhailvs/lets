@@ -3,14 +3,21 @@ import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 
 const ErrorMessage = ({ message, onClose }) => {
-  if (!message) return null; // Don't render if there's no error
+  if (!message) return null;
 
   return (
     <View style={styles.container}>
-      <Icon name="alert-circle" size={20} color="white" style={styles.icon} />
-      <Text style={styles.text}>{message}</Text>
-      <TouchableOpacity onPress={onClose}>
-        <Icon name="close" size={20} color="white" />
+      {/* Icon wrap */}
+      <View style={styles.iconWrap}>
+        <Icon name="alert-circle-outline" size={18} color="#c62828" />
+      </View>
+
+      {/* Message */}
+      <Text style={styles.text} numberOfLines={3}>{message}</Text>
+
+      {/* Close */}
+      <TouchableOpacity style={styles.closeBtn} onPress={onClose} hitSlop={8}>
+        <Icon name="close" size={15} color="#c62828" />
       </TouchableOpacity>
     </View>
   );
@@ -20,19 +27,40 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "#FF4D4D",
-    padding: 12,
-    borderRadius: 8,
-    marginTop: 10
+    backgroundColor: "#ffebee",
+    borderLeftWidth: 3,
+    borderLeftColor: "#c62828",
+    borderRadius: 12,
+    paddingVertical: 12,
+    paddingHorizontal: 14,
+    marginTop: 10,
+    gap: 10,
   },
+
+  iconWrap: {
+    width: 32,
+    height: 32,
+    borderRadius: 10,
+    backgroundColor: "#ffcdd2",
+    alignItems: "center",
+    justifyContent: "center",
+  },
+
   text: {
-    color: "white",
-    fontSize: 14,
     flex: 1,
-    marginLeft: 10,
+    fontSize: 13,
+    fontWeight: "600",
+    color: "#b71c1c",
+    lineHeight: 18,
   },
-  icon: {
-    marginRight: 5,
+
+  closeBtn: {
+    width: 28,
+    height: 28,
+    borderRadius: 9,
+    backgroundColor: "#ffcdd2",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });
 
