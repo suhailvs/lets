@@ -58,8 +58,8 @@ class TransactionTest(TestCase):
         response = self.client.post(
             self.url,
             {
-                "transaction_type": "seller",
-                "to_user": self.nusra.id,
+                "from_user": self.nusra.id,
+                "to_user": self.suhail.id,
                 "amount": 10,
                 "description": "caring",
             },
@@ -91,7 +91,7 @@ class TransactionTest(TestCase):
         response = self.client.post(
             self.url,
             {
-                "transaction_type": "buyer",
+                "from_user": self.suhail.id,
                 "to_user": self.nusra.id,
                 "amount": "13",
                 "description": "purchased bread",

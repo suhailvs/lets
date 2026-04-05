@@ -4,6 +4,7 @@ from . import views
 app_name = "frontendapp"
 urlpatterns = [
     path("", views.transaction_view, name="home"), # HomeView.as_view()
+    path("transaction/delete/<int:txn_id>/", views.delete_transaction, name="delete_transaction"),
     path("users/", views.ExchangeView.as_view(), name="exchange_list"),
     path("users/<str:exchange>/", views.UserList.as_view(), name="user_list"),
     path(

@@ -84,25 +84,30 @@ class ExchangeForm(forms.ModelForm):
 
 
 class TransactionForm(forms.Form):
-    CHOICES = [
-        ("seller", "Enter as seller(Receive money)"),
-        ("buyer", "Enter as buyer(Send money)"),
-    ]
-    transaction_type = forms.ChoiceField(
-        initial="seller",
-        widget=forms.RadioSelect,
-        choices=CHOICES,
-    )
+    from_user = forms.ModelChoiceField(queryset=User.objects.all())
     to_user = forms.ModelChoiceField(queryset=User.objects.all())
-    description = forms.CharField()
+    description = forms.CharField(required=False)
     amount = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
+        self.request_user = kwargs.pop('request_user', None)
         super().__init__(*args, **kwargs)
-        self.fields["to_user"].label_from_instance = (
-            lambda u: f"{u.username}|{u.first_name}|amt:{u.balance}rs"
-        )
+        if self.request_user:
+            qs = User.objects.filter(exchange=self.request_user.exchange)
+            self.fields['from_user'].queryset = qs
+            self.fields['to_user'].queryset = qs
+        label = lambda u: f"{u.username} | {u.first_name} | bal:{u.balance}"
+        self.fields['from_user'].label_from_instance = label
+        self.fields['to_user'].label_from_instance = label
 
+    def clean(self):
+        cleaned = super().clean()
+        from_user = cleaned.get('from_user')
+        to_user = cleaned.get('to_user')
+        if from_user and to_user and from_user == to_user:
+            raise forms.ValidationError("From and To cannot be the same user.")
+        return cleaned
+    
 
 class DetailWidget(forms.Textarea):
     template_name = "frontendapp/parts/_detail_widget.html"

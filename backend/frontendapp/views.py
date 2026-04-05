@@ -9,7 +9,7 @@ from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView
-from django.http import JsonResponse
+from django.http import JsonResponse,HttpResponseForbidden
 from django.conf import settings
 
 from coinapp.models import Listing, Exchange, Transaction
@@ -26,19 +26,11 @@ from api.utils import get_transaction_queryset
 User = get_user_model()
 
 
-
-def save_transaction(transaction_type, amt, desc, seller, buyer):
+def save_transaction(amt, desc, seller, buyer,auth_user):
     resp = lambda s, msg, txn=None: {"success": s, "msg": msg, "txn_obj": txn}
-    auth_user = seller
-    if seller == buyer:
-        return resp(False, "You cannot transfer funds to your own account.")
-    if seller.exchange_id != buyer.exchange_id:
+    if not (seller.exchange_id == buyer.exchange_id == auth_user.exchange_id):
         msg = "Oops! You can only send money to members of your own exchange."
         return resp(False, msg)
-
-    if transaction_type == "buyer":
-        # send money
-        seller, buyer = buyer, seller
 
     try:
         amt = int(amt)
@@ -111,31 +103,48 @@ class SignUpNewView(CreateView):
 @login_required
 def transaction_view(request):
     if request.method == "POST":
-        form = TransactionForm(request.POST)
+        form = TransactionForm(request.POST, request_user=request.user)
         if form.is_valid():
-            amt = form.cleaned_data["amount"]
-            desc = form.cleaned_data["description"]
-            # default is seller transaction(receive money)
-            seller = request.user
-            buyer = form.cleaned_data["to_user"]
+            amt    = form.cleaned_data["amount"]
+            desc   = form.cleaned_data["description"]
+            from_u = form.cleaned_data["from_user"]
+            to_u   = form.cleaned_data["to_user"]
 
-            response_data = save_transaction(
-                request.POST["transaction_type"], amt, desc, seller, buyer
-            )
+
+            response_data = save_transaction(amt, desc, to_u, from_u,request.user)
             if response_data["success"]:
                 txn = response_data["txn_obj"]
-                messages.success(request, f"Success! Payment success. txnId:{txn.id}")
+                messages.success(request, f"Success! txnId:{txn.id}")
             else:
                 messages.error(request, response_data["msg"])
             return redirect("frontendapp:home")
-
     else:
-        form = TransactionForm()
-    latest_trans = get_transaction_queryset(request.user)[:5]
-    return render(
-        request, "home.html", {"transaction_form": form, "transactions": latest_trans}
-    )
+        # Pre-fill from_user with the logged-in user
+        form = TransactionForm(
+            initial={"from_user": request.user},
+            request_user=request.user,
+        )
 
+    latest_trans = Transaction.objects.filter(initiator__exchange=request.user.exchange).order_by('-created_at')[:5]
+    return render(request,"home.html",{"transaction_form": form, "transactions": latest_trans},)
+
+@login_required
+def delete_transaction(request, txn_id):
+    txn = Transaction.objects.get(id=txn_id)
+    # Only allow initiator to delete
+    if txn.initiator != request.user:
+        messages.error(request, "You can only delete transactions you initiated.")
+        return redirect("frontendapp:home")
+    if request.method == "POST":
+        # Reverse the balances
+        with transaction.atomic():
+            txn.seller.balance = F("balance") - txn.amount
+            txn.buyer.balance  = F("balance") + txn.amount
+            txn.seller.save(update_fields=["balance"])
+            txn.buyer.save(update_fields=["balance"])
+            txn.delete()
+        messages.success(request, "Transaction deleted and balances reversed.")
+    return redirect("frontendapp:home")
 
 class ExchangeView(ListView):
     paginate_by = 20
