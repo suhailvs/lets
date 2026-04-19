@@ -3,7 +3,7 @@
     "model": "coinapp.user",
     "pk": 5,
     "fields": {
-        "password": "pbkdf2_sha256$870000$xzeF42M3TBzkb3KAIGsEcf$4olPeBFhZPewrbCYuWt0YEwCJS5lC5ig2dgqGkQDQns=",
+        "password": "pbkdf2_sha256$1000000$JnLM1Xx93296PpN4MjIxRx$A4MogLl62zabzq+vkOmXTCZ+nHD8D9uVIOVz6hEE/mU=",
         "last_login": "2025-04-08T00:40:56.244Z",
         "is_superuser": true,
         "username": "KKDE00",
@@ -308,6 +308,50 @@
     }
 },
 {
+    "model": "coinapp.user",
+    "pk": 19,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$RHjLiU44eKgMgEemvIJK2Q$XCyjoTn+UcGUZBzm0/zv670zbue1mKRSKAfyUjzyTtk=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "KKDE14",
+        "first_name": "Abhilash",
+        "last_name": "",
+        "email": "abhilash@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-04-01T06:21:08.504Z",
+        "exchange": 1,
+        "phone": "+919446947393",
+        "balance": 0,
+        "image": "users/abhilash.jpeg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
+    "model": "coinapp.user",
+    "pk": 20,
+    "fields": {
+        "password": "pbkdf2_sha256$1000000$ri2LuLgRXLKnr8urLy20qy$1HhNZz/Gg7CQ6driMSvoa60ZBnPgSguNhMhf0eijyCs=",
+        "last_login": null,
+        "is_superuser": false,
+        "username": "KKDE15",
+        "first_name": "Sibi",
+        "last_name": "",
+        "email": "sibi.mcfadyen@gmail.com",
+        "is_staff": false,
+        "is_active": true,
+        "date_joined": "2026-04-01T06:23:29.532Z",
+        "exchange": 1,
+        "phone": "+919447520669",
+        "balance": 0,
+        "image": "users/sibi.jpeg",
+        "groups": [],
+        "user_permissions": []
+    }
+},
+{
     "model": "coinapp.exchange",
     "pk": 1,
     "fields": {
@@ -541,6 +585,42 @@
         "created_at": "2026-01-10T16:08:17.347Z",
         "image": "",
         "is_active": true
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 5,
+    "fields": {
+        "seller": 20,
+        "buyer": 5,
+        "initiator": 5,
+        "description": "Pathiri pori while travelling to peechi padam",
+        "amount": 10,
+        "created_at": "2026-04-07T06:33:20.136Z"
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 6,
+    "fields": {
+        "seller": 20,
+        "buyer": 5,
+        "initiator": 5,
+        "description": "Sprite, Kubboos and Brosted Chicken at LuLu Mall while PSC Exam",
+        "amount": 137,
+        "created_at": "2026-04-18T10:35:45.226Z"
+    }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 7,
+    "fields": {
+        "seller": 5,
+        "buyer": 19,
+        "initiator": 5,
+        "description": "2 Hour work on website design",
+        "amount": 120,
+        "created_at": "2026-04-18T17:37:03.715Z"
     }
 }
 ]

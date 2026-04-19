@@ -69,7 +69,7 @@
     "model": "coinapp.user",
     "pk": 4,
     "fields": {
-        "password": "pbkdf2_sha256$870000$2eA51hkNIS7qAdrqGy1w7o$N0DVZq4aaDhY80V0RF5LSb+/Hqu2DRKILkI8FCTjIWA=",
+        "password": "pbkdf2_sha256$1000000$lhCrr7wWwtuBdmdoPAYnOX$qY7myBEZqBRT9vWiYBej8zVtFLjYD5ggedWltIPt6rY=",
         "last_login": null,
         "is_superuser": false,
         "username": "PIXL00",
