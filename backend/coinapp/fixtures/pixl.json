@@ -17,6 +17,8 @@
         "exchange": 2,
         "balance": 70,
         "image": "users/sabareesh.jpg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -39,6 +41,8 @@
         "exchange": 2,
         "balance": -40,
         "image": "users/anshad.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -61,6 +65,8 @@
         "exchange": 2,
         "balance": 0,
         "image": "users/vishnu.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -83,6 +89,8 @@
         "phone": "+919000000000",
         "balance": -30,
         "image": "users/suhail_pixl.jpg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }

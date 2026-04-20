@@ -65,6 +65,18 @@ class UserSerializer(serializers.ModelSerializer):
         source='image',
         read_only=True
     )
+
+class ExchangeUserLocationSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["id", "first_name", "username", "latitude", "longitude", "thumbnail"]
+        read_only_fields = fields
+
+    thumbnail = HyperlinkedSorlImageField(
+        '128x128',
+        source='image',
+        read_only=True
+    )
 class UserCreateSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True)
     exchange = serializers.PrimaryKeyRelatedField(

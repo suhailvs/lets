@@ -10,6 +10,7 @@ import Map from './pages/Map';
 import AllListings from './pages/AllListings';
 import ListingDetails from './pages/ListingDetails';
 import NewListing from './pages/NewListing';
+import ChangePassword from './pages/ChangePassword';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthContext } from './utils/AuthContext';
 
@@ -36,6 +37,7 @@ function App() {
             <Route path="/dashboard" element={<Dashboard />} />
             <Route path="/map" element={<Map />} />
             <Route path="/user/:id" element={<User />} />
+            <Route path="/change-password" element={<ChangePassword />} />
             <Route path="/listings" element={<AllListings />} />
             <Route path="/listing/:id" element={<ListingDetails />} />
             <Route path="/new-listing" element={<NewListing />} />

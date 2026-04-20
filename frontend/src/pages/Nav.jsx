@@ -3,7 +3,7 @@ import { useContext, useState } from 'react';
 import { AuthContext } from '../utils/AuthContext';
 
 export default function Nav() {
-  const { isAuthenticated, logout } = useContext(AuthContext);
+  const { logout } = useContext(AuthContext);
   const navigate = useNavigate();
   const [menuOpen, setMenuOpen] = useState(false);
 

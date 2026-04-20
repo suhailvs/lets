@@ -181,6 +181,9 @@ export default function User() {
                     <button className="btn btn-outline-primary" onClick={() => navigate('/new-listing?type=W')}>
                       Add Want
                     </button>
+                    <button className="btn btn-outline-secondary" onClick={() => navigate('/change-password')}>
+                      Change Password
+                    </button>
                   </div>
                 )}
               </div>

@@ -17,6 +17,8 @@
         "exchange": 1,
         "balance": 0,
         "image": "users/suhail.jpg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -39,6 +41,8 @@
         "exchange": 1,
         "balance": 0,
         "image": "users/nusra.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -61,6 +65,8 @@
         "exchange": 1,
         "balance": 0,
         "image": "users/sulaiman.jpg",
+        "latitude": "10.599758",
+        "longitude": "76.459695",
         "groups": [],
         "user_permissions": []
     }
@@ -83,6 +89,8 @@
         "exchange": 1,
         "balance": 0,
         "image": "users/shakeer.jpg",
+        "latitude": "10.599793",
+        "longitude": "76.460434",
         "groups": [],
         "user_permissions": []
     }
@@ -105,6 +113,8 @@
         "phone": "+916282569947",
         "balance": 0,
         "image": "users/meeran.jpeg",
+        "latitude": "10.600112",
+        "longitude": "76.458180",
         "groups": [],
         "user_permissions": []
     }
@@ -127,6 +137,8 @@
         "phone": "+917907157693",
         "balance": 0,
         "image": "users/lulu.jpg",
+        "latitude": "10.599454",
+        "longitude": "76.460082",
         "groups": [],
         "user_permissions": []
     }
@@ -149,6 +161,8 @@
         "phone": "+919446756224",
         "balance": 0,
         "image": "users/hair.jpeg",
+        "latitude": "10.599798",
+        "longitude": "76.460438",
         "groups": [],
         "user_permissions": []
     }
@@ -171,6 +185,8 @@
         "phone": "+919605291674",
         "balance": 0,
         "image": "users/inu.jpg",
+        "latitude": "10.599458",
+        "longitude": "76.460088",
         "groups": [],
         "user_permissions": []
     }
@@ -193,6 +209,8 @@
         "phone": "+919495856594",
         "balance": 0,
         "image": "users/moosa.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -215,6 +233,8 @@
         "phone": "+919656194141",
         "balance": 0,
         "image": "users/najath.jpeg",
+        "latitude": "10.599450",
+        "longitude": "76.460080",
         "groups": [],
         "user_permissions": []
     }
@@ -237,6 +257,8 @@
         "phone": "+919495658936",
         "balance": 0,
         "image": "users/naseer.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -259,6 +281,8 @@
         "phone": "+916238853181",
         "balance": 0,
         "image": "users/shahana.jpg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -281,6 +305,8 @@
         "phone": "+916238287359",
         "balance": 0,
         "image": "users/sufail.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -303,6 +329,8 @@
         "phone": "+918304082462",
         "balance": 0,
         "image": "users/sumee.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }

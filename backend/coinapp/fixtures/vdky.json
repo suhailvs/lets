@@ -17,6 +17,8 @@
         "phone": "+919446947393",
         "balance": -120,
         "image": "users/abhilash.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -39,6 +41,8 @@
         "phone": "+919447520669",
         "balance": 147,
         "image": "users/sibi.jpeg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }
@@ -61,6 +65,8 @@
         "exchange": 3,
         "balance": -27,
         "image": "users/suhail_vdky.jpg",
+        "latitude": "10.59975",
+        "longitude": "76.45969",
         "groups": [],
         "user_permissions": []
     }

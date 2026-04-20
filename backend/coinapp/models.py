@@ -8,6 +8,8 @@ class User(AbstractUser):
     phone = models.CharField(max_length=50, blank=False)
     balance = models.IntegerField(default=0)
     image = models.ImageField(upload_to='users/')
+    latitude = models.DecimalField(max_digits=9, decimal_places=6, default=10.599750)
+    longitude = models.DecimalField(max_digits=9, decimal_places=6,default=76.45969)
 
     @property
     def balance_from_txns(self):

@@ -125,6 +125,16 @@ class ChangePasswordView(GenericAPIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"message": "Password changed successfully"})
+
+class ExchangeUsersLocationsView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        qs = User.objects.filter(exchange=request.user.exchange).order_by("first_name", "username")
+        serializer = serializers.ExchangeUserLocationSerializer(
+            qs, many=True, context={"request": request}
+        )
+        return Response(serializer.data)
     
 class UserReadOnlyViewSet(viewsets.ReadOnlyModelViewSet):
     permission_classes = [IsAuthenticated]

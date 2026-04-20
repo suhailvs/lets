@@ -16,5 +16,6 @@ urlpatterns = [
     path('registration/', views.CreateUserView.as_view()),
     path('verifyuser/', views.VerifyUserView.as_view()),
     path('change-password/', views.ChangePasswordView.as_view()),
+    path('exchange-users-locations/', views.ExchangeUsersLocationsView.as_view()),
     path('export-exchange/', views.ExportExchangeView.as_view()),
 ]
