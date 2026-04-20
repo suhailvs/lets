@@ -432,7 +432,7 @@ class TransactionTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
         response = self.client.get(f"{BASE_URL}transactions/?user=4")
-        self.assertEqual(response.json()[0]["description"], "Badminton Court - Amigos Oct 29")
+        self.assertEqual(response.json()['results'][0]["description"], "Badminton Court - Amigos Oct 29")
 
     def test_get_transactions_other_exchange_user_forbidden(self):
         """
