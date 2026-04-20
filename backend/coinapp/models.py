@@ -4,6 +4,7 @@ from django.db import models
 from . import misc
 
 class User(AbstractUser):
+    email = models.EmailField(unique=True)
     exchange = models.ForeignKey("Exchange", on_delete=models.CASCADE, null=True, related_name="users")
     phone = models.CharField(max_length=50, blank=False)
     balance = models.IntegerField(default=0)

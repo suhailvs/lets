@@ -189,7 +189,16 @@ REST_FRAMEWORK = {
     }
 }
 if not DEBUG:
+    # in production, on django error return json
     REST_FRAMEWORK["EXCEPTION_HANDLER"] = "api.utils.custom_exception_handler"
 SITE_ID = 1 
 CORS_ORIGIN_ALLOW_ALL = True
 THUMBNAIL_KVSTORE = 'sorl.thumbnail.kvstores.dbm_kvstore.KVStore' # https://sorl-thumbnail.readthedocs.io/en/latest/reference/settings.html?highlight=kvstores#dbm
+
+DEFAULT_FROM_EMAIL = 'noreplay@stackschools.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp-relay.brevo.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = '7ba7e9001@smtp-brevo.com'
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")

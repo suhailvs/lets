@@ -1,5 +1,6 @@
 import re
 from sorl.thumbnail import get_thumbnail # pip install sorl-thumbnail
+from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.db import transaction
 from rest_framework import serializers
@@ -245,7 +246,6 @@ class TransactionCreateSerializer(serializers.Serializer):
     amount = serializers.IntegerField()
 
     def validate(self, data):
-        today = timezone.now().date()
         # default is seller transaction(receive money)
         seller = self.context["request"].user
         buyer = data["user"]
@@ -272,10 +272,12 @@ class TransactionCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError("Seller has reached the maximum allowed amount")
         if buyer.balance - amt < settings.MINIMUM_BALANCE:
             raise serializers.ValidationError("Insufficient balance to complete the transaction.")
-    
+
+        start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
+        end = start + timedelta(days=1)
         seller_count = Transaction.objects.filter(
             Q(seller=seller) | Q(buyer=seller),
-            created_at__date=today
+            created_at__gte=start,created_at__lt=end
         ).count()
 
         if seller_count >= settings.DAILY_TRANSACTION_LIMIT:
@@ -283,7 +285,7 @@ class TransactionCreateSerializer(serializers.Serializer):
 
         buyer_count = Transaction.objects.filter(
             Q(seller=buyer) | Q(buyer=buyer),
-            created_at__date=today
+            created_at__gte=start,created_at__lt=end
         ).count()
 
         if buyer_count >= settings.DAILY_TRANSACTION_LIMIT:
