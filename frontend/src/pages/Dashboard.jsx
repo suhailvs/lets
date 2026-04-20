@@ -72,16 +72,6 @@ export default function Dashboard() {
           <h3>{authuser?.firstname || authuser?.first_name}, ({authuser?.exchange_name})</h3>
           <h5>Your Balance: ℏ{balance != null ? `${balance}`:'****'}</h5>
         </div>
-        <div className="d-flex gap-2">
-          {authuser?.user_id && (
-            <Link to={`/user/${authuser.user_id}`} className="btn btn-outline-primary">
-              My Profile
-            </Link>
-          )}
-          <Link to="/listings" className="btn btn-primary">
-            All Listings
-          </Link>
-        </div>
       </div>
       <hr />
       {loading==true ? (<div>loading...</div>): (<div className="row">{listItems}</div>)}   

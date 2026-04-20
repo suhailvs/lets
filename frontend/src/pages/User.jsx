@@ -114,11 +114,6 @@ export default function User() {
             <div className="text-muted">ID {user.id} · {user.username}</div>
           </div>
         </div>
-        {isMe && (
-          <button className="btn btn-outline-secondary" onClick={() => navigate('/dashboard')}>
-            Back to Dashboard
-          </button>
-        )}
       </div>
 
       <ul className="nav nav-tabs mb-3">
