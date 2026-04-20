@@ -8,19 +8,49 @@ import i18n from '@/constants/i18n';
 import { Palette } from '@/constants/Colors';
 
 export default function TransactionScreen() {
-  const [data, setData]       = useState([]);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [page, setPage] = useState(1);
+  const [hasNext, setHasNext] = useState(false);
+  const [totalCount, setTotalCount] = useState(null);
 
-  useEffect(() => { fetchData(); }, []);
+  useEffect(() => {
+    fetchPage(1, true);
+  }, []);
 
-  const fetchData = async () => {
+  const fetchPage = async (pageNumber, replace = false) => {
+    const isFirstPage = pageNumber === 1;
     try {
-      const response = await api.get(`/transactions/?user=${global.selectedUserId}`);
-      setData(response.data);
+      if (!global.selectedUserId) {
+        setData([]);
+        setHasNext(false);
+        setTotalCount(null);
+        setPage(1);
+        return;
+      }
+      if (isFirstPage) setLoading(true);
+      else setLoadingMore(true);
+
+      const response = await api.get(
+        `/transactions/?user=${global.selectedUserId}&page=${pageNumber}`
+      );
+      const payload = response.data;
+      const rows = Array.isArray(payload?.results)
+        ? payload.results
+        : Array.isArray(payload)
+          ? payload
+          : [];
+
+      setData((prev) => (replace ? rows : [...prev, ...rows]));
+      setHasNext(Boolean(payload?.next));
+      setTotalCount(typeof payload?.count === 'number' ? payload.count : null);
+      setPage(pageNumber);
     } catch (error) {
       console.error('Error fetching data:', error);
     } finally {
-      setLoading(false);
+      if (isFirstPage) setLoading(false);
+      else setLoadingMore(false);
     }
   };
 
@@ -72,13 +102,19 @@ export default function TransactionScreen() {
 
                   <View style={styles.summaryCol}>
                     <Text style={styles.summarySubLabel}>COUNT</Text>
-                    <Text style={styles.summaryCount}>{data.length}</Text>
+                    <Text style={styles.summaryCount}>
+                      {typeof totalCount === 'number' ? totalCount : data.length}
+                    </Text>
                   </View>
                 </View>
 
                 {/* Divider */}
                 <View style={styles.divider} />
-                <Text style={styles.subheadNote}>Recent activity and payouts</Text>
+                <Text style={styles.subheadNote}>
+                  {typeof totalCount === 'number' && totalCount > data.length
+                    ? `Showing ${data.length} of ${totalCount} transactions`
+                    : 'Recent activity and payouts'}
+                </Text>
               </View>
             </>
           }
@@ -145,13 +181,19 @@ export default function TransactionScreen() {
           ListFooterComponent={
             data.length > 0 ? (
               <View style={styles.footer}>
+                {loadingMore ? <><SkeletonLoader width="100%" height={72} /><Text style={styles.footerLoading}>Loading more…</Text></> : null}
                 <View style={styles.tearOff}>
                   {Array.from({ length: 28 }).map((_, i) => <View key={i} style={styles.dash} />)}
                 </View>
-                <Text style={styles.footerNote}>LETS · Community Exchange</Text>
+                <Text style={styles.footerNote}>LETS · Community Exchange</Text>                
               </View>
             ) : null
           }
+          onEndReached={() => {
+            if (!hasNext || loadingMore) return;
+            fetchPage(page + 1, false);
+          }}
+          onEndReachedThreshold={0.5}
         />
       )}
     </View>
@@ -405,5 +447,11 @@ const styles = StyleSheet.create({
     letterSpacing: 2,
     color: '#b0bec5',
     textTransform: 'uppercase',
+  },
+
+  footerLoading: {
+    fontSize: 11,
+    fontWeight: '700',
+    color: Palette.textMid,
   },
 });

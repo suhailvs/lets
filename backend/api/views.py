@@ -18,6 +18,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.permissions import IsAuthenticated,BasePermission, SAFE_METHODS
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.generics import CreateAPIView,GenericAPIView
 from coinapp.models import Listing,Exchange,Transaction, ExpoPushToken
 from coinapp.misc import CATEGORIES
@@ -183,13 +184,32 @@ class Transactions(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        user = User.objects.filter(id=request.GET["user"],exchange=request.user.exchange).first()
+        user_id = request.query_params.get("user")
+        if not user_id:
+            return Response({"detail": "Missing 'user' query param."}, status=status.HTTP_400_BAD_REQUEST)
+
+        user = User.objects.filter(id=user_id, exchange=request.user.exchange).first()
         if not user:
             return Response({"detail": "User not found."}, status=status.HTTP_400_BAD_REQUEST)
-        other_user = request.user if request.GET.get('show','all') == 'mine' else None
+
+        other_user = request.user if request.query_params.get("show", "all") == "mine" else None
         qs = get_transaction_queryset(user, other_user)
-        serializer = serializers.TransactionSerializer(qs, many=True)
-        return Response(serializer.data)
+
+        # Backwards compatible:
+        # - No `page`/`page_size` param -> return a plain list (old behavior)
+        # - With pagination params -> return DRF paginated shape
+        # wants_pagination = any(k in request.query_params for k in ("page", "page_size"))
+        # if not wants_pagination:
+        #     serializer = serializers.TransactionSerializer(qs, many=True)
+        #     return Response(serializer.data)
+
+        paginator = PageNumberPagination()
+        paginator.page_size = 10
+        paginator.page_size_query_param = "page_size"
+        paginator.max_page_size = 200
+        page = paginator.paginate_queryset(qs, request, view=self)
+        serializer = serializers.TransactionSerializer(page, many=True)
+        return paginator.get_paginated_response(serializer.data)
 
     def post(self, request):
         create_serializer = serializers.TransactionCreateSerializer(data=request.data,context={"request": request})
