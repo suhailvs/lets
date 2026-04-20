@@ -540,5 +540,17 @@
         "image": "",
         "is_active": true
     }
+},
+{
+    "model": "coinapp.transaction",
+    "pk": 8,
+    "fields": {
+        "seller": 8,
+        "buyer": 5,
+        "initiator": 5,
+        "description": "Received 100rs cash from shakeer.",
+        "amount": 100,
+        "created_at": "2026-04-20T10:39:12.817Z"
+    }
 }
 ]
