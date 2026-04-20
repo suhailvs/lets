@@ -118,14 +118,13 @@ export default function TransactionScreen() {
 
                 {/* Info */}
                 <View style={styles.txInfo}>
-                  <Text style={styles.txName}>
-                    {isReceived ? item.buyer_name : item.seller_name}
-                  </Text>
-                  <Text style={styles.txDirection}>
-                    {isReceived ? 'Received' : 'Paid'}
-                  </Text>
+                  <View style={styles.txParties}>
+                    <Text style={styles.txName}>{item.buyer_name}</Text>
+                    <Icon name="arrow-right" size={12} color={Palette.textMid} />
+                    <Text style={styles.txName}>{item.seller_name}</Text>
+                  </View>
                   {item.description ? (
-                    <Text style={styles.txDesc} numberOfLines={1}>"{item.description}"</Text>
+                    <Text style={styles.txDesc} numberOfLines={2}>"{item.description}"</Text>
                   ) : null}
                   <Text style={styles.txTime}>{formatDate(item.created_at)}</Text>
                 </View>
@@ -304,19 +303,16 @@ const styles = StyleSheet.create({
     flex: 1,
     gap: 2,
   },
-
+  txParties: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5,
+    flexWrap: 'wrap',
+  },
   txName: {
     fontSize: 14,
     fontWeight: '700',
     color: Palette.textDark,
-  },
-
-  txDirection: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: Palette.textMid,
-    textTransform: 'uppercase',
-    letterSpacing: 0.5,
   },
 
   txDesc: {

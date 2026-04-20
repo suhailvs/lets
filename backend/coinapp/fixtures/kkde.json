@@ -308,50 +308,6 @@
     }
 },
 {
-    "model": "coinapp.user",
-    "pk": 19,
-    "fields": {
-        "password": "pbkdf2_sha256$1000000$RHjLiU44eKgMgEemvIJK2Q$XCyjoTn+UcGUZBzm0/zv670zbue1mKRSKAfyUjzyTtk=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "KKDE14",
-        "first_name": "Abhilash",
-        "last_name": "",
-        "email": "abhilash@gmail.com",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2026-04-01T06:21:08.504Z",
-        "exchange": 1,
-        "phone": "+919446947393",
-        "balance": 0,
-        "image": "users/abhilash.jpeg",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
-    "model": "coinapp.user",
-    "pk": 20,
-    "fields": {
-        "password": "pbkdf2_sha256$1000000$ri2LuLgRXLKnr8urLy20qy$1HhNZz/Gg7CQ6driMSvoa60ZBnPgSguNhMhf0eijyCs=",
-        "last_login": null,
-        "is_superuser": false,
-        "username": "KKDE15",
-        "first_name": "Sibi",
-        "last_name": "",
-        "email": "sibi.mcfadyen@gmail.com",
-        "is_staff": false,
-        "is_active": true,
-        "date_joined": "2026-04-01T06:23:29.532Z",
-        "exchange": 1,
-        "phone": "+919447520669",
-        "balance": 0,
-        "image": "users/sibi.jpeg",
-        "groups": [],
-        "user_permissions": []
-    }
-},
-{
     "model": "coinapp.exchange",
     "pk": 1,
     "fields": {
@@ -544,36 +500,6 @@
 },
 {
     "model": "coinapp.listing",
-    "pk": 14,
-    "fields": {
-        "user": 5,
-        "category": "CESServices",
-        "title": "Salesman for lets marketting",
-        "description": "**Wants Description: Salesman for LETS Marketing**  \n\nWe are looking for motivated and enthusiastic salespeople to join our Local Exchange Trading System (LETS) marketing initiative. As a community-driven platform, LETS thrives on building strong relationships and empowering individuals to trade goods and services locally. The ideal candidate will actively promote our LETS network, attract new members, and generate excitement by spreading awareness of our unique barter-based economy.  \n\n**What We're Looking For:**  \n- **Strong Communication Skills:** You can connect with people easily, convey our mission effectively, and build trust within the local community.  \n- **Passion for Community Development:** You believe in the power of local collaboration and want to help grow a sustainable, inclusive trading network.  \n- **Marketing Experience (Preferred):** A background in sales, networking, or marketing is a plus, but not mandatory. Enthusiasm and willingness to learn are just as important.  \n- **Flexibility & Self-Motivation:** You can work independently, identify potential leads, and pursue goals proactively.  \n\n**What You'll Do:**  \n- Introduce LETS to individuals, small businesses, and local organizations.  \n- Help potential members understand the value and benefits of trading through LETS.  \n- Assist new members with onboarding and navigating the system.  \n- Foster ongoing engagement and participation among members.  \n\n**Compensation:**  \nAs part of the LETS system, your compensation may include earning trading credits (referred to as LETS credits or points) that you can redeem for goods and services within the network. For example, use your credits for food, professional services, or any offerings available in the LETS marketplace.  \n\n**Why Join Us?**  \nThis is an exciting opportunity to be at the heart of a local movement that is revitalizing bartering and changing the way people trade for the better. You’ll meet incredible people, shape vibrant communities, and make a tangible difference in fostering a spirit of collaboration and support.  \n\nIf you're interested in becoming a Salesman for LETS marketing, join us and take the first step toward making a big impact on your local community!",
-        "rate": "100 rs per hour",
-        "listing_type": "W",
-        "created_at": "2025-05-01T04:57:18.057Z",
-        "image": "",
-        "is_active": true
-    }
-},
-{
-    "model": "coinapp.listing",
-    "pk": 15,
-    "fields": {
-        "user": 5,
-        "category": "CESServices",
-        "title": "django, react native expo developers wanted to maintain lets system",
-        "description": "**Wants Description for Local Exchange Trading System (LETS)**  \n\n**Title:** Django and React Native (Expo) Developers Wanted for LETS Maintenance  \n\n**Description:**  \nWe are seeking skilled and passionate **Django** and **React Native (Expo)** developers to help maintain and improve our **Local Exchange Trading System (LETS)** platform. LETS is a community-driven initiative that facilitates the exchange of goods and services without the use of money, emphasizing local economic sustainability and mutual support.  \n\nOur platform is a web and mobile-based system built using **Django** for the backend and **React Native (Expo)** for the mobile frontend. We value teamwork, innovation, and commitment to community development, and we are looking for developers who share this vision.  \n\n### **What We Need:**  \n- **Django Developers:**  \n   - Maintain and optimize the existing Django backend.  \n   - Implement new features, improve API performance, and fix bugs.  \n   - Ensure the security and scalability of the platform.  \n\n- **React Native (Expo) Developers:**  \n   - Maintain and enhance the React Native (Expo) mobile application.  \n   - Debug issues, optimize UI/UX, and implement new features.  \n   - Ensure compatibility across Android and iOS devices.  \n\n### **Requirements:**  \n- Proven experience in Django or React Native (Expo).  \n- Familiarity with RESTful APIs and integration.  \n- Strong problem-solving skills and attention to detail.  \n- Ability to work in a collaborative environment.  \n- Commitment to writing clean, maintainable, and well-documented code.  \n\n### **Bonus Skills (Optional):**  \n- Experience with database optimization (e.g., PostgreSQL).  \n- Familiarity with payment gateways or trade tracking systems.  \n- Knowledge of other front-end frameworks like ReactJS.  \n\n### **What’s in it for you?**  \n- Join a project that positively impacts local communities.  \n- Flexible working hours with a remote-friendly environment.  \n- Opportunity to work on meaningful technology for sustainable economic systems.  \n\n### **How to Apply:**  \nIf you’re passionate about contributing to a community-driven project and have the skills we’re looking for, please send your application (CV, portfolio, and GitHub/LinkedIn profile) to [insert contact information].  \n\nLet’s work together to make local economies thrive!",
-        "rate": "200 rs per hour",
-        "listing_type": "W",
-        "created_at": "2025-05-01T06:49:44.796Z",
-        "image": "listings/wanted_dev.jpg",
-        "is_active": true
-    }
-},
-{
-    "model": "coinapp.listing",
     "pk": 16,
     "fields": {
         "user": 5,
@@ -585,42 +511,6 @@
         "created_at": "2026-01-10T16:08:17.347Z",
         "image": "",
         "is_active": true
-    }
-},
-{
-    "model": "coinapp.transaction",
-    "pk": 5,
-    "fields": {
-        "seller": 20,
-        "buyer": 5,
-        "initiator": 5,
-        "description": "Pathiri pori while travelling to peechi padam",
-        "amount": 10,
-        "created_at": "2026-04-07T06:33:20.136Z"
-    }
-},
-{
-    "model": "coinapp.transaction",
-    "pk": 6,
-    "fields": {
-        "seller": 20,
-        "buyer": 5,
-        "initiator": 5,
-        "description": "Sprite, Kubboos and Brosted Chicken at LuLu Mall while PSC Exam",
-        "amount": 137,
-        "created_at": "2026-04-18T10:35:45.226Z"
-    }
-},
-{
-    "model": "coinapp.transaction",
-    "pk": 7,
-    "fields": {
-        "seller": 5,
-        "buyer": 19,
-        "initiator": 5,
-        "description": "2 Hour work on website design",
-        "amount": 120,
-        "created_at": "2026-04-18T17:37:03.715Z"
     }
 }
 ]

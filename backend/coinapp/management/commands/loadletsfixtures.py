@@ -20,4 +20,5 @@ class Command(BaseCommand):
             self.stdout.write("No such folder coinapp/fixture_media.")
         call_command("loaddata", "pixl")
         call_command("loaddata", "kkde")
+        call_command("loaddata", "vdky")
         self.stdout.write(self.style.SUCCESS("Fixtures loaded with images"))
