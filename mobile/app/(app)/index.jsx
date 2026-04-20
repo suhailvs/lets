@@ -113,21 +113,35 @@ export default function Index() {
           <View style={styles.balanceTop}>
             <View>
               <Text style={styles.balanceLabel}>Balance</Text>
-              <Text style={styles.balanceAmount}>{balance != null ? `ℏ${balance}` : '****'}</Text>
+              <Text style={[styles.balanceAmount, balance < 0 && { color: '#fad4d8' }]}>
+                {balance != null ? `ℏ${balance}` : '****'}
+              </Text>
             </View>
             <Text style={styles.hubBadge}>{authuser?.exchange_name}</Text>
           </View>
           <View style={styles.balanceActions}>
             <Button
-              icon={({ size }) => (<FontAwesome6 name="list-alt" size={size} color={Palette.textDark} />)}
+              icon={({ size }) => <FontAwesome6 name="list-alt" size={size} color={Palette.textDark} />}
               mode="contained"
               buttonColor={Palette.bg}
               textColor={Palette.textDark}
               onPress={() => router.push({ pathname: 'screens/all_listings' })}
-              style={styles.primaryCta}
-              labelStyle={styles.primaryCtaLabel}
+              style={styles.actionBtn}
+              labelStyle={styles.actionBtnLabel}
             >
               All Listings
+            </Button>
+
+            <Button
+              icon={({ size }) => <FontAwesome6 name="map-location" size={size} color={Palette.textDark} />}
+              mode="contained"
+              buttonColor={Palette.bg}
+              textColor={Palette.textDark}
+              onPress={() => router.push({ pathname: 'screens/map' })}
+              style={styles.actionBtn}
+              labelStyle={styles.actionBtnLabel}
+            >
+              Map
             </Button>
           </View>
         </View>
@@ -251,16 +265,15 @@ const styles = StyleSheet.create({
     letterSpacing: -0.5,
   },
   balanceCard: {
-    marginHorizontal: 16,
+    marginHorizontal: 16, 
     marginBottom: 20,
     backgroundColor: Palette.primary,
-    borderRadius: 26,
+    borderRadius: 26, 
     padding: 22,
-    overflow: 'hidden',
     shadowColor: Palette.primary,
-    shadowOpacity: 0.35,
+    shadowOpacity: 0.35, 
     shadowRadius: 16,
-    shadowOffset: { width: 0, height: 8 },
+    shadowOffset: { width: 0, height: 8 }, 
     elevation: 6,
   },
   balanceCircleLarge: {
@@ -282,42 +295,41 @@ const styles = StyleSheet.create({
     left: 30,
   },
   balanceTop: {
-    flexDirection: 'row',
+    flexDirection: 'row', 
     justifyContent: 'space-between',
-    alignItems: 'flex-start',
+    alignItems: 'flex-start', 
     marginBottom: 14,
   },
   balanceLabel: {
-    fontSize: 12,
-    fontWeight: '700',
+    fontSize: 12, 
+    fontWeight: '700', 
     color: Palette.whiteAlpha75,
-    letterSpacing: 0.5,
+    letterSpacing: 0.5, 
     textTransform: 'uppercase',
   },
   balanceAmount: {
-    fontSize: 40,
-    fontWeight: '900',
+    fontSize: 40, 
+    fontWeight: '900', 
     color: Palette.white,
-    letterSpacing: -1.5,
+    letterSpacing: -1.5, 
     marginTop: 6,
   },
   hubBadge: {
-    backgroundColor: Palette.whiteAlpha22,
+    backgroundColor: Palette.whiteAlpha22, 
     color: Palette.white,
-    fontSize: 11,
+    fontSize: 11, 
     fontWeight: '700',
-    paddingVertical: 6,
-    paddingHorizontal: 12,
+    paddingVertical: 6, 
+    paddingHorizontal: 12, 
     borderRadius: 20,
   },
   balanceActions: {
-    marginTop: 6,
-    alignItems: 'flex-start',
+    flexDirection: 'row', gap: 10,
   },
-  primaryCta: {
-    borderRadius: 18,
+  actionBtn: {
+    flex: 1, borderRadius: 18,
   },
-  primaryCtaLabel: {
+  actionBtnLabel: {
     fontWeight: '700',
   },
   peopleHeader: {
