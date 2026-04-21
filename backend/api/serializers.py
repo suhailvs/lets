@@ -110,7 +110,10 @@ class UserCreateSerializer(serializers.ModelSerializer):
         ]
         read_only_fields = ['username']
 
-    
+    def validate_phone(self, value):
+        if not re.match(r'^\+[1-9]\d{7,14}$', value):
+            raise serializers.ValidationError("Invalid phone number")
+        return value
 
     def validate(self, attrs):
         create_exchange_fields = [
