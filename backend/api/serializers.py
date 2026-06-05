@@ -112,7 +112,9 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
     def validate_phone(self, value):
         if not re.match(r'^\+[1-9]\d{7,14}$', value):
-            raise serializers.ValidationError("Invalid phone number")
+            raise serializers.ValidationError("""
+                Invalid phone number. Must start with +. 
+                Total digits after + must be 8 to 15 digits""")
         return value
 
     def validate(self, attrs):

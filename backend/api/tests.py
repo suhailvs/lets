@@ -91,7 +91,7 @@ class RegistrationTest(APITestCase):
         data = {
             "first_name": f"User{i}",
             "email": f"user{i}@test.com",
-            "phone": f"9000000{i}",
+            "phone": f"+919000000{i}",
             "password": f"mypassword{i}",
             "exchange": self.exchange_id,
             "image": sample_image(),
@@ -142,7 +142,7 @@ class RegistrationTest(APITestCase):
             {
                 "first_name": "nora",
                 "password": "mypass1234",
-                "phone": "9000000011",
+                "phone": "+919000000011",
                 "email":"nora@gmail.com",
                 "exchange_code": "newx",
                 "exchange_name": "New Exchange",
@@ -286,7 +286,7 @@ class VerifyUserTest(APITestCase):
             {
                 "first_name": "sufail",
                 "password": "dummypassword",
-                "phone": "dummyphone",
+                "phone": "+123456789",
                 "email": "dummyemail@gmail.com",
                 "exchange": "1",
                 "image": sample_image(),
