@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import CreateView, ListView, DeleteView, DetailView
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum, Count
 from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -112,11 +112,12 @@ def transaction_view(request,exchange):
             desc   = form.cleaned_data["description"]
             from_u = form.cleaned_data["from_user"]
             to_u   = form.cleaned_data["to_user"]
-
+            date   = form.cleaned_data['created_at']
 
             response_data = save_transaction(amt, desc, to_u, from_u,request.user)
             if response_data["success"]:
                 txn = response_data["txn_obj"]
+                if date: Transaction.objects.filter(id=txn.id).update(created_at=date)
                 messages.success(request, f"Success! txnId:{txn.id}")
             else:
                 messages.error(request, response_data["msg"])
@@ -125,7 +126,7 @@ def transaction_view(request,exchange):
         # Pre-fill from_user with the logged-in user
         form = TransactionForm(exchange=exchange)
 
-    txs = Transaction.objects.filter(seller__exchange__code=exchange).order_by('-created_at')
+    txs = Transaction.objects.filter(seller__exchange__code=exchange).select_related("seller", "buyer").order_by('-created_at')
     paginator = Paginator(txs, ITEMS_PER_PAGE)
     return render(request,"frontendapp/transaction.html",{"transaction_form": form, 
         "page_obj": paginator.get_page(request.GET.get('page',1)), "is_paginated": paginator.num_pages > 1,})
@@ -153,7 +154,14 @@ class ExchangeView(ListView):
     context_object_name = "exchanges"
 
     def get_queryset(self):
-        return Exchange.objects.order_by('code')
+        return (
+            Exchange.objects.order_by("code")
+            .annotate(
+                member_count=Count("users", distinct=True),
+                listing_count=Count("users__listings", distinct=True),
+                transaction_count=Count("users__txn_seller", distinct=True),
+            )
+        )
 
 class ListingView(ListView):
     paginate_by = ITEMS_PER_PAGE

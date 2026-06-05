@@ -88,6 +88,7 @@ class TransactionForm(forms.Form):
     to_user = forms.ModelChoiceField(queryset=User.objects.all())
     description = forms.CharField(required=False)
     amount = forms.IntegerField()
+    created_at = forms.DateField(required=False,widget=forms.DateInput(attrs={'type': 'date'}))
 
     def __init__(self, *args, **kwargs):
         exchange = kwargs.pop('exchange', None)
