@@ -235,6 +235,9 @@ def backup_media(request):
     backup_dir = os.path.join(settings.BASE_DIR,"mysite", "backups")
     os.makedirs(backup_dir, exist_ok=True)
 
+    # Delete existing zip files in backups folder
+    for f in os.listdir(backup_dir):
+        if f.endswith(".zip"): os.remove(os.path.join(backup_dir, f))
     timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
     zip_name  = f"media_backup_{timestamp}.zip"
     zip_path  = os.path.join(backup_dir, zip_name)
