@@ -27,12 +27,12 @@ User = get_user_model()
 
 def index(request):
     if request.user.is_authenticated:
-        return redirect('frontendapp:home')
+        return redirect('frontendapp:exchange_list')
     return redirect('/accounts/login/') #admin:index')
     
 def save_transaction(amt, desc, seller, buyer,auth_user):
     resp = lambda s, msg, txn=None: {"success": s, "msg": msg, "txn_obj": txn}
-    if not (seller.exchange_id == buyer.exchange_id == auth_user.exchange_id):
+    if not (seller.exchange_id == buyer.exchange_id):# == auth_user.exchange_id):
         msg = "Oops! You can only send money to members of your own exchange."
         return resp(False, msg)
 
@@ -74,13 +74,13 @@ def ajax_views(request, purpose):
 
 class SignUpJoinView(CreateView):
     form_class = SignUpForm
-    success_url = reverse_lazy("frontendapp:home")
+    success_url = reverse_lazy("frontendapp:exchange_list")
     template_name = "registration/signup_join.html"
 
 
 class SignUpNewView(CreateView):
     form_class = SignUpFormWithoutExchange
-    # success_url = reverse_lazy("frontendapp:home")
+    # success_url = reverse_lazy("frontendapp:exchange_list")
     template_name = "registration/signup_new.html"
 
     def form_valid(self, form):
@@ -91,7 +91,7 @@ class SignUpNewView(CreateView):
                 exchange_obj = exchange_form.save()
                 user_obj = form.save(exchange_obj=exchange_obj)
                 login(self.request, user_obj)
-                return redirect(reverse_lazy("frontendapp:home"))
+                return redirect(reverse_lazy("frontendapp:exchange_list"))
         else:
             return self.render_to_response(self.get_context_data(form=form))
 
@@ -104,9 +104,9 @@ class SignUpNewView(CreateView):
         return ctx
 
 
-def transaction_view(request):
+def transaction_view(request,exchange):
     if request.method == "POST":
-        form = TransactionForm(request.POST, request_user=request.user)
+        form = TransactionForm(request.POST, exchange=exchange)
         if form.is_valid():
             amt    = form.cleaned_data["amount"]
             desc   = form.cleaned_data["description"]
@@ -120,23 +120,20 @@ def transaction_view(request):
                 messages.success(request, f"Success! txnId:{txn.id}")
             else:
                 messages.error(request, response_data["msg"])
-            return redirect("frontendapp:home")
+            return redirect("frontendapp:exchange_list")
     else:
         # Pre-fill from_user with the logged-in user
-        form = TransactionForm(
-            initial={"from_user": request.user},
-            request_user=request.user,
-        )
+        form = TransactionForm(exchange=exchange)
 
-    latest_trans = Transaction.objects.filter(initiator__exchange=request.user.exchange).order_by('-created_at')[:5]
-    return render(request,"home.html",{"transaction_form": form, "transactions": latest_trans},)
+    latest_trans = Transaction.objects.filter(initiator__exchange=request.user.exchange).order_by('-created_at')
+    return render(request,"frontendapp/transaction.html",{"transaction_form": form, "transactions": latest_trans},)
 
 def delete_transaction(request, txn_id):
     txn = Transaction.objects.get(id=txn_id)
-    # Only allow initiator to delete
-    if txn.initiator != request.user:
-        messages.error(request, "You can only delete transactions you initiated.")
-        return redirect("frontendapp:home")
+    # # Only allow initiator to delete
+    # if txn.initiator != request.user:
+    #     messages.error(request, "You can only delete transactions you initiated.")
+    #     return redirect("frontendapp:exchange_list")
     if request.method == "POST":
         # Reverse the balances
         with transaction.atomic():
@@ -146,7 +143,7 @@ def delete_transaction(request, txn_id):
             txn.buyer.save(update_fields=["balance"])
             txn.delete()
         messages.success(request, "Transaction deleted and balances reversed.")
-    return redirect("frontendapp:home")
+    return redirect("frontendapp:exchange_list")
 
 class ExchangeView(ListView):
     paginate_by = 20
@@ -207,14 +204,10 @@ class ListingDeleteView(DeleteView):
     model = Listing
 
     def get_queryset(self):
-        return Listing.objects.filter(user=self.request.user)
+        return Listing.objects.all()
 
     def get_success_url(self):
-        u = self.request.user
-        return reverse(
-            "frontendapp:user_detail",
-            kwargs={"exchange": u.exchange.code, "user": u.id},
-        )
+        return reverse("frontendapp:exchange_list")
 
 
 class ListingPreviewView(DetailView):

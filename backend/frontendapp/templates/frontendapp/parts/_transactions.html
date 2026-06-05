@@ -8,13 +8,13 @@
       &mdash; {{ txn.description }}
       <small class="text-muted ms-2">{{ txn.amount }} credits</small>
     </div>
-    {% if txn.initiator == request.user %}
+    
     <form method="post" action="{% url 'frontendapp:delete_transaction' txn.id %}"
           onsubmit="return confirm('Delete this transaction and reverse balances?')">
       {% csrf_token %}
       <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
     </form>
-    {% endif %}
+   
   </div>
 </div>
 {% empty %}

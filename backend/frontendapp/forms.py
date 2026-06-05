@@ -90,12 +90,11 @@ class TransactionForm(forms.Form):
     amount = forms.IntegerField()
 
     def __init__(self, *args, **kwargs):
-        self.request_user = kwargs.pop('request_user', None)
+        exchange = kwargs.pop('exchange', None)
         super().__init__(*args, **kwargs)
-        if self.request_user:
-            qs = User.objects.filter(exchange=self.request_user.exchange)
-            self.fields['from_user'].queryset = qs
-            self.fields['to_user'].queryset = qs
+        qs = User.objects.filter(exchange__code=exchange)
+        self.fields['from_user'].queryset = qs
+        self.fields['to_user'].queryset = qs
         label = lambda u: f"{u.username} | {u.first_name} | bal:{u.balance}"
         self.fields['from_user'].label_from_instance = label
         self.fields['to_user'].label_from_instance = label

@@ -3,12 +3,8 @@
 {% load quiz_extras %}
 
 {% block content %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'frontendapp:exchange_list' %}">Exchanges</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{request.resolver_match.kwargs.exchange}}</li>
-  </ol>
-</nav>
+
+{% include 'frontendapp/_navbar.html' %}
 
 <form method='GET'>
   <div class="row">

@@ -1,0 +1,19 @@
+{% url 'frontendapp:transaction_list' request.resolver_match.kwargs.exchange as url_txn %}
+{% url 'frontendapp:user_list' request.resolver_match.kwargs.exchange as url_users %}
+
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'frontendapp:exchange_list' %}">Exchanges</a></li>
+    <li class="breadcrumb-item active" aria-current="page">{{request.resolver_match.kwargs.exchange}}</li>
+  </ol>
+</nav>
+
+<ul class="nav nav-tabs">     
+  <li class="nav-item">
+    <a class="nav-link{% if url_txn in request.path %} active{% endif %}" href="{{url_txn}}">Transaction</a>
+  </li>       
+  <li class="nav-item">
+    <a class="nav-link{% if url_users in request.path %} active{% endif %}" href="{{url_users}}">Users</a>
+  </li>  
+</ul>
+<br>

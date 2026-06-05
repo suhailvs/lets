@@ -161,8 +161,8 @@ CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 # Third party apps configuration
 CRISPY_TEMPLATE_PACK = "bootstrap5"
 # LOGIN_URL = '/'
-LOGIN_REDIRECT_URL = "frontendapp:home"
-LOGOUT_REDIRECT_URL = "frontendapp:home"
+LOGIN_REDIRECT_URL = "frontendapp:exchange_list"
+LOGOUT_REDIRECT_URL = "frontendapp:exchange_list"
 
 MAXIMUM_BALANCE = 1000
 MINIMUM_BALANCE = -1000

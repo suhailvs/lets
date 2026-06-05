@@ -1,7 +1,6 @@
 {% load static %}
 
-{% url 'frontendapp:home' as url_home %}
-{% url 'frontendapp:exchange_list' as url_users %}
+
 {% url 'login' as url_login %}
 {% url 'signup_join' as url_signup_join %}
 {% url 'signup_new' as url_signup_new %}
@@ -37,14 +36,11 @@
             </div>
           </div>
           <div class="card mb-3">
-            <div class="card-header">
-              
-              <ul class="nav nav-tabs card-header-tabs">
-                {% if user.is_authenticated %}                  
-                  <li class="nav-item">
-                    <a class="nav-link{% if request.path == url_home %} active{% endif %}" href="{{url_home}}">Home</a>
-                  </li>                  
-                {% else %}                  
+            <div class="card-header"> 
+              {% if user.is_authenticated %} 
+                <p class="lead">Welcome superadmin</p>
+              {% else %}                 
+                <ul class="nav nav-tabs card-header-tabs">    
                   <li class="nav-item">
                     <a class="nav-link{% if request.path == url_login %} active{% endif %}" href="{{url_login}}">Log in</a>
                   </li>
@@ -54,13 +50,9 @@
                   <li class="nav-item">
                     <a class="nav-link{% if request.path == url_signup_new %} active{% endif %}" href="{{url_signup_new}}">New Exchange</a>
                   </li>
-                {% endif %}
-                  <li class="nav-item">
-                    <a class="nav-link{% if url_users in request.path %} active{% endif %}" href="{{url_users}}" href="{{url_users}}">Users</a>
-                  </li>
-              </ul>
-                
-              
+                </ul>   
+              {% endif %}                  
+                         
             </div>
             <div class="card-body" style="min-height: 500px;">
               {% for message in messages %}
