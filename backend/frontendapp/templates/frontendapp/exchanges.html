@@ -1,18 +1,41 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags %}
+
+{% block page_header %}
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">Choose an exchange</p>
+    <h1 class="page-title">Pick a workspace to explore.</h1>
+    <p class="page-subtitle">
+      Each exchange keeps its own members, listings, and transaction history in one place.
+    </p>
+  </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<p class="lead">Please select an exchange to list down its users</p>
-<table class="table table-bordered">
-  <tr><th>Code</th><th>Title</th><th>Country</th></tr>
+<div class="row g-4">
   {% for exchange in exchanges %}
-  <tr>
-    <td><a href="{% url 'frontendapp:transaction_list' exchange=exchange.code %}">{{exchange.code}}</a></td>
-    <td>{{exchange.name}}</td>
-    <td>{{exchange.get_country_and_subdivision}}</td>    
-  </tr>
+    <div class="col-md-6 col-xl-4">
+      <a class="surface-card listing-card h-100 d-block" href="{% url 'frontendapp:transaction_list' exchange=exchange.code %}">
+        <div class="d-flex justify-content-between align-items-start gap-3">
+          <div>
+            <p class="muted-label mb-1">Exchange code</p>
+            <h3 class="h5 fw-bold mb-2">{{ exchange.code }}</h3>
+            <p class="text-secondary mb-0">{{ exchange.name }}</p>
+          </div>
+          <span class="badge rounded-pill text-bg-light text-dark badge-soft">{{ exchange.users.count }} members</span>
+        </div>
+        <div class="divider-soft"></div>
+        <p class="mb-1 fw-semibold">{{ exchange.get_country_and_subdivision }}</p>
+        <p class="mb-0 text-secondary">{{ exchange.address }}</p>
+      </a>
+    </div>
+  {% empty %}
+    <div class="col-12">
+      <div class="surface-card empty-state">No exchanges found.</div>
+    </div>
   {% endfor %}
-</table>
+</div>
 
 {% include '_pagination.html' %}
 {% endblock %}

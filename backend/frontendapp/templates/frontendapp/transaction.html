@@ -1,43 +1,53 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
+
 {% block css %}
 <link rel="stylesheet" href="{% static 'select2/select2.min.css' %}">
 {% endblock %}
 
-{% block content %}
+{% block page_header %}
 {% include 'frontendapp/_navbar.html' %}
+{% endblock %}
 
-<form method="post" action="."> {% csrf_token %}
-<div class="card">
-    <div class="card-body">
-    <h5 class="card-title">Record Transaction</h5>
-    {{ transaction_form|crispy }}
-    <button type="submit" class="btn btn-primary">Confirm</button>
+{% block content %}
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="surface-card h-100">
+      <div class="section-heading">
+        <div>
+          <h2>Record transaction</h2>
+          <p>Move balance between two members in this exchange.</p>
+        </div>
+      </div>
+      <form method="post" action="." novalidate>
+        {% csrf_token %}
+        {{ transaction_form|crispy }}
+        <button type="submit" class="btn btn-dark rounded-pill px-4">Confirm transaction</button>
+      </form>
     </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="surface-card h-100">
+      <div class="section-heading">
+        <div>
+          <h2>Recent activity</h2>
+          <p>The latest movements for this exchange.</p>
+        </div>
+        <span class="badge rounded-pill text-bg-success badge-soft">Total money: ${{ total }}</span>
+      </div>
+      {% include 'frontendapp/parts/_transactions.html' %}
+    </div>
+  </div>
 </div>
-</form>
-<hr>
-<p>Transactions:</p>
-{% include 'frontendapp/parts/_transactions.html' %}
 {% endblock %}
 
 {% block js %}
 <script src="{% static 'select2/select2.min.js' %}"></script>
 <script>
-    $(function () {
-        $('#id_from_user').select2();
-        $('#id_to_user').select2();
-        // $('#id_buyer').on('select2:select', function (e) {
-        //     $.ajax({ 
-        //         url: "{% url 'frontendapp:ajax_views' 'get_balance' %}", 
-        //         data: {'username': e.params.data.id},
-        //         success: function (data) {
-        //             $("#user_balance").html(data);
-        //         }
-        //     });
-        // });
-
-    });
+  $(function () {
+    $('#id_from_user').select2();
+    $('#id_to_user').select2();
+  });
 </script>
 {% endblock %}

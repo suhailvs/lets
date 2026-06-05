@@ -1,46 +1,53 @@
-<!-- To show list of offerings and wants of all users of an exchange -->
 {% extends 'base.html' %}
+{% load thumbnail %}
+
+{% block page_header %}
+{% include 'frontendapp/_navbar.html' %}
+{% endblock %}
 
 {% block content %}
-{% include 'frontendapp/_navbar.html' %}
-{% for listing in page_obj %}
-<a href="{% url 'frontendapp:listing_preview' listing.id %}"
-   class="text-decoration-none d-block mb-2 listing-card">
-  <div class="card border rounded-3 px-4 py-3">
-    <div class="d-flex align-items-start gap-2">
-      <span class="badge rounded-pill fw-semibold" 
-            style="font-size: 11px; letter-spacing: 0.04em; text-transform: uppercase;
-                   background-color: #EAF3DE; color: #3B6D11;">
-        {{ listing.category }}
-      </span>
-      {% if listing.listing_type == 'O' %}
-        <span class="badge rounded-pill text-bg-success">Offering</span>
-      {% else %}
-        <span class="badge rounded-pill text-bg-info">Want</span>
-      {% endif %}
-      <small class="text-body-secondary text-nowrap pull-right">
-        <i class="bi bi-calendar3 me-1"></i>{{ listing.created_at|date }}
-      </small>
-    </div>
-
-    <div class="mt-2">
-      
-      <p class="mb-0 fw-medium" style="font-size: 15px;"><span class="text-body-secondary" style="font-size: 12px; font-family: monospace;">
-        #{{ listing.id }}
-      </span>{{ listing.title }}</p>
-    </div>
-
-    <div class="d-flex align-items-center gap-1 mt-2 text-body-secondary" style="font-size: 13px;">
-      <i class="bi bi-coin"></i>
-      <span>{{ listing.rate }}</span>
+<div class="surface-card">
+  <div class="section-heading">
+    <div>
+      <h2>Listings</h2>
+      <p>Offerings and wants published by members of this exchange.</p>
     </div>
   </div>
-</a>
-{% empty %}
-<div class="text-center py-5 text-body-secondary">
-  <i class="bi bi-inbox fs-3 d-block mb-2"></i>
-  No listings found
+
+  <div class="row g-4">
+    {% for listing in page_obj %}
+      <div class="col-md-6 col-xl-4">
+        <a class="surface-card listing-card h-100 d-block" href="{% url 'frontendapp:listing_preview' listing.id %}">
+          {% if listing.image %}
+            <div class="mb-3">
+              {% thumbnail listing.image "720x420" crop="center" as listing_thumb %}
+                <img src="{{ listing_thumb.url }}" class="img-fluid rounded-4" alt="{{ listing.title }}">
+              {% endthumbnail %}
+            </div>
+          {% endif %}
+          <div class="d-flex justify-content-between align-items-start gap-3">
+            <div>
+              <span class="badge rounded-pill text-bg-light text-dark badge-soft">{{ listing.category }}</span>
+              <h3 class="h5 fw-bold mt-3 mb-2">{{ listing.title }}</h3>
+            </div>
+            <span class="badge rounded-pill {% if listing.listing_type == 'O' %}text-bg-success{% else %}text-bg-info{% endif %} badge-soft">
+              {% if listing.listing_type == 'O' %}Offering{% else %}Want{% endif %}
+            </span>
+          </div>
+          <p class="text-secondary mb-3">{{ listing.description|truncatechars:100 }}</p>
+          <div class="d-flex justify-content-between align-items-center">
+            <span class="fw-semibold">{{ listing.rate }}</span>
+            <small class="text-secondary">{{ listing.created_at|date:"M j, Y" }}</small>
+          </div>
+        </a>
+      </div>
+    {% empty %}
+      <div class="col-12">
+        <div class="empty-state">No listings yet.</div>
+      </div>
+    {% endfor %}
+  </div>
 </div>
-{% endfor %}
+
 {% include '_pagination.html' %}
 {% endblock %}

@@ -1,42 +1,61 @@
-<!-- To show list of users -->
 {% extends 'base.html' %}
-{% load quiz_extras %}
+{% load thumbnail %}
+
+{% block page_header %}
+{% include 'frontendapp/_navbar.html' %}
+{% endblock %}
 
 {% block content %}
+<div class="surface-card mb-4">
+  <div class="section-heading">
+    <div>
+      <h2>Members</h2>
+      <p>Search for people in this exchange and open their profile.</p>
+    </div>
+  </div>
+  <form method="get">
+    <div class="row g-2 align-items-center">
+      <div class="col-lg-8">
+        <input type="text" class="form-control" name="q" value="{{ request.GET.q }}" placeholder="Filter by username or first name">
+      </div>
+      <div class="col-lg-4">
+        <button class="btn btn-dark rounded-pill px-4 w-100" type="submit">Search members</button>
+      </div>
+    </div>
+  </form>
+</div>
 
-{% include 'frontendapp/_navbar.html' %}
-
-<form method='GET'>
-  <div class="row">
-    <div class="col-sm-6">
-      <div class="input-group mb-3">
-        <input type="text" class="form-control" name='q' value='{{ request.GET.q }}' placeholder="Filter by username/firstname">
-        <div class="input-group-append">
-          <button class="btn btn-outline-secondary" type="submit">Search...</button>
+<div class="row g-3">
+  {% for user in users %}
+    <div class="col-md-6 col-xl-3">
+      <a class="surface-card user-card h-100 d-block" href="{% url 'frontendapp:user_detail' exchange=user.exchange.code user=user.id %}">
+        <div class="d-flex align-items-center gap-3">
+          <div class="avatar avatar-sm">
+            {% if user.image %}
+              {% thumbnail user.image "80x80" crop="center" as user_thumb %}
+                <img src="{{ user_thumb.url }}" alt="{{ user.username }}">
+              {% endthumbnail %}
+            {% else %}
+              {{ user.username|slice:":2"|upper }}
+            {% endif %}
+          </div>
+          <div>
+            <div class="fw-bold">{{ user.username }}</div>
+            <div class="text-secondary small">{{ user.first_name }}</div>
+          </div>
         </div>
-      </div>
-    </div>
-  </div>
-</form>
-<br>
-<div class="row">
-{% for user in users %}
-  <div class="col-6 col-md-3 mb-4">
-    <div class="media">
-      <a href="{% url 'frontendapp:user_detail' exchange=user.exchange.code user=user.id %}">
-        <img class="mr-3" src="{{ user.username|gravatar_url:50 }}" alt="{{user.first_name}}">
+        <div class="divider-soft my-3"></div>
+        <div class="d-flex justify-content-between align-items-center">
+          <span class="muted-label">Balance</span>
+          <strong>{{ user.balance }}</strong>
+        </div>
       </a>
-      <div class="media-body" style="font-size: 12px">
-        <!-- <a href="#">{{user.get_full_name}}</a><br> -->
-        <a href="{% url 'frontendapp:user_detail' exchange=user.exchange.code user=user.id %}">{{user.username}}</a><br>
-        Balance: <strong>{{user.balance}}</strong><br>
-        {{user.first_name}}
-      </div>
     </div>
-  </div>
-{% empty %}
-  <div class="col-sm-6"><p class="text-warning">No user matched your search.</p></div>
-{% endfor %}
+  {% empty %}
+    <div class="col-12">
+      <div class="surface-card empty-state">No user matched your search.</div>
+    </div>
+  {% endfor %}
 </div>
 
 {% include '_pagination.html' %}

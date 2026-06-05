@@ -1,44 +1,55 @@
-{% extends 'base.html' %} 
-{% load static %} 
-{% load crispy_forms_tags %} 
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block page_header %}
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">New exchange</p>
+    <h1 class="page-title">Start a fresh local exchange.</h1>
+    <p class="page-subtitle">Create the exchange first, then add your first account and begin trading.</p>
+  </div>
+</div>
+{% endblock %}
 
 {% block content %}
-<div class="row">
-  <div class="col-md-8 col-sm-10 col-12">
-    <h2>New Exchange</h2>    
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-xl-7">
     <form method="post" novalidate>
-      <div class="card">
-        <div class="card-body">
-          <h5 class="card-title">New Exchange Form</h5>
-          {{ exchange_form|crispy }}
+      {% csrf_token %}
+      <div class="surface-card mb-4">
+        <div class="section-heading">
+          <div>
+            <h2>Create exchange</h2>
+            <p>Tell StackCoin where this exchange lives.</p>
+          </div>
         </div>
+        {{ exchange_form|crispy }}
       </div>
-      <hr>
-      {% include "registration/_signup_parts.html" %}
+      <div class="surface-card">
+        {% include "registration/_signup_parts.html" %}
+      </div>
     </form>
   </div>
 </div>
-{% endblock %} 
-
+{% endblock %}
 
 {% block js %}
 <script>
-$("#id_dummy_country_dropdown").change(function () {
-  $.ajax({ 
-    url: '{% url "frontendapp:ajax_views" "get_cities" %}',
-    data: {'country': $(this).val()},
-    success: function (response) {   // `data` is the return of the `load_cities` view function
-      const citySelect = document.getElementById('id_country_city');
-      citySelect.innerHTML = '';  // Clear existing
-      response.data.forEach(city => {
-        const option = document.createElement('option');
-        option.value = city[0];
-        option.text = city[1];
-        citySelect.appendChild(option);
-      });
-    }
+  $("#id_dummy_country_dropdown").change(function () {
+    $.ajax({
+      url: '{% url "frontendapp:ajax_views" "get_cities" %}',
+      data: {'country': $(this).val()},
+      success: function (response) {
+        const citySelect = document.getElementById('id_country_city');
+        citySelect.innerHTML = '';
+        response.data.forEach(city => {
+          const option = document.createElement('option');
+          option.value = city[0];
+          option.text = city[1];
+          citySelect.appendChild(option);
+        });
+      }
+    });
   });
-
-});
 </script>
 {% endblock %}

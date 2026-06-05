@@ -1,41 +1,68 @@
 {% extends 'base.html' %}
 {% load static %}
-{% load crispy_forms_tags %} 
-{% block css %}
-<link rel="stylesheet" href="{% static 'select2/select2.min.css' %}">
+
+{% block page_header %}
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">StackCoin</p>
+    <h1 class="page-title">A modern face for local exchange trading.</h1>
+    <p class="page-subtitle">
+      Explore the demo, read the story behind the system, and jump into the exchange workflow.
+    </p>
+  </div>
+  <div class="page-hero-actions">
+    <a class="btn btn-light rounded-pill px-4" href="{% url 'login' %}">Log in</a>
+    <a class="btn btn-outline-light rounded-pill px-4" href="{% url 'signup_join' %}">Join exchange</a>
+  </div>
+</div>
 {% endblock %}
 
 {% block content %}
-<form method="post" action="."> {% csrf_token %}
-<div class="card">
-    <div class="card-body">
-    <h5 class="card-title">Record Transaction</h5>
-    {{ transaction_form|crispy }}
-    <button type="submit" class="btn btn-primary">Confirm</button>
+<div class="row g-4">
+  <div class="col-lg-8">
+    <div class="surface-card h-100">
+      <div class="section-heading">
+        <div>
+          <h2>Why StackCoin exists</h2>
+          <p>Simple, visible, exchange-based trading.</p>
+        </div>
+      </div>
+      <p class="text-secondary">
+        This Django app demonstrates a local exchange trading system where users can start at zero, post offerings and wants, and record transactions with a clean shared ledger.
+      </p>
+      <div class="row g-3 mt-2">
+        <div class="col-md-4">
+          <div class="metric-card">
+            <p class="metric-label">Members</p>
+            <p class="metric-value">Profiles</p>
+            <p class="metric-note">Avatar-rich user lists make exchanges feel human.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="metric-card">
+            <p class="metric-label">Listings</p>
+            <p class="metric-value">Offerings</p>
+            <p class="metric-note">Searchable cards with rates and images.</p>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="metric-card">
+            <p class="metric-label">Transactions</p>
+            <p class="metric-value">Ledger</p>
+            <p class="metric-note">Recent movements are easy to review and reverse.</p>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
+  <div class="col-lg-4">
+    <div class="surface-card h-100">
+      <img src="{% static 'img/loan_default.png' %}" class="img-fluid rounded-4 mb-3" alt="Loan default illustration">
+      <h3 class="h5 fw-bold">Built for demonstration</h3>
+      <p class="text-secondary mb-0">
+        If you want the original explanation and project background, the about page still tells the full story in a cleaner presentation.
+      </p>
+    </div>
+  </div>
 </div>
-</form>
-
-<p>Total money in existence:${{total}}</p>
-{% include 'frontendapp/parts/_transactions.html' %}
-{% endblock %}
-
-{% block js %}
-<script src="{% static 'select2/select2.min.js' %}"></script>
-<script>
-    $(function () {
-        $('#id_from_user').select2();
-        $('#id_to_user').select2();
-        // $('#id_buyer').on('select2:select', function (e) {
-        //     $.ajax({ 
-        //         url: "{% url 'frontendapp:ajax_views' 'get_balance' %}", 
-        //         data: {'username': e.params.data.id},
-        //         success: function (data) {
-        //             $("#user_balance").html(data);
-        //         }
-        //     });
-        // });
-
-    });
-</script>
 {% endblock %}

@@ -2,22 +2,17 @@
 {% url 'frontendapp:user_list' request.resolver_match.kwargs.exchange as url_users %}
 {% url 'frontendapp:listing_list' request.resolver_match.kwargs.exchange as url_listings %}
 
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url 'frontendapp:exchange_list' %}">Exchanges</a></li>
-    <li class="breadcrumb-item active" aria-current="page">{{request.resolver_match.kwargs.exchange}}</li>
-  </ol>
-</nav>
-
-<ul class="nav nav-tabs">     
-  <li class="nav-item">
-    <a class="nav-link{% if url_txn == request.path %} active{% endif %}" href="{{url_txn}}">Transaction</a>
-  </li>       
-  <li class="nav-item">
-    <a class="nav-link{% if url_users == request.path %} active{% endif %}" href="{{url_users}}">Users</a>
-  </li>  
-  <li class="nav-item">
-    <a class="nav-link{% if url_listings == request.path %} active{% endif %}" href="{{url_listings}}">Listings</a>
-  </li>  
-</ul>
-<br>
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">Exchange workspace</p>
+    <h1 class="page-title">{{ request.resolver_match.kwargs.exchange }}</h1>
+    <p class="page-subtitle">
+      Browse members, manage listings, and review transactions inside this exchange.
+    </p>
+  </div>
+  <div class="page-hero-actions">
+    <a class="btn btn-light rounded-pill px-4{% if url_txn == request.path %} active{% endif %}" href="{{ url_txn }}">Transactions</a>
+    <a class="btn btn-outline-light rounded-pill px-4{% if url_users == request.path %} active{% endif %}" href="{{ url_users }}">Users</a>
+    <a class="btn btn-outline-light rounded-pill px-4{% if url_listings == request.path %} active{% endif %}" href="{{ url_listings }}">Listings</a>
+  </div>
+</div>

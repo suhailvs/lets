@@ -2,9 +2,10 @@
     Create an offering description for local exchange trading system where I have a bike and can do things like transport 
     one person at a rate of 2 dollars per kilometer
 -->
-<br>
-<textarea name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} style="display:none;">
+<div class="d-flex flex-wrap gap-2 mb-3">
+  <textarea name="{{ widget.name }}"{% include "django/forms/widgets/attrs.html" %} class="d-none">
     {% if widget.value %}{{ widget.value }}{% endif %}
-</textarea>
-<button type="button" class="btn btn-sm btn-primary" id="btn_generate_ai">Generate Detail from Heading</button>
-<button type="button" class="btn btn-sm btn-primary" id="btn_show_details">Enter Detail Manually</button>
+  </textarea>
+  <button type="button" class="btn btn-dark rounded-pill" id="btn_generate_ai">Generate detail from heading</button>
+  <button type="button" class="btn btn-outline-secondary rounded-pill" id="btn_show_details">Enter detail manually</button>
+</div>

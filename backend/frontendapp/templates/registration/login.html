@@ -1,28 +1,35 @@
 {% extends 'base.html' %}
-
 {% load crispy_forms_tags %}
 
+{% block page_header %}
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">Welcome back</p>
+    <h1 class="page-title">Log in to your exchange workspace.</h1>
+    <p class="page-subtitle">Continue managing balances, members, and listings in one place.</p>
+  </div>
+</div>
+{% endblock %}
+
 {% block content %}
-  {% if form.non_field_errors %}
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-      {% for error in form.non_field_errors %}
-        <p{% if forloop.last %} class="mb-0"{% endif %}>{{ error }}</p>
-      {% endfor %}
-      <button type="button" class="btn-close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-      </button>
-    </div>
-  {% endif %}
-  <div class="row">
-    <div class="col-lg-6 col-md-8 col-sm-12">
-      <h2>Log in</h2>
+<div class="row justify-content-center">
+  <div class="col-lg-6 col-xl-5">
+    <div class="surface-card">
+      {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+          {% for error in form.non_field_errors %}
+            <div>{{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
       <form method="post" novalidate>
         {% csrf_token %}
         <input type="hidden" name="next" value="{{ next }}">
         {{ form.username|as_crispy_field }}
         {{ form.password|as_crispy_field }}
-        <button type="submit" class="btn btn-primary">Log in</button> 
+        <button type="submit" class="btn btn-dark rounded-pill px-4">Log in</button>
       </form>
     </div>
   </div>
+</div>
 {% endblock %}

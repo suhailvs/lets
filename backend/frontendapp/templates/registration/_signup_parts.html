@@ -1,52 +1,13 @@
-{% load crispy_forms_tags %} 
+{% load crispy_forms_tags %}
 {% csrf_token %}
 <input type="hidden" name="next" value="{{ next }}" />
 {{ form|crispy }}
-<div>
-  <ul style="font-size: 12px">
-    <li>
-      Credit/debit limits
-      <ul>
-        <li>
-          All new accounts are created with a balance of zero Units.
-        </li>
-        <li>
-          Account-holders shall be entitled to begin trading without
-          having a positive balance and may so incur a debit balance in
-          their accounts.
-        </li>
-        <li>
-          The administration may set limits to the extent to which
-          accounts may go into debit and credit.
-        </li>
-      </ul>
-    </li>
-
-    <li>
-      Exceeding limits
-
-      <p>
-        It shall be the duty of each seller in a transaction to ensure
-        that the buyers have not exceeded their limits before agreeing to
-        a transaction. If a buyer's debit limit is exceeded then the
-        transaction may be declined, in which event:
-      </p>
-      <ul>
-      <li>
-        The seller will have to take recourse against the buyer
-        personally.
-      </li>
-      <li>
-        The parties accept the jurisdiction of the small claims court,
-        alternatively the magistrates court for the district having
-        jurisdiction
-      </li>
-      <li>
-        The seller shall be entitled to claim the amount owed in Units in
-        Rupees on the basis of one Rupees being equal to one Unit.
-      </li>
-    </ul>
-    </li>
+<div class="surface-card p-4 my-4" style="background: rgba(23, 50, 77, 0.03);">
+  <h3 class="h6 fw-bold mb-3">Account terms</h3>
+  <ul class="mb-0 text-secondary">
+    <li>All new accounts start with a zero balance.</li>
+    <li>You can trade within the credit and debit limits of the exchange.</li>
+    <li>Members should check balances before confirming a transaction.</li>
   </ul>
 </div>
-<button type="submit" class="btn btn-success">Sign up</button>
+<button type="submit" class="btn btn-dark rounded-pill px-4">Sign up</button>

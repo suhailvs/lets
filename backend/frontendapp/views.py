@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.views.generic import CreateView, ListView, DeleteView, DetailView
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
-from django.db.models import Q, F
+from django.db.models import Q, F, Sum
 from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
@@ -125,10 +125,21 @@ def transaction_view(request,exchange):
         # Pre-fill from_user with the logged-in user
         form = TransactionForm(exchange=exchange)
 
-    txs = Transaction.objects.filter(seller__exchange__code=exchange).order_by('-created_at')
+    txs = Transaction.objects.filter(seller__exchange__code=exchange).select_related("seller", "buyer").order_by('-created_at')
     paginator = Paginator(txs, ITEMS_PER_PAGE)
-    return render(request,"frontendapp/transaction.html",{"transaction_form": form, 
-        "page_obj": paginator.get_page(request.GET.get('page',1)), "is_paginated": paginator.num_pages > 1,})
+    page_obj = paginator.get_page(request.GET.get('page',1))
+    total = User.objects.filter(exchange__code=exchange).aggregate(total=Sum("balance"))["total"] or 0
+    return render(
+        request,
+        "frontendapp/transaction.html",
+        {
+            "transaction_form": form,
+            "transactions": page_obj.object_list,
+            "page_obj": page_obj,
+            "is_paginated": paginator.num_pages > 1,
+            "total": total,
+        },
+    )
 
 def delete_transaction(request, txn_id):
     txn = Transaction.objects.get(id=txn_id)

@@ -1,14 +1,23 @@
-{% extends 'base.html' %} 
-{% load static %} 
+{% extends 'base.html' %}
 
-
-{% block content %}
-<div class="row">
-  <div class="col-md-8 col-sm-10 col-12">
-    <h2>Join</h2>
-    <form method="post" novalidate>
-      {% include "registration/_signup_parts.html" %}        
-    </form>
+{% block page_header %}
+<div class="page-hero">
+  <div>
+    <p class="page-kicker">Join an exchange</p>
+    <h1 class="page-title">Create your account and step into the network.</h1>
+    <p class="page-subtitle">Use an existing exchange code to join the people already trading in your community.</p>
   </div>
 </div>
-{% endblock %} 
+{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8 col-xl-7">
+    <div class="surface-card">
+      <form method="post" novalidate>
+        {% include "registration/_signup_parts.html" %}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
