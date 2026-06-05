@@ -1,15 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.views.generic import CreateView, ListView, DeleteView, DetailView
 from django.shortcuts import render, redirect
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login
-from django.utils.decorators import method_decorator
 from django.db.models import Q, F
 from django.db import transaction
 from django.contrib import messages
 from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView
-from django.http import JsonResponse,HttpResponseForbidden
+from django.http import JsonResponse
 from django.conf import settings
 
 from coinapp.models import Listing, Exchange, Transaction
@@ -26,6 +24,12 @@ from api.utils import get_transaction_queryset
 User = get_user_model()
 
 
+
+def index(request):
+    if request.user.is_authenticated:
+        return redirect('frontendapp:home')
+    return redirect('/accounts/login/') #admin:index')
+    
 def save_transaction(amt, desc, seller, buyer,auth_user):
     resp = lambda s, msg, txn=None: {"success": s, "msg": msg, "txn_obj": txn}
     if not (seller.exchange_id == buyer.exchange_id == auth_user.exchange_id):
@@ -100,7 +104,6 @@ class SignUpNewView(CreateView):
         return ctx
 
 
-@login_required
 def transaction_view(request):
     if request.method == "POST":
         form = TransactionForm(request.POST, request_user=request.user)
@@ -128,7 +131,6 @@ def transaction_view(request):
     latest_trans = Transaction.objects.filter(initiator__exchange=request.user.exchange).order_by('-created_at')[:5]
     return render(request,"home.html",{"transaction_form": form, "transactions": latest_trans},)
 
-@login_required
 def delete_transaction(request, txn_id):
     txn = Transaction.objects.get(id=txn_id)
     # Only allow initiator to delete
@@ -186,10 +188,6 @@ class UserDetail(FormView):
         }
         return ctx | extra
 
-    @method_decorator(login_required)
-    def post(self, request, *args, **kwargs):
-        return super().post(request, *args, **kwargs)
-
     def form_valid(self, form):
         # This method is called when valid form data has been POSTed.
         # It should return an HttpResponse.
@@ -205,7 +203,6 @@ class UserDetail(FormView):
         )
 
 
-@method_decorator([login_required], name="dispatch")
 class ListingDeleteView(DeleteView):
     model = Listing
 
@@ -224,7 +221,6 @@ class ListingPreviewView(DetailView):
     model = Listing
     template_name = "frontendapp/listing_detail.html"
 
-@login_required
 def backup_media(request):
     import zipfile
     from datetime import datetime

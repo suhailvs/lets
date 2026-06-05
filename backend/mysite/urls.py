@@ -18,11 +18,12 @@ urlpatterns = [
 if True: #settings.DEBUG
     from django.contrib import admin
     from django.conf.urls.static import static
-    from frontendapp.views import SignUpJoinView, SignUpNewView
+    from frontendapp.views import SignUpJoinView, SignUpNewView, index
     from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 
-    urlpatterns += [
-        path("", include("frontendapp.urls")),
+    urlpatterns += [        
+        path("", index),
+        path("frontendapp/", include("frontendapp.urls")),
         path("api/schema/", SpectacularAPIView.as_view(), name="schema"),
         path(
             "api/docs/",
