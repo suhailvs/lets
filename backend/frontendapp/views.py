@@ -9,7 +9,7 @@ from django.urls import reverse_lazy, reverse
 from django.views.generic.edit import FormView
 from django.http import JsonResponse
 from django.conf import settings
-
+from django.core.paginator import Paginator
 from coinapp.models import Listing, Exchange, Transaction
 from frontendapp.forms import (
     SignUpForm,
@@ -125,8 +125,9 @@ def transaction_view(request,exchange):
         # Pre-fill from_user with the logged-in user
         form = TransactionForm(exchange=exchange)
 
-    latest_trans = Transaction.objects.filter(initiator__exchange=request.user.exchange).order_by('-created_at')
-    return render(request,"frontendapp/transaction.html",{"transaction_form": form, "transactions": latest_trans},)
+    txs = Transaction.objects.filter(seller__exchange__code=exchange).order_by('-created_at')
+    paginator = Paginator(txs, 5)
+    return render(request,"frontendapp/transaction.html",{"transaction_form": form, "page_obj": paginator.get_page(request.GET.get('page',1))},)
 
 def delete_transaction(request, txn_id):
     txn = Transaction.objects.get(id=txn_id)
@@ -151,7 +152,7 @@ class ExchangeView(ListView):
     context_object_name = "exchanges"
 
     def get_queryset(self):
-        return Exchange.objects.all()
+        return Exchange.objects.order_by('code')
 
 
 class UserList(ListView):

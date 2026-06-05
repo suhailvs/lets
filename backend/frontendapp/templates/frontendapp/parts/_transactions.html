@@ -1,6 +1,6 @@
 {% load thumbnail %}
 
-{% for txn in transactions %}
+{% for txn in page_obj %}
 <div class="d-flex align-items-center gap-3 p-3 mb-2 bg-white border rounded-3">
 
   <!-- Avatar -->
@@ -45,6 +45,18 @@
 {% empty %}
 <p class="text-muted text-center py-4">No transactions yet.</p>
 {% endfor %}
+
+<nav aria-label="Page navigation">
+  <ul class="pagination justify-content-center">
+    {% if page_obj.has_previous %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo; Previous</a></li>
+    {% endif %}
+    <li class="page-item active"><span class="page-link">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span></li>    
+    {% if page_obj.has_next %}
+    <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Next &raquo;</a></li>
+    {% endif %}
+  </ul>
+</nav>
 
 
 
