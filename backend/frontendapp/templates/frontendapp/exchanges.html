@@ -23,9 +23,28 @@
             <h3 class="h5 fw-bold mb-2">{{ exchange.code }}</h3>
             <p class="text-secondary mb-0">{{ exchange.name }}</p>
           </div>
-          <span class="badge rounded-pill text-bg-light text-dark badge-soft">{{ exchange.users.count }} members</span>
         </div>
         <div class="divider-soft"></div>
+        <div class="row g-2 mb-3">
+          <div class="col-4">
+            <div class="metric-card p-3">
+              <p class="metric-label mb-1">Members</p>
+              <p class="metric-value h5 mb-0">{{ exchange.member_count }}</p>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="metric-card p-3">
+              <p class="metric-label mb-1">Listings</p>
+              <p class="metric-value h5 mb-0">{{ exchange.listing_count }}</p>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="metric-card p-3">
+              <p class="metric-label mb-1">Transactions</p>
+              <p class="metric-value h5 mb-0">{{ exchange.transaction_count }}</p>
+            </div>
+          </div>
+        </div>
         <p class="mb-1 fw-semibold">{{ exchange.get_country_and_subdivision }}</p>
         <p class="mb-0 text-secondary">{{ exchange.address }}</p>
       </a>
