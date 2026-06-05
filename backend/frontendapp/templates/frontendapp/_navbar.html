@@ -1,5 +1,6 @@
 {% url 'frontendapp:transaction_list' request.resolver_match.kwargs.exchange as url_txn %}
 {% url 'frontendapp:user_list' request.resolver_match.kwargs.exchange as url_users %}
+{% url 'frontendapp:listing_list' request.resolver_match.kwargs.exchange as url_listings %}
 
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb">
@@ -10,10 +11,13 @@
 
 <ul class="nav nav-tabs">     
   <li class="nav-item">
-    <a class="nav-link{% if url_txn in request.path %} active{% endif %}" href="{{url_txn}}">Transaction</a>
+    <a class="nav-link{% if url_txn == request.path %} active{% endif %}" href="{{url_txn}}">Transaction</a>
   </li>       
   <li class="nav-item">
-    <a class="nav-link{% if url_users in request.path %} active{% endif %}" href="{{url_users}}">Users</a>
+    <a class="nav-link{% if url_users == request.path %} active{% endif %}" href="{{url_users}}">Users</a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link{% if url_listings == request.path %} active{% endif %}" href="{{url_listings}}">Listings</a>
   </li>  
 </ul>
 <br>

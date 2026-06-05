@@ -23,7 +23,7 @@ from api.utils import get_transaction_queryset
 
 User = get_user_model()
 
-
+ITEMS_PER_PAGE = 5
 
 def index(request):
     if request.user.is_authenticated:
@@ -126,8 +126,9 @@ def transaction_view(request,exchange):
         form = TransactionForm(exchange=exchange)
 
     txs = Transaction.objects.filter(seller__exchange__code=exchange).order_by('-created_at')
-    paginator = Paginator(txs, 5)
-    return render(request,"frontendapp/transaction.html",{"transaction_form": form, "page_obj": paginator.get_page(request.GET.get('page',1))},)
+    paginator = Paginator(txs, ITEMS_PER_PAGE)
+    return render(request,"frontendapp/transaction.html",{"transaction_form": form, 
+        "page_obj": paginator.get_page(request.GET.get('page',1)), "is_paginated": paginator.num_pages > 1,})
 
 def delete_transaction(request, txn_id):
     txn = Transaction.objects.get(id=txn_id)
@@ -147,16 +148,22 @@ def delete_transaction(request, txn_id):
     return redirect("frontendapp:exchange_list")
 
 class ExchangeView(ListView):
-    paginate_by = 20
+    paginate_by = ITEMS_PER_PAGE
     template_name = "frontendapp/exchanges.html"
     context_object_name = "exchanges"
 
     def get_queryset(self):
         return Exchange.objects.order_by('code')
 
+class ListingView(ListView):
+    paginate_by = ITEMS_PER_PAGE
+    template_name = "frontendapp/listings.html"
 
+    def get_queryset(self):
+        return Listing.objects.filter(user__exchange__code=self.kwargs["exchange"]).order_by('title')
+    
 class UserList(ListView):
-    paginate_by = 20
+    paginate_by = ITEMS_PER_PAGE
     template_name = "frontendapp/user_list.html"
     context_object_name = "users"
 
