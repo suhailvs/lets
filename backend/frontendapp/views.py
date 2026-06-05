@@ -223,3 +223,38 @@ class ListingDeleteView(DeleteView):
 class ListingPreviewView(DetailView):
     model = Listing
     template_name = "frontendapp/listing_detail.html"
+
+@login_required
+def backup_media(request):
+    import zipfile
+    from datetime import datetime
+    from django.http import FileResponse
+    import os
+    
+    media_root = settings.MEDIA_ROOT
+    backup_dir = os.path.join(settings.BASE_DIR,"mysite", "backups")
+    os.makedirs(backup_dir, exist_ok=True)
+
+    timestamp = datetime.now().strftime("%d%m%Y_%H%M%S")
+    zip_name  = f"media_backup_{timestamp}.zip"
+    zip_path  = os.path.join(backup_dir, zip_name)
+
+    try:
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as zf:
+            for root, dirs, files in os.walk(media_root):
+                for file in files:
+                    abs_path = os.path.join(root, file)
+                    arc_path = os.path.relpath(abs_path, media_root)
+                    zf.write(abs_path, arc_path)
+
+        # Stream the file to browser without loading into RAM
+        response = FileResponse(
+            open(zip_path, "rb"),
+            content_type="application/zip",
+            as_attachment=True,
+            filename=zip_name,
+        )
+        return response
+
+    except Exception as e:
+        return JsonResponse({"Error":f"Error: {e}"})

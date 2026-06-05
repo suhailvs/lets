@@ -4,6 +4,7 @@ thumbnail_kvstore.lock
 .vscode/
 mysite/media/
 mysite/static/
+mysite/backups/
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
