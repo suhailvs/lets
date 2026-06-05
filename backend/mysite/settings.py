@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "crispy_forms",
     "crispy_bootstrap5",
     'drf_spectacular',
+    'sorl.thumbnail',
 
     # my apps
     "coinapp",

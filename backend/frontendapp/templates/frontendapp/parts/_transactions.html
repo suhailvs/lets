@@ -1,22 +1,50 @@
+{% load thumbnail %}
+
 {% for txn in transactions %}
-<div class="card mb-2">
-  <div class="card-body py-2 d-flex justify-content-between align-items-center">
-    <div>
-      <span class="fw-semibold">{{ txn.buyer.username }}</span>
-      paid
-      <span class="fw-semibold">{{ txn.seller.username }}</span>
-      &mdash; {{ txn.description }}
-      <small class="text-muted ms-2">{{ txn.amount }} credits</small>
-    </div>
-    
-    <form method="post" action="{% url 'frontendapp:delete_transaction' txn.id %}"
-          onsubmit="return confirm('Delete this transaction and reverse balances?')">
-      {% csrf_token %}
-      <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-    </form>
-   
+<div class="d-flex align-items-center gap-3 p-3 mb-2 bg-white border rounded-3">
+
+  <!-- Avatar -->
+  <div class="rounded-circle bg-success bg-opacity-10 text-success d-flex align-items-center justify-content-center fw-semibold flex-shrink-0 overflow-hidden"
+       style="width:40px;height:40px;font-size:13px;">
+    {% if txn.buyer.image %}
+      {% thumbnail txn.buyer.image "40x40" crop="center" as buyer_thumb %}
+        <img src="{{ buyer_thumb.url }}" alt="@{{ txn.buyer.username }}" style="width:40px;height:40px;object-fit:cover;">
+      {% endthumbnail %}
+    {% else %}
+      {{ txn.buyer.username|slice:":2"|upper }}
+    {% endif %}
   </div>
+
+  <!-- Main info -->
+  <div class="flex-grow-1 overflow-hidden">
+    <div class="text-truncate" style="font-size:14px;">
+      <span class="fw-semibold">{{ txn.buyer.username }}({{ txn.buyer.first_name }})</span>
+      <span class="text-muted mx-1">→</span>
+      <span class="fw-semibold">{{ txn.seller.username }}({{ txn.seller.first_name }})</span>
+    </div>
+    <div class="text-muted text-truncate" style="font-size:12px;">
+      {{ txn.description }}
+    </div>
+    <p class="mb-0 text-muted"><small>{{ txn.created_at|date:"M j, g:i a" }}</small></p>
+  </div>
+
+  <!-- Amount badge -->
+  <span class="badge rounded-pill text-success bg-success bg-opacity-10 px-3"
+        style="font-size:13px;font-weight:500;">
+    ℏ {{ txn.amount }}
+  </span>
+
+  <!-- Delete -->
+  <form method="post" action="{% url 'frontendapp:delete_transaction' txn.id %}"
+        onsubmit="return confirm('Delete this transaction and reverse balances?')">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-sm btn-outline-danger">X</button>
+  </form>
+
 </div>
 {% empty %}
-<p class="text-muted">No transactions yet.</p>
+<p class="text-muted text-center py-4">No transactions yet.</p>
 {% endfor %}
+
+
+
