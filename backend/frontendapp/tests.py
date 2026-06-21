@@ -31,7 +31,7 @@ class CreateExchangeTest(TestCase):
         response = self.client.post(self.url,data,follow=True)
         # check user logged in
         self.assertInHTML(
-            f'<a href="{reverse("frontendapp:user_detail", args=("KKED","1"))}"><strong>KKED00</strong> </a>', 
+            f'<a href="{reverse("frontendapp:user_detail", args=("KKED","1"))}"><strong>KKED0</strong> </a>', 
             response.content.decode()
         )
 
@@ -42,8 +42,8 @@ class TransactionTest(TestCase):
     def setUp(self):
         self.client = Client()
         self.url = reverse("frontendapp:exchange_list")
-        self.nusra = User.objects.get(username="KKDE01")
-        self.suhail = User.objects.get(username="KKDE00")
+        self.nusra = User.objects.get(username="KKDE1")
+        self.suhail = User.objects.get(username="KKDE0")
 
     def test_login_and_make_seller_transaction(self):
         response = self.client.get(self.url, follow=True)
@@ -123,7 +123,7 @@ class ListingTest(TestCase):
     def login(self):
         self.client.post(
             reverse("login"),
-            {"username": "KKDE00", "password": "sumee1910"},
+            {"username": "KKDE0", "password": "sumee1910"},
             follow=True,
         )
     def test_offerings_list(self):

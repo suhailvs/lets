@@ -131,7 +131,7 @@ class RegistrationTest(APITestCase):
         for case in test_cases:
             response = self.client.post(
                 f"{BASE_URL}login/",
-                {"username": "TEST00", "password": case["password"]},
+                {"username": "TEST0", "password": case["password"]},
             )
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             self.assertEqual(response.json(), case["response"])
@@ -161,7 +161,7 @@ class RegistrationTest(APITestCase):
         response = self.create_user(i=2)        
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "test00", "password": "mypassword2"},
+            {"username": "test0", "password": "mypassword2"},
         )
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertEqual(
@@ -176,7 +176,7 @@ class RegistrationTest(APITestCase):
         for i in range(99):
             users.append(
                 User(
-                    username=f"TEST{i:02}",
+                    username=f"TEST{i}",
                     first_name=f"User{i}",
                     email=f"user{i}@test.com",
                     phone=f"900000{i}",
@@ -193,12 +193,12 @@ class RegistrationTest(APITestCase):
         self.assertEqual(response.status_code, 400)
         self.assertIn("This exchange already has 100 users", str(response.data))
 
-        # test_deleted_username_reused
-        User.objects.get(username="TEST03").delete()
+        # test_deleted_username
+        User.objects.get(username="TEST3").delete()
         response = self.create_user(i=999)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         new_user = User.objects.get(email="user999@test.com")
-        self.assertEqual(new_user.username, "TEST03")
+        self.assertEqual(new_user.username, "TEST100")
 
 # =====================================================================
 # USER DETAILS
@@ -215,12 +215,12 @@ class UserDetailsTest(APITestCase):
         # Login
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE1", "password": "sumee1910"},
         )
         token = response.json()["key"]
         # Fetch user details
         response = self.client.get(
-            f"{BASE_URL}users/{User.objects.get(username='KKDE01').id}/",
+            f"{BASE_URL}users/{User.objects.get(username='KKDE1').id}/",
             headers={"Authorization": f"Token {token}"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -229,7 +229,7 @@ class UserDetailsTest(APITestCase):
         """
         users list endpoint should only return users from request user's exchange
         """
-        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE00 (exchange=1)
+        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE0 (exchange=1)
         response = self.client.get(
             f"{BASE_URL}users/",
             headers={"Authorization": f"Token {token}"},
@@ -251,15 +251,15 @@ class VerifyUserTest(APITestCase):
         Prepare verifier tokens
         """
         self.users = {
-            "KKDE00": Token.objects.get_or_create(user_id=1)[0],  # same exchange
-            "PIXL00": Token.objects.get_or_create(user_id=4)[0],  # different exchange
+            "KKDE0": Token.objects.get_or_create(user_id=1)[0],  # same exchange
+            "PIXL0": Token.objects.get_or_create(user_id=4)[0],  # different exchange
         }
 
     def verify_sufail(self, token):
         """
         Helper to verify newly created user (sufail)
         """
-        user_sufail = User.objects.get(username="KKDE02")
+        user_sufail = User.objects.get(username="KKDE2")
 
         response = self.client.post(
             f"{BASE_URL}verifyuser/",
@@ -268,7 +268,7 @@ class VerifyUserTest(APITestCase):
         )
 
         # Only same-exchange users can verify
-        if token == self.users["PIXL00"]:
+        if token == self.users["PIXL0"]:
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         else:
             self.assertEqual(response.status_code, status.HTTP_201_CREATED)
@@ -294,29 +294,29 @@ class VerifyUserTest(APITestCase):
         )
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
 
-        user_sufail = User.objects.get(username="KKDE02")
+        user_sufail = User.objects.get(username="KKDE2")
 
         # Login should fail (not verified)
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE02", "password": "dummypassword"},
+            {"username": "KKDE2", "password": "dummypassword"},
         )
         self.assertFalse(response.json()["is_active"])
 
         # Wrong exchange verification attempt
-        self.verify_sufail(self.users["PIXL00"])
+        self.verify_sufail(self.users["PIXL0"])
         user_sufail.refresh_from_db()
         self.assertFalse(user_sufail.is_active)
 
         # Correct exchange verification
-        self.verify_sufail(self.users["KKDE00"])
+        self.verify_sufail(self.users["KKDE0"])
         user_sufail.refresh_from_db()
         self.assertTrue(user_sufail.is_active)
 
         # Login succeeds after verification
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE02", "password": "dummypassword"},
+            {"username": "KKDE2", "password": "dummypassword"},
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
@@ -337,15 +337,15 @@ class ListingTest(APITestCase):
         ).exists()
 
         self.users = {
-            "KKDE00": Token.objects.get_or_create(user_id=1)[0],
-            "KKDE01": Token.objects.get_or_create(user_id=2)[0],
+            "KKDE0": Token.objects.get_or_create(user_id=1)[0],
+            "KKDE1": Token.objects.get_or_create(user_id=2)[0],
         }
 
     def test_list_listings(self):
         """
         Listings visibility based on ownership
         """
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE00"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE0"].key)
 
         response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=2")
         self.assertEqual(response.json()["results"], [])
@@ -358,33 +358,33 @@ class ListingTest(APITestCase):
         user=all listing feed must be limited to request user's exchange
         """
         Listing.objects.create(
-            user=User.objects.get(username="PIXL00"),
+            user=User.objects.get(username="PIXL0"),
             category="Food_Drink",
             title="burger",
             description="cross exchange listing",
             rate="10",
             listing_type="O",
         )
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE00"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE0"].key)
         response = self.client.get(f"{BASE_URL}listings/?type=O&page=1&user=all")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertNotIn("burger", [item["title"] for item in response.json()["results"]])
 
     def test_view_listing(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE00"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE0"].key)
         response = self.client.get(self.url)
         self.assertEqual(response.json()["title"], "rice")
 
     def test_owner_can_delete(self):
         self.assertTrue(self.listing_exists())
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE00"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE0"].key)
 
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(self.listing_exists())
 
     def test_other_user_cannot_delete(self):
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE01"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE1"].key)
 
         response = self.client.delete(self.url)
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
@@ -394,7 +394,7 @@ class ListingTest(APITestCase):
         """
         Owner can deactivate listing; others cannot see it
         """
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE00"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE0"].key)
 
         response = self.client.patch(self.url, data={"is_active": False})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
@@ -405,7 +405,7 @@ class ListingTest(APITestCase):
         self.assertEqual(response.json()["results"][0]["title"], "rice")
 
         # Other users cannot
-        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE01"].key)
+        self.client.credentials(HTTP_AUTHORIZATION='Token ' + self.users["KKDE1"].key)
         response = self.client.get(f"{BASE_URL}listings/?type=O&user=1")
         self.assertEqual(response.json()["results"], [])
         # Other users cannot see even in all listing
@@ -420,8 +420,8 @@ class TransactionTest(APITestCase):
     fixtures = ["test.json"]
 
     def setUp(self):
-        self.user_nusra = User.objects.get(username="KKDE01")
-        self.user_suhail = User.objects.get(username="KKDE00")
+        self.user_nusra = User.objects.get(username="KKDE1")
+        self.user_suhail = User.objects.get(username="KKDE0")
 
     def test_get_transactions(self):
         """
@@ -440,9 +440,9 @@ class TransactionTest(APITestCase):
         """
         Should not allow viewing transactions of users from another exchange
         """
-        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE00 exchange=1
+        token = Token.objects.get_or_create(user_id=1)[0]  # KKDE0 exchange=1
         self.client.credentials(HTTP_AUTHORIZATION='Token ' + token.key)
-        response = self.client.get(f"{BASE_URL}transactions/?user=4")  # PIXL00 exchange=2
+        response = self.client.get(f"{BASE_URL}transactions/?user=4")  # PIXL0 exchange=2
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_login_and_make_transaction(self):
@@ -451,7 +451,7 @@ class TransactionTest(APITestCase):
         """
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE00", "password": "sumee1910"},
+            {"username": "KKDE0", "password": "sumee1910"},
         )
         token = response.json()["key"]
 
@@ -476,11 +476,11 @@ class TransactionTest(APITestCase):
         # login as nusra. check she has -10$ balance
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE1", "password": "sumee1910"},
             format="json",
         )
         self.assertEqual(response.status_code, status.HTTP_200_OK)
-        self.assertEqual(response.json()["username"], "KKDE01")
+        self.assertEqual(response.json()["username"], "KKDE1")
         response = self.client.get(
             f"{BASE_URL}ajax/?purpose=userbalance",
             headers={"Authorization": f"Token {response.json()['key']}"},
@@ -498,7 +498,7 @@ class TransactionTest(APITestCase):
             response = self.client.post(
                 f"{BASE_URL}transactions/",
                 {
-                    "user": User.objects.get(username="PIXL00").id,
+                    "user": User.objects.get(username="PIXL0").id,
                     "amount": amt,
                     "message": f"sending amount of {{amt}} to sabreesh must return error",
                     "transaction_type":"buyer",
@@ -518,14 +518,14 @@ class TransactionTest(APITestCase):
         # so must not able to send to sabareesh
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE1", "password": "sumee1910"},
             format="json",
         )
         token = response.json()["key"]
         response = self.client.post(
             f"{BASE_URL}transactions/",
             {
-                "user": User.objects.get(username="PIXL00").id,
+                "user": User.objects.get(username="PIXL0").id,
                 "amount": '101',
                 "message": "sending amount of 101 to sabreesh must return error",
                 "transaction_type":"buyer",
@@ -543,7 +543,7 @@ class TransactionTest(APITestCase):
         # sending amount of 101 to nusra must return error
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE1", "password": "sumee1910"},
             format="json",
         )
         token = response.json()["key"]
@@ -568,7 +568,7 @@ class TransactionTest(APITestCase):
         # send 11$ to suhail
         response = self.client.post(
             f"{BASE_URL}login/",
-            {"username": "KKDE01", "password": "sumee1910"},
+            {"username": "KKDE1", "password": "sumee1910"},
             format="json",
         )
         token = response.json()["key"]

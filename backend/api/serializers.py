@@ -33,15 +33,14 @@ def generate_username(exchange):
     existing_usernames = User.objects.filter(
         exchange=exchange
     ).values_list("username", flat=True)
-    used_numbers = set()
+    used_numbers = []
     for username in existing_usernames:
         match = re.search(r'(\d+)$', username)
-        if match: used_numbers.add(int(match.group(1)))
+        if match: used_numbers.append(int(match.group(1)))
 
-    for i in range(settings.EXCHANGE_USER_LIMIT):
-        if i not in used_numbers:
-            return f"{exchange.code}{i:02}"
-    
+    next_num = max(used_numbers, default=-1) + 1
+    return f"{exchange.code}{next_num}"
+
 class ChangePasswordSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
     def validate_password(self, value):
