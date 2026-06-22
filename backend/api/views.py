@@ -207,11 +207,11 @@ class Transactions(APIView):
         if create_serializer.is_valid():
             txn_obj = create_serializer.save()            
             serializer = serializers.TransactionSerializer(txn_obj)
-            notification_user = serializer.data['buyer']
-            txn_from = serializer.data['seller_name']
-            if txn_obj.initiator == txn_obj.buyer:
-                notification_user = serializer.data['seller']
-                txn_from = serializer.data['buyer_name']
+            notification_user = serializer.data['from_user']
+            txn_from = serializer.data['to_user_name']
+            if txn_obj.initiator == txn_obj.from_user:
+                notification_user = serializer.data['to_user']
+                txn_from = serializer.data['from_user_name']
             send_push_notification(receiver_id=notification_user,title="New Transaction",
                 body=f"New trasaction from {txn_from}",data={"txn_id": serializer.data['id']})
             return Response(serializer.data)

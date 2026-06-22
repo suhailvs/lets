@@ -236,8 +236,8 @@ class ListingCreateSerializer(serializers.ModelSerializer):
 
 class TransactionSerializer(serializers.ModelSerializer):
     is_received = serializers.BooleanField(default=False)
-    seller_name = serializers.ReadOnlyField(source="seller.first_name")
-    buyer_name = serializers.ReadOnlyField(source="buyer.first_name")
+    from_user_name = serializers.ReadOnlyField(source="from_user.first_name")
+    to_user_name = serializers.ReadOnlyField(source="to_user.first_name")
 
     class Meta:
         model = Transaction
@@ -245,18 +245,23 @@ class TransactionSerializer(serializers.ModelSerializer):
 
 class TransactionCreateSerializer(serializers.Serializer):
     user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
-    transaction_type = serializers.ChoiceField(choices=(('seller','seller'),('buyer','buyer')))
+    transaction_type = serializers.ChoiceField(choices=(('someone_to_me','someone_to_me'),('me_to_someone','me_to_someone')))
     message = serializers.CharField(max_length=255,required=False,allow_blank=True)
     amount = serializers.IntegerField()
 
     def validate(self, data):
-        # default is seller transaction(receive money)
-        seller = self.context["request"].user
-        buyer = data["user"]
+        if data["transaction_type"] == "me_to_someone":
+            # send money
+            from_user = self.context["request"].user
+            to_user = data["user"]
+        elif data["transaction_type"] == "someone_to_me":
+            # receive money
+            from_user = data["user"]
+            to_user = self.context["request"].user
         amt = data["amount"]
-        if seller == buyer:
+        if to_user == from_user:
             raise serializers.ValidationError("You cannot transfer funds to your own account.")
-        if seller.exchange_id != buyer.exchange_id:
+        if to_user.exchange_id != from_user.exchange_id:
             raise serializers.ValidationError("Oops! You can only send money to members of your own exchange.")
         
         try:
@@ -267,51 +272,50 @@ class TransactionCreateSerializer(serializers.Serializer):
         if amt < 1:
             raise serializers.ValidationError("Txn Amount must be greater than 0.")
         
-        if data["transaction_type"] == "buyer":
-            # send money
-            seller, buyer = buyer, seller
 
         # _check_max_min_balance
-        if seller.balance + amt > settings.MAXIMUM_BALANCE:
-            raise serializers.ValidationError("Seller has reached the maximum allowed amount")
-        if buyer.balance - amt < settings.MINIMUM_BALANCE:
+        if to_user.balance + amt > settings.MAXIMUM_BALANCE:
+            raise serializers.ValidationError("Recipient has reached the maximum allowed amount")
+        if from_user.balance - amt < settings.MINIMUM_BALANCE:
             raise serializers.ValidationError("Insufficient balance to complete the transaction.")
 
         start = timezone.now().replace(hour=0, minute=0, second=0, microsecond=0)
         end = start + timedelta(days=1)
-        seller_count = Transaction.objects.filter(
-            Q(seller=seller) | Q(buyer=seller),
+        to_user_count = Transaction.objects.filter(
+            Q(to_user=to_user) | Q(from_user=to_user),
             created_at__gte=start,created_at__lt=end
         ).count()
 
-        if seller_count >= settings.DAILY_TRANSACTION_LIMIT:
-            raise serializers.ValidationError("Seller reached daily limit")
+        if to_user_count >= settings.DAILY_TRANSACTION_LIMIT:
+            raise serializers.ValidationError("Recipient reached daily limit")
 
-        buyer_count = Transaction.objects.filter(
-            Q(seller=buyer) | Q(buyer=buyer),
+        from_user_count = Transaction.objects.filter(
+            Q(to_user=from_user) | Q(from_user=from_user),
             created_at__gte=start,created_at__lt=end
         ).count()
 
-        if buyer_count >= settings.DAILY_TRANSACTION_LIMIT:
-            raise serializers.ValidationError("Buyer reached daily limit")
+        if from_user_count >= settings.DAILY_TRANSACTION_LIMIT:
+            raise serializers.ValidationError("Sender reached daily limit")
 
         return data
     
     def create(self, validated_data):
-        # default is seller transaction(receive money)
-        seller = self.context["request"].user
-        buyer = validated_data["user"]
-        if validated_data["transaction_type"] == "buyer":
+        if validated_data["transaction_type"] == "me_to_someone":
             # send money
-            seller, buyer = buyer, seller
+            from_user = self.context["request"].user
+            to_user = validated_data["user"]
+        elif validated_data["transaction_type"] == "someone_to_me":
+            # receive money
+            from_user = validated_data["user"]
+            to_user = self.context["request"].user
         with transaction.atomic():
-            seller.balance = F("balance") + validated_data['amount']
-            buyer.balance = F("balance") - validated_data['amount']
-            seller.save(update_fields=["balance"])
-            buyer.save(update_fields=["balance"])
+            to_user.balance = F("balance") + validated_data['amount']
+            from_user.balance = F("balance") - validated_data['amount']
+            to_user.save(update_fields=["balance"])
+            from_user.save(update_fields=["balance"])
             txn = Transaction.objects.create(
-                seller=seller,
-                buyer=buyer,
+                from_user=from_user,
+                to_user=to_user,
                 initiator=self.context["request"].user,
                 description=validated_data['message'],
                 amount=validated_data['amount'],

@@ -110,8 +110,8 @@
     "model": "coinapp.transaction",
     "pk": 1,
     "fields": {
-        "seller": 1,
-        "buyer": 4,
+        "to_user": 1,
+        "from_user": 4,
         "initiator":1,
         "description": "Badminton Court - Amigos Oct 29",
         "amount": 70,
@@ -122,8 +122,8 @@
     "model": "coinapp.transaction",
     "pk": 2,
     "fields": {
-        "seller": 1,
-        "buyer": 4,
+        "to_user": 1,
+        "from_user": 4,
         "initiator":1,
         "description": "Chumma tha",
         "amount": 100,
@@ -134,8 +134,8 @@
     "model": "coinapp.transaction",
     "pk": 3,
     "fields": {
-        "seller": 4,
-        "buyer": 1,
+        "to_user": 4,
+        "from_user": 1,
         "initiator":4,
         "description": "Return 100rs due to dummy previous payment ",
         "amount": 100,
@@ -146,8 +146,8 @@
     "model": "coinapp.transaction",
     "pk": 4,
     "fields": {
-        "seller": 4,
-        "buyer": 2,
+        "to_user": 4,
+        "from_user": 2,
         "initiator":2,
         "description": "Sandwich ",
         "amount": 40,

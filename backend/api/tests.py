@@ -447,7 +447,7 @@ class TransactionTest(APITestCase):
 
     def test_login_and_make_transaction(self):
         """
-        Seller → buyer transaction & balance update
+        me_to_someone -> someone_to_me transaction & balance update
         """
         response = self.client.post(
             f"{BASE_URL}login/",
@@ -461,7 +461,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_nusra.id,
                 "amount": 10,
                 "message": "caring",
-                "transaction_type":"buyer",
+                "transaction_type":"me_to_someone",
             },
             headers={"Authorization": f"Token {token}"},
         )
@@ -501,15 +501,15 @@ class TransactionTest(APITestCase):
                     "user": User.objects.get(username="PIXL0").id,
                     "amount": amt,
                     "message": f"sending amount of {{amt}} to sabreesh must return error",
-                    "transaction_type":"buyer",
+                    "transaction_type":"me_to_someone",
                 },
                 headers={"Authorization": f"Token {token.key}"},
             )
             self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
             # print(response.json())
 
-    def test_buyer_transaction(self):
-        # test buyer transaction
+    def test_me_to_someone_transaction(self):
+        # test me_to_someone transaction
         # check nusra has -13$ balance
         pass
     
@@ -528,7 +528,7 @@ class TransactionTest(APITestCase):
                 "user": User.objects.get(username="PIXL0").id,
                 "amount": '101',
                 "message": "sending amount of 101 to sabreesh must return error",
-                "transaction_type":"buyer",
+                "transaction_type":"me_to_someone",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -553,7 +553,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_nusra.id,
                 "amount": '101',
                 "message": "sending amount of 101 to nusra must return error",
-                "transaction_type":"buyer",
+                "transaction_type":"me_to_someone",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -578,7 +578,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_suhail.id,
                 "amount": 11,
                 "message": "send 11$ to suhail must return error",
-                "transaction_type":"buyer",
+                "transaction_type":"me_to_someone",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -594,7 +594,7 @@ class TransactionTest(APITestCase):
                 "user": self.user_suhail.id,
                 "amount": 5,
                 "message": "nusra receive 5 rs from suhail",
-                "transaction_type":"seller",
+                "transaction_type":"someone_to_me",
             },
             headers={"Authorization": f"Token {token}"},
             format="json",
@@ -608,5 +608,4 @@ class TransactionTest(APITestCase):
         response = create_txn()
         # block_11th_transaction(daily txn limit)
         self.assertEqual(response.status_code, 400)
-        self.assertIn("Seller reached daily limit", str(response.data))
-
+        self.assertIn("Recipient reached daily limit", str(response.data))

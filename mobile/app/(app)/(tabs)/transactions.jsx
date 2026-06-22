@@ -155,12 +155,12 @@ export default function TransactionScreen() {
                 {/* Info */}
                 <View style={styles.txInfo}>
                   <View style={styles.txParties}>
-                    <Text style={styles.txName}>{item.buyer_name}</Text>
+                    <Text style={styles.txName}>{item.from_user_name}</Text>
                     <Icon name="arrow-right" size={12} color={Palette.textMid} />
-                    <Text style={styles.txName}>{item.seller_name}</Text>
+                    <Text style={styles.txName}>{item.to_user_name}</Text>
                   </View>
                   {item.description ? (
-                    <Text style={styles.txDesc} numberOfLines={2}>"{item.description}"</Text>
+                    <Text style={styles.txDesc} numberOfLines={2}>{`"${item.description}"`}</Text>
                   ) : null}
                   <Text style={styles.txTime}>{formatDate(item.created_at)}</Text>
                 </View>

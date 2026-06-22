@@ -135,8 +135,8 @@
     "model": "coinapp.transaction",
     "pk": 1,
     "fields": {
-        "seller": 3,
-        "buyer": 4,
+        "to_user": 3,
+        "from_user": 4,
         "initiator":3,
         "description": "Badminton Court - Amigos Oct 29",
         "amount": 70,

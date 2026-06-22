@@ -545,8 +545,8 @@
     "model": "coinapp.transaction",
     "pk": 8,
     "fields": {
-        "seller": 8,
-        "buyer": 5,
+        "to_user": 8,
+        "from_user": 5,
         "initiator": 5,
         "description": "Received 100rs cash from shakeer.",
         "amount": 100,

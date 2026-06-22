@@ -20,7 +20,7 @@ export default function User() {
   const [tab, setTab] = useState(initialTab);
   const [amount, setAmount] = useState('');
   const [message, setMessage] = useState('');
-  const [txnType, setTxnType] = useState('buyer');
+  const [txnType, setTxnType] = useState('me_to_someone');
   const [txnLoading, setTxnLoading] = useState(false);
   const [txnError, setTxnError] = useState('');
   const [txnSuccess, setTxnSuccess] = useState('');
@@ -72,8 +72,8 @@ export default function User() {
       return;
     }
 
-    const actionLabel = txnType === 'seller' ? 'receive' : 'pay';
-    if (!window.confirm(`Confirm to ${actionLabel} ℏ${amount} ${txnType === 'seller' ? 'from' : 'to'} ${user.first_name}?`)) {
+    const actionLabel = txnType === 'someone_to_me' ? 'receive' : 'pay';
+    if (!window.confirm(`Confirm to ${actionLabel} ℏ${amount} ${txnType === 'someone_to_me' ? 'from' : 'to'} ${user.first_name}?`)) {
       return;
     }
 
@@ -198,15 +198,15 @@ export default function User() {
                   <div className="btn-group mb-3" role="group">
                     <button
                       type="button"
-                      className={`btn btn-outline-primary ${txnType === 'buyer' ? 'active' : ''}`}
-                      onClick={() => setTxnType('buyer')}
+                      className={`btn btn-outline-primary ${txnType === 'me_to_someone' ? 'active' : ''}`}
+                      onClick={() => setTxnType('me_to_someone')}
                     >
                       Pay
                     </button>
                     <button
                       type="button"
-                      className={`btn btn-outline-primary ${txnType === 'seller' ? 'active' : ''}`}
-                      onClick={() => setTxnType('seller')}
+                      className={`btn btn-outline-primary ${txnType === 'someone_to_me' ? 'active' : ''}`}
+                      onClick={() => setTxnType('someone_to_me')}
                     >
                       Receive
                     </button>
@@ -222,7 +222,7 @@ export default function User() {
                   {txnError && <div className="alert alert-danger">{txnError}</div>}
                   {txnSuccess && <div className="alert alert-success">{txnSuccess}</div>}
                   <button className="btn btn-primary" onClick={handleSendMoney} disabled={txnLoading}>
-                    {txnLoading ? 'Processing...' : txnType === 'seller' ? 'Receive' : 'Pay'}
+                    {txnLoading ? 'Processing...' : txnType === 'someone_to_me' ? 'Receive' : 'Pay'}
                   </button>
                 </div>
               </div>

@@ -14,8 +14,8 @@ class User(AbstractUser):
 
     @property
     def balance_from_txns(self):
-        credited = Transaction.objects.filter(seller=self).aggregate(t=models.Sum('amount'))['t'] or 0
-        debited = Transaction.objects.filter(buyer=self).aggregate(t=models.Sum('amount'))['t'] or 0
+        credited = Transaction.objects.filter(to_user=self).aggregate(t=models.Sum('amount'))['t'] or 0
+        debited = Transaction.objects.filter(from_user=self).aggregate(t=models.Sum('amount'))['t'] or 0
         return credited - debited
 
 
@@ -60,15 +60,15 @@ class Listing(models.Model):
 
 
 class Transaction(models.Model):
-    seller = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_seller")
-    buyer = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_buyer")
+    from_user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_from_user")
+    to_user = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_to_user")
     initiator = models.ForeignKey("User", on_delete=models.CASCADE, related_name="txn_initiator")
     description = models.CharField(max_length=255, blank=True)
     amount = models.PositiveIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.id}: {self.buyer} -> {self.seller}: {self.amount}"
+        return f"{self.id}: {self.from_user} -> {self.to_user}: {self.amount}"
 
 # =============================================
 # mischellenious models

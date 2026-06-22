@@ -187,7 +187,7 @@ const UserDetails = () => {
                 style={[styles.payBtn, styles.payBtnOutline]}
                 onPress={() => router.navigate({
                   pathname: 'screens/sendmoney/amount',
-                  params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'buyer' },
+                  params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'me_to_someone' },
                 })}
               >
                 <Ionicons name="send" size={16} color={Palette.primary} />
@@ -198,7 +198,7 @@ const UserDetails = () => {
                 style={[styles.payBtn, styles.payBtnFilled]}
                 onPress={() => router.navigate({
                   pathname: 'screens/sendmoney/amount',
-                  params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'seller' },
+                  params: { id: data.id, username: data.username, first_name: data.first_name, txn_type: 'someone_to_me' },
                 })}
               >
                 <Ionicons name="download" size={16} color="#fff" />

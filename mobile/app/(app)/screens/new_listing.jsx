@@ -71,36 +71,32 @@ const AddListingScreen = () => {
     <ScrollView style={[styles.container, { backgroundColor: theme.colors.background }]}>
       <Text variant="titleLarge">Add a New {ltype==='O'? 'Offering':'Want'}</Text>
       
-      {image && (
-        <>
-          <Text>Select Category</Text>
-          <Picker onValueChange={setCategory}>
-            <Picker.Item key="" label="Select a Category" value="" />
-            {categories.map((item) => (
-              <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
-            ))}
-          </Picker>
-          {/* <Dropdown label="Select Category" items={categories} onSelect={setCategory} /> */}
-          {/* Title Input */}
-          <TextInput mode="outlined" label="Title" style={styles.input} value={title} onChangeText={setTitle} />
-          <TextInput
-            label="Description"
-            value={description}
-            onChangeText={setDescription}
-            mode="outlined"
-            multiline
-            style={[styles.input, styles.textArea]}
-          />
-          <TextInput label="Rate" value={rate} onChangeText={setRate} mode="outlined" style={styles.input} />
-        </>
-      )}
+      <Text>Select Category</Text>
+      <Picker onValueChange={setCategory}>
+        <Picker.Item key="" label="Select a Category" value="" />
+        {categories.map((item) => (
+          <Picker.Item key={item[0]} label={item[1]} value={item[0]} />
+        ))}
+      </Picker>
+      {/* <Dropdown label="Select Category" items={categories} onSelect={setCategory} /> */}
+      {/* Title Input */}
+      <TextInput mode="outlined" label="Title" style={styles.input} value={title} onChangeText={setTitle} />
+      <TextInput
+        label="Description"
+        value={description}
+        onChangeText={setDescription}
+        mode="outlined"
+        multiline
+        style={[styles.input, styles.textArea]}
+      />
+      <TextInput label="Rate" value={rate} onChangeText={setRate} mode="outlined" style={styles.input} />
+
       <ImagePickerComponent onImageSelected={setSelectedImage} />
 
       <Snackbar visible={!!error} onDismiss={() => setError("")} action={{ label: "OK" }}>
         {error}
       </Snackbar>
-      {image && 
-        <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.submitButton}> Add Listing </Button>}
+      <Button mode="contained" onPress={handleSubmit} loading={loading} disabled={loading} style={styles.submitButton}> Add Listing </Button>
       <Text></Text><Text></Text><Text></Text><Text></Text>
     </ScrollView>
   );

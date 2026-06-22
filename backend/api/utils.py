@@ -29,14 +29,14 @@ def custom_exception_handler(exc, context):
 
 def get_transaction_queryset(user,auth_user=None):
     if auth_user:
-        qs = Transaction.objects.filter(Q(seller=user,buyer=auth_user) | Q(seller=auth_user,buyer=user))
+        qs = Transaction.objects.filter(Q(to_user=user,from_user=auth_user) | Q(to_user=auth_user,from_user=user))
     else:
-        qs = Transaction.objects.filter(Q(seller=user) | Q(buyer=user)) #  show == 'all'
+        qs = Transaction.objects.filter(Q(to_user=user) | Q(from_user=user)) #  show == 'all'
     return (
-        qs.select_related("seller", "buyer")
+        qs.select_related("from_user", "to_user")
         .annotate(
             is_received=Case(
-                When(Q(seller=user), then=True),
+                When(Q(to_user=user), then=True),
                 default=False,
                 output_field=BooleanField(),
             )
@@ -58,7 +58,7 @@ def export_exchange(exchange):
         users_qs = User.objects.filter(exchange=exchange).order_by("id")
         listings_qs = Listing.objects.filter(user__exchange=exchange).order_by("id")
         transactions_qs = Transaction.objects.filter(
-            Q(seller__exchange=exchange) | Q(buyer__exchange=exchange)
+            Q(to_user__exchange=exchange) | Q(from_user__exchange=exchange)
         ).distinct().order_by("id")
         exchange_qs = Exchange.objects.filter(id=exchange.id)
         target_dir = Path(settings.BASE_DIR) / "mysite" / "media" / "exports"
@@ -95,4 +95,3 @@ def export_exchange(exchange):
         f'attachment; filename="{exchange.code}_export.zip"'
     )
     return response
-

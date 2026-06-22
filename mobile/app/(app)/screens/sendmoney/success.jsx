@@ -10,12 +10,12 @@ import {
 import { MaterialIcons } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import { useLocalSearchParams, useRouter,Stack } from "expo-router";
-import { Colors, Palette } from "@/constants/Colors";
+import { Palette } from "@/constants/Colors";
 
 const PaymentSuccessScreen = () => {
   const { name, amount, username, txn_type } = useLocalSearchParams();
   const router = useRouter();
-  const isSeller = txn_type === "seller";
+  const isToUser = txn_type === "someone_to_me";
 
   const slideAnim = useRef(new Animated.Value(60)).current;
   const fadeAnim  = useRef(new Animated.Value(0)).current;
@@ -63,12 +63,12 @@ const PaymentSuccessScreen = () => {
     });
   }, []);
 
-  const fromName  = isSeller ? name  : "You";
-  const fromId    = isSeller ? username : "MY ACCOUNT";
-  const fromColor = isSeller ? Palette.secondary : Palette.primary;
-  const toName    = isSeller ? "You" : name;
-  const toId      = isSeller ? "MY ACCOUNT" : username;
-  const toColor   = isSeller ? Palette.primary : Palette.secondary;
+  const fromName  = isToUser ? name  : "You";
+  const fromId    = isToUser ? username : "MY ACCOUNT";
+  const fromColor = isToUser ? Palette.secondary : Palette.primary;
+  const toName    = isToUser ? "You" : name;
+  const toId      = isToUser ? "MY ACCOUNT" : username;
+  const toColor   = isToUser ? Palette.primary : Palette.secondary;
 
   return (
     <>

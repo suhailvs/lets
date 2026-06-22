@@ -45,11 +45,11 @@ class TransactionTest(TestCase):
         self.nusra = User.objects.get(username="KKDE1")
         self.suhail = User.objects.get(username="KKDE0")
 
-    def test_login_and_make_seller_transaction(self):
+    def test_login_and_make_to_user_transaction(self):
         response = self.client.get(self.url, follow=True)
         self.assertInHTML("<h2>Log in</h2>", response.content.decode())
 
-        # login as suhail and make a seller transaction of 10$ -> nusra
+        # login as suhail and make a to_user transaction of 10$ -> nusra
         self.client.post(
             reverse("login"),
             {"username": self.suhail.username, "password": "sumee1910"},
@@ -81,13 +81,13 @@ class TransactionTest(TestCase):
         #     '<h3 class="text-muted">Balance: -10$</h3>', response.content.decode()
         # )
 
-    def test_buyer_transaction(self):
+    def test_from_user_transaction(self):
         self.client.post(
             reverse("login"),
             {"username": self.suhail.username, "password": "sumee1910"},
             follow=True,
         )
-        # test buyer transaction
+        # test from_user transaction
         response = self.client.post(
             self.url,
             {

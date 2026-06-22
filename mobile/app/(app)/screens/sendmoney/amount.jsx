@@ -6,7 +6,6 @@ import {
   TouchableOpacity,
   StyleSheet,
   Modal,
-  Image,
 } from "react-native";
 import { Button } from "react-native-paper";
 import { useLocalSearchParams, useRouter, Stack } from "expo-router";
@@ -24,7 +23,7 @@ const EnterAmountScreen = () => {
   const { id, username, first_name, txn_type } = useLocalSearchParams();
   const router = useRouter();
 
-  const isSeller = txn_type === "seller";
+  const isToUser = txn_type === "someone_to_me";
 
   const handleProceed = () => {
     if (!amount || parseFloat(amount) <= 0) return;
@@ -49,7 +48,7 @@ const EnterAmountScreen = () => {
       setModalVisible(false);
       router.replace({
         pathname: "screens/sendmoney/success",
-        params: { name: first_name, amount },
+        params: { name: first_name, username, amount, txn_type },
       });
     } catch (err) {
       if (err.response) {
@@ -117,10 +116,10 @@ const EnterAmountScreen = () => {
               <View style={styles.partyInfo}>
                 <Text style={styles.partyLabel}>FROM</Text>
                 <Text style={styles.partyName}>
-                  {isSeller ? first_name : "You"}
+                  {isToUser ? first_name : "You"}
                 </Text>
                 <Text style={styles.partyId}>
-                  {isSeller ? username : "MY ACCOUNT"}
+                  {isToUser ? username : "MY ACCOUNT"}
                 </Text>
               </View>
             </View>
@@ -140,10 +139,10 @@ const EnterAmountScreen = () => {
               <View style={styles.partyInfo}>
                 <Text style={styles.partyLabel}>TO</Text>
                 <Text style={styles.partyName}>
-                  {isSeller ? "You" : first_name}
+                  {isToUser ? "You" : first_name}
                 </Text>
                 <Text style={styles.partyId}>
-                  {isSeller ? "MY ACCOUNT" : username}
+                  {isToUser ? "MY ACCOUNT" : username}
                 </Text>
               </View>
             </View>
@@ -158,7 +157,7 @@ const EnterAmountScreen = () => {
           disabled={!amount || parseFloat(amount) <= 0}
         >
           <Text style={styles.proceedButtonText}>
-            {isSeller ? "Receive" : "Pay"} {amount ? `ℏ${amount}` : "ℏ0"}
+            {isToUser ? "Receive" : "Pay"} {amount ? `ℏ${amount}` : "ℏ0"}
           </Text>
         </TouchableOpacity>
 
@@ -180,7 +179,7 @@ const EnterAmountScreen = () => {
                   <Text style={styles.modalReceiptValue}>ℏ{amount}</Text>
                 </View>
                 <View style={styles.modalReceiptRow}>
-                  <Text style={styles.modalReceiptLabel}>{isSeller ? "From" : "To"}</Text>
+                  <Text style={styles.modalReceiptLabel}>{isToUser ? "From" : "To"}</Text>
                   <Text style={styles.modalReceiptValue}>{first_name}</Text>
                 </View>
                 <View style={styles.modalReceiptRow}>
@@ -190,7 +189,7 @@ const EnterAmountScreen = () => {
                 {message ? (
                   <View style={styles.modalReceiptRow}>
                     <Text style={styles.modalReceiptLabel}>Note</Text>
-                    <Text style={[styles.modalReceiptValue, { fontStyle: "italic" }]}>"{message}"</Text>
+                    <Text style={[styles.modalReceiptValue, { fontStyle: "italic" }]}>{`"${message}"`}</Text>
                   </View>
                 ) : null}
               </View>

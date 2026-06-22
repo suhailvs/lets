@@ -74,7 +74,7 @@ export default function Transactions({ userId }) {
             <div className="list-group-item d-flex justify-content-between align-items-start" key={item.id}>
               <div>
                 <div className="fw-semibold">
-                  {isReceived ? `Received from ${item.buyer_name}` : `Paid to ${item.seller_name}`}
+                  {isReceived ? `Received from ${item.from_user_name}` : `Paid to ${item.to_user_name}`}
                 </div>
                 {item.description && <div className="text-muted small">{item.description}</div>}
                 <div className="text-muted small">{formatDate(item.created_at)}</div>

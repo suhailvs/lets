@@ -116,8 +116,8 @@
     "model": "coinapp.transaction",
     "pk": 5,
     "fields": {
-        "seller": 20,
-        "buyer": 21,
+        "to_user": 20,
+        "from_user": 21,
         "initiator": 21,
         "description": "Pathiri pori while travelling to peechi padam",
         "amount": 10,
@@ -128,8 +128,8 @@
     "model": "coinapp.transaction",
     "pk": 6,
     "fields": {
-        "seller": 20,
-        "buyer": 21,
+        "to_user": 20,
+        "from_user": 21,
         "initiator": 21,
         "description": "Sprite, Kubboos and Brosted Chicken at LuLu Mall while PSC Exam",
         "amount": 137,
@@ -140,8 +140,8 @@
     "model": "coinapp.transaction",
     "pk": 7,
     "fields": {
-        "seller": 21,
-        "buyer": 19,
+        "to_user": 21,
+        "from_user": 19,
         "initiator": 21,
         "description": "2 Hour work on website design",
         "amount": 120,

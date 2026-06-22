@@ -36,9 +36,9 @@ def exchange_settings(request,exchange):
 def export_exchange_json(request,exchange):
     return export_exchange(Exchange.objects.get(code=exchange))
 
-def save_transaction(amt, desc, seller, buyer,auth_user):
+def save_transaction(amt, desc, from_user, to_user,auth_user):
     resp = lambda s, msg, txn=None: {"success": s, "msg": msg, "txn_obj": txn}
-    if not (seller.exchange_id == buyer.exchange_id):# == auth_user.exchange_id):
+    if not (from_user.exchange_id == to_user.exchange_id):# == auth_user.exchange_id):
         msg = "Oops! You can only send money to members of your own exchange."
         return resp(False, msg)
 
@@ -51,19 +51,19 @@ def save_transaction(amt, desc, seller, buyer,auth_user):
         return resp(False, "Txn Amount must be greater than 0.")
     
     # _check_max_min_balance
-    if seller.balance + amt > settings.MAXIMUM_BALANCE:
-        return resp(False, "Seller has reached the maximum allowed amount")
-    if buyer.balance - amt < settings.MINIMUM_BALANCE:
+    if to_user.balance + amt > settings.MAXIMUM_BALANCE:
+        return resp(False, "Recipient has reached the maximum allowed amount")
+    if from_user.balance - amt < settings.MINIMUM_BALANCE:
         return resp(False, "Insufficient balance to complete the transaction.")
 
     with transaction.atomic():
-        seller.balance = F("balance") + amt
-        buyer.balance = F("balance") - amt
-        seller.save(update_fields=["balance"])
-        buyer.save(update_fields=["balance"])
+        to_user.balance = F("balance") + amt
+        from_user.balance = F("balance") - amt
+        to_user.save(update_fields=["balance"])
+        from_user.save(update_fields=["balance"])
         txn = Transaction.objects.create(
-            seller=seller,
-            buyer=buyer,
+            from_user=from_user,
+            to_user=to_user,
             initiator = auth_user,
             description=desc,
             amount=amt,
@@ -120,7 +120,7 @@ def transaction_view(request,exchange):
             to_u   = form.cleaned_data["to_user"]
             date   = form.cleaned_data['created_at']
 
-            response_data = save_transaction(amt, desc, to_u, from_u,request.user)
+            response_data = save_transaction(amt, desc, from_u, to_u,request.user)
             if response_data["success"]:
                 txn = response_data["txn_obj"]
                 if date: Transaction.objects.filter(id=txn.id).update(created_at=date)
@@ -132,7 +132,7 @@ def transaction_view(request,exchange):
         # Pre-fill from_user with the logged-in user
         form = TransactionForm(exchange=exchange)
 
-    txs = Transaction.objects.filter(seller__exchange__code=exchange).select_related("seller", "buyer").order_by('-created_at')
+    txs = Transaction.objects.filter(to_user__exchange__code=exchange).select_related("from_user", "to_user").order_by('-created_at')
     paginator = Paginator(txs, ITEMS_PER_PAGE)
     return render(request,"frontendapp/transaction.html",{"transaction_form": form, 
         "page_obj": paginator.get_page(request.GET.get('page',1)), "is_paginated": paginator.num_pages > 1,})
@@ -146,10 +146,10 @@ def delete_transaction(request, txn_id):
     if request.method == "POST":
         # Reverse the balances
         with transaction.atomic():
-            txn.seller.balance = F("balance") - txn.amount
-            txn.buyer.balance  = F("balance") + txn.amount
-            txn.seller.save(update_fields=["balance"])
-            txn.buyer.save(update_fields=["balance"])
+            txn.to_user.balance = F("balance") - txn.amount
+            txn.from_user.balance  = F("balance") + txn.amount
+            txn.to_user.save(update_fields=["balance"])
+            txn.from_user.save(update_fields=["balance"])
             txn.delete()
         messages.success(request, "Transaction deleted and balances reversed.")
     return redirect("frontendapp:exchange_list")
@@ -165,7 +165,7 @@ class ExchangeView(ListView):
             .annotate(
                 member_count=Count("users", distinct=True),
                 listing_count=Count("users__listings", distinct=True),
-                transaction_count=Count("users__txn_seller", distinct=True),
+                transaction_count=Count("users__txn_to_user", distinct=True),
             )
         )
 
