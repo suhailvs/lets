@@ -6,8 +6,10 @@ urlpatterns = [
     path("", views.ExchangeView.as_view(), name="exchange_list"),
     path("<str:exchange>/transaction/", views.transaction_view, name="transaction_list"), # HomeView.as_view()
     path("<str:exchange>/user/", views.UserList.as_view(), name="user_list"),
-    path("<str:exchange>/listing/", views.ListingView.as_view(), name="listing_list"),      
+    path("<str:exchange>/listing/", views.ListingView.as_view(), name="listing_list"),
+    path("<str:exchange>/settings/", views.exchange_settings, name="exchange_settings"),
     path("<str:exchange>/<int:user>/",views.UserDetail.as_view(),name="user_detail"),
+    path('<str:exchange>/export-exchange-json/', views.export_exchange_json, name='export_exchange_json'),
     path("transaction/<int:txn_id>/delete/", views.delete_transaction, name="delete_transaction"),
     
     path('listing/<int:pk>/delete/', views.ListingDeleteView.as_view(), name='listing_delete'),

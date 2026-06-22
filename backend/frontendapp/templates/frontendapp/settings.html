@@ -1,0 +1,6 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% include 'frontendapp/_navbar.html' %}
+  <a class="btn btn-primary" href="{% url 'frontendapp:export_exchange_json' exchange %}">download json</a>
+{% endblock %}

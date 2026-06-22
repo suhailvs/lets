@@ -19,7 +19,7 @@ from frontendapp.forms import (
     ListingForm,
     get_state_choices,
 )
-from api.utils import get_transaction_queryset
+from api.utils import get_transaction_queryset, export_exchange
 
 User = get_user_model()
 
@@ -29,7 +29,13 @@ def index(request):
     if request.user.is_authenticated:
         return redirect('frontendapp:exchange_list')
     return redirect('/accounts/login/') #admin:index')
-    
+
+def exchange_settings(request,exchange):
+    return render(request,'frontendapp/settings.html',{'exchange':exchange})
+
+def export_exchange_json(request,exchange):
+    return export_exchange(Exchange.objects.get(code=exchange))
+
 def save_transaction(amt, desc, seller, buyer,auth_user):
     resp = lambda s, msg, txn=None: {"success": s, "msg": msg, "txn_obj": txn}
     if not (seller.exchange_id == buyer.exchange_id):# == auth_user.exchange_id):
@@ -218,7 +224,7 @@ class UserDetail(FormView):
 
 class ListingDeleteView(DeleteView):
     model = Listing
-
+    template_name = 'frontendapp/listing_confirm_delete.html'
     def get_queryset(self):
         return Listing.objects.all()
 
