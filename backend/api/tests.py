@@ -169,11 +169,11 @@ class RegistrationTest(APITestCase):
             {"is_active": False, "message": "Verification is pending."},
         )
     
-    def test_101st_user_fails(self):
-        """101st user should fail"""
+    def test_exchange_user_limit(self):
+        """maximum number of users an exchange can hold"""
         users = []
         password = make_password("StrongPassword123!")
-        for i in range(99):
+        for i in range(settings.EXCHANGE_USER_LIMIT-1):
             users.append(
                 User(
                     username=f"TEST{i}",
@@ -186,19 +186,21 @@ class RegistrationTest(APITestCase):
             )
 
         User.objects.bulk_create(users)
-        response = self.create_user(i=100)
+        # signup last possible user
+        response = self.create_user(i=settings.EXCHANGE_USER_LIMIT-1)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-
-        response = self.create_user(i=101)
+        self.assertEqual(response.json()['username'], f"TEST{settings.EXCHANGE_USER_LIMIT-1}")
+        # try to signup user again, will be error
+        response = self.create_user(i=settings.EXCHANGE_USER_LIMIT)
         self.assertEqual(response.status_code, 400)
-        self.assertIn("This exchange already has 100 users", str(response.data))
+        self.assertIn(f"This exchange already has {settings.EXCHANGE_USER_LIMIT} users", str(response.data))
 
         # test_deleted_username
         User.objects.get(username="TEST3").delete()
-        response = self.create_user(i=999)
+        # since a user deleted, a new will able to signup
+        response = self.create_user(i=settings.EXCHANGE_USER_LIMIT+9)
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
-        new_user = User.objects.get(email="user999@test.com")
-        self.assertEqual(new_user.username, "TEST100")
+        self.assertEqual(response.json()['username'], f"TEST{settings.EXCHANGE_USER_LIMIT}")
 
 # =====================================================================
 # USER DETAILS

@@ -135,7 +135,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             count = User.objects.filter(exchange_id=exchange_selected).count()
 
             if count >= settings.EXCHANGE_USER_LIMIT:
-                raise serializers.ValidationError("This exchange already has 100 users")
+                raise serializers.ValidationError(f"This exchange already has {settings.EXCHANGE_USER_LIMIT} users")
         else:
             missing = [field for field in create_exchange_fields if not attrs.get(field)]
             if missing:
