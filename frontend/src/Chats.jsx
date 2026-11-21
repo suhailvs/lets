@@ -232,9 +232,6 @@ export function Chat() {
           <button className={scope === 'all' ? 'on' : ''} onClick={() => setScope('all')}>
             All transactions
           </button>
-          <button className={scope === 'mine' ? 'on' : ''} onClick={() => setScope('mine')}>
-            Between you &amp; {name}
-          </button>
         </div>
       </div>
 
