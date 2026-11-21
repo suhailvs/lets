@@ -71,7 +71,6 @@ export function Chat() {
   // 'all' = every transaction of this member (incl. with others), 'mine' = only between me and them
   const [scope, setScope] = useState('all');
 
-  const [mode, setMode] = useState('pay'); // pay | receive
   const [amount, setAmount] = useState('');
   const [note, setNote] = useState('');
   const [sending, setSending] = useState(false);
@@ -99,14 +98,27 @@ export function Chat() {
     setNextPage(null);
     setLoading(true);
     stick.current = true;
-    api('transactions/', { params: { user: userId, show: scope, page_size: PAGE } })
-      .then((t) => {
+    (async () => {
+      try {
+        const first = await api('transactions/', { params: { user: userId, show: scope, page_size: PAGE } });
         if (off) return;
-        setMsgs([...t.results].reverse());
-        setNextPage(t.next ? 2 : null);
-      })
-      .catch((e) => !off && setError(e.message))
-      .finally(() => !off && setLoading(false));
+        let transactions = [...first.results];
+        let page = first.next ? 2 : null;
+        // The all-transactions view should include the full history on initial load.
+        while (scope === 'all' && page) {
+          const next = await api('transactions/', { params: { user: userId, show: scope, page_size: PAGE, page } });
+          if (off) return;
+          transactions.push(...next.results);
+          page = next.next ? page + 1 : null;
+        }
+        setMsgs(transactions.reverse());
+        setNextPage(page);
+      } catch (e) {
+        if (!off) setError(e.message);
+      } finally {
+        if (!off) setLoading(false);
+      }
+    })();
     return () => {
       off = true;
     };
@@ -143,7 +155,7 @@ export function Chat() {
         method: 'POST',
         body: {
           user: Number(userId),
-          transaction_type: mode === 'pay' ? 'me_to_someone' : 'someone_to_me',
+          transaction_type: 'me_to_someone',
           message: note.trim(), // the API requires the key to be present
           amount: amt,
         },
@@ -218,7 +230,7 @@ export function Chat() {
       <div className="scope">
         <div className="seg">
           <button className={scope === 'all' ? 'on' : ''} onClick={() => setScope('all')}>
-            All of {name}'s transactions
+            All transactions
           </button>
           <button className={scope === 'mine' ? 'on' : ''} onClick={() => setScope('mine')}>
             Between you &amp; {name}
@@ -260,6 +272,26 @@ export function Chat() {
             side = debit ? 'out' : 'in';
             label = `${fromName} paid ${toName}`;
           }
+          if (scope === 'all') {
+            const counterparty = t.from_user === other.id ? toName : fromName;
+            return (
+              <div key={t.id} className="msg-wrap history-wrap">
+                <div className="history-row">
+                  <div className={`history-icon ${debit ? 'debit' : 'credit'}`} aria-hidden="true">
+                    {debit ? '↗' : '↙'}
+                  </div>
+                  <div className="history-info">
+                    <div className="history-name">{counterparty}</div>
+                    <div className="history-note">{t.description || (debit ? 'Payment sent' : 'Payment received')}</div>
+                    <div className="history-time">{day} · {fmtTime(t.created_at)}</div>
+                  </div>
+                  <div className={`history-amount ${debit ? 'debit' : 'credit'}`}>
+                    {debit ? '−' : '+'} {COIN} {t.amount}
+                  </div>
+                </div>
+              </div>
+            );
+          }
           return (
             <div key={t.id} className="msg-wrap">
               {sep && <div className="day">{day}</div>}
@@ -285,19 +317,7 @@ export function Chat() {
             {error}
           </div>
         )}
-        <div className="mode">
-          <button type="button" className={mode === 'pay' ? 'on' : ''} onClick={() => setMode('pay')}>
-            Pay {name}
-          </button>
-          <button
-            type="button"
-            className={mode === 'receive' ? 'on' : ''}
-            onClick={() => setMode('receive')}
-          >
-            Receive from {name}
-          </button>
-        </div>
-        <div className="inputs">
+        <div className="inputs payment-inputs">
           <input
             className="amt"
             type="number"
@@ -308,16 +328,18 @@ export function Chat() {
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
           />
+          <button className="send" disabled={sending} aria-label="Pay">
+            <Icon name="send" />
+          </button>
+        </div>
+        <div className="message-input">
           <input
             className="msg"
             maxLength={255}
-            placeholder="Add a message"
+            placeholder="Add a message (optional)"
             value={note}
             onChange={(e) => setNote(e.target.value)}
           />
-          <button className="send" disabled={sending} aria-label="Send">
-            <Icon name="send" />
-          </button>
         </div>
       </form>
     </div>
