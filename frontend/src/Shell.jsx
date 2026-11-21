@@ -1,7 +1,7 @@
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from './auth.jsx';
 import { Avatar, COIN, Icon } from './util.jsx';
-import { ChatList } from './Chats.jsx';
+import { UserList } from './Users.jsx';
 import { ListingList } from './Listings.jsx';
 
 export function Empty() {
@@ -20,8 +20,8 @@ export default function Shell() {
   const { session, balance, logout } = useAuth();
   const nav = useNavigate();
   const parts = useLocation().pathname.split('/').filter(Boolean);
-  const tab = parts[0] || 'chats';
-  const hasPane = parts.length > 1 || tab === 'me';
+  const tab = parts[0] || 'users';
+  const hasPane = parts.length > 1 || tab === 'me' || tab === 'transactions';
 
   return (
     <div className={`app ${hasPane ? 'has-pane' : ''}`}>
@@ -36,20 +36,23 @@ export default function Shell() {
               {session.firstname} · {balance === null ? '…' : `${COIN} ${balance}`}
             </div>
           </div>
+          <NavLink className="icon-btn" to="/transactions" aria-label="My transactions" title="My transactions">
+            <Icon name="history" />
+          </NavLink>
           <button className="icon-btn" onClick={logout} title="Log out">
             <Icon name="logout" />
           </button>
         </header>
 
         <nav className="pills">
-          <NavLink to="/chats" className={tab === 'chats' || tab === 'me' ? 'on' : ''}>
-            Chats
+          <NavLink to="/users" className={tab === 'users' || tab === 'me' ? 'on' : ''}>
+            Users
           </NavLink>
           <NavLink to="/offerings">Offerings</NavLink>
           <NavLink to="/wants">Wants</NavLink>
         </nav>
 
-        {(tab === 'chats' || tab === 'me') && <ChatList />}
+        {(tab === 'users' || tab === 'me') && <UserList />}
         {tab === 'offerings' && <ListingList type="O" />}
         {tab === 'wants' && <ListingList type="W" />}
       </aside>

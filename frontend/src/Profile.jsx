@@ -36,7 +36,7 @@ export default function Profile() {
   return (
     <div className="detail">
       <header className="bar">
-        <Link to="/chats" className="icon-btn back" aria-label="Back">
+        <Link to="/users" className="icon-btn back" aria-label="Back">
           <Icon name="back" />
         </Link>
         <div className="grow title">Profile</div>

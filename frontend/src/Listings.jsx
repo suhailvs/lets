@@ -237,7 +237,7 @@ export function ListingDetail() {
               {l.is_active ? 'Hide' : 'Show'}
             </button>
           ) : (
-            <Link className="btn small primary" to={`/chats/${owner.id}`}>
+            <Link className="btn small primary" to={`/users/${owner.id}`}>
               Message
             </Link>
           )}

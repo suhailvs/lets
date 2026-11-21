@@ -5,7 +5,7 @@ import { useAuth } from './auth.jsx';
 import { Avatar, COIN, Icon, displayName, fmtDay, fmtRel, fmtTime } from './util.jsx';
 
 // ---------------------------------------------------------------- chat list
-export function ChatList() {
+export function UserList() {
   const [users, setUsers] = useState(null);
   const [q, setQ] = useState('');
   const [error, setError] = useState('');
@@ -33,7 +33,7 @@ export function ChatList() {
         {!users && !error && <div className="muted center m">Loading members…</div>}
         {users && shown.length === 0 && <div className="muted center m">No members found.</div>}
         {shown.map((u) => (
-          <NavLink key={u.id} to={`/chats/${u.id}`} className="row">
+          <NavLink key={u.id} to={`/users/${u.id}`} className="row">
             <Avatar src={u.thumbnail} name={displayName(u)} />
             <div className="grow">
               <div className="row-top">
@@ -187,7 +187,7 @@ export function Chat() {
     return (
       <div className="empty-pane">
         <div className="error">{error || 'Member not found.'}</div>
-        <Link to="/chats" className="btn">
+        <Link to="/users" className="btn">
           Back
         </Link>
       </div>
@@ -199,7 +199,7 @@ export function Chat() {
   return (
     <div className="chat">
       <header className="bar">
-        <Link to="/chats" className="icon-btn back" aria-label="Back">
+        <Link to="/users" className="icon-btn back" aria-label="Back">
           <Icon name="back" />
         </Link>
         <Avatar src={other.thumbnail} name={name} size={40} />

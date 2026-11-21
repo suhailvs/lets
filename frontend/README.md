@@ -2,7 +2,7 @@
 
 A WhatsApp-style React (Vite) front-end for the CoinApp Django REST backend.
 
-- **Chats** – every member of your exchange (like contacts). Open one to see your
+- **Users** – every member of your exchange (like contacts). Open one to see your
   transactions as chat bubbles, and **Pay** or **Receive** coins from the composer.
 - **Offerings / Wants** – browse the exchange's listings, filter by category / mine / a member,
   view details, message the owner, and add / edit / hide / delete your own.
